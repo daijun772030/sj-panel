@@ -31,5 +31,13 @@ export default {
     color: #2c3e50;
     height: 100%;
     width: 100%;
+    position: relative;
+    .wrapper{
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 200px;
+    }
 }
 </style>

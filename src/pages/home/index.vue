@@ -1,15 +1,16 @@
 <template>
-    <div class="index">
-
+    <div class="home">
+        首页
     </div>
 </template>
 <script>
+    // 首页
     export default {
         
     }
 </script>
 <style lang="less" scoped>
-    .index{
+    .home{
 
     }
 </style>

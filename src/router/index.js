@@ -1,6 +1,10 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Index from '@/pages/index';
+
+// 按需加载组件，在需要的时候才加载组件
+const Home = () => import ('@/pages/home' /* webpackChunkName: "pages/home" */ ).then(m => m.default || m)
+const BusinessList = () => import ('@/pages/business/list' /* webpackChunkName: "pages/business/list" */ ).then(m => m.default || m)
+const BusinessOrder = () => import ('@/pages/business/order' /* webpackChunkName: "pages/business/order" */ ).then(m => m.default || m)
 
 Vue.use(Router);
 
@@ -27,6 +31,7 @@ const scrollBehavior = (to, from, savedPosition) => {
     }
 }
 
+// 注册路由
 const router = new Router({
     mode: 'history',
     base: '/sangjie/panel/', //项目的根名称 如：localhost:3000/sangjie/panel/index
@@ -34,7 +39,11 @@ const router = new Router({
     linkExactActiveClass: 'b-c-link-active',
     scrollBehavior,
     routes: [
-        { name: 'index', path: '/', component: Index }
+        { name: 'home', path: '/home', component: Home },
+        { name: 'business', path: '/business', component: BusinessList, children: [
+            { name: 'business-list', path: 'list', component: BusinessList },
+            { name: 'business-order', path: 'order', component: BusinessOrder }
+        ]}
     ]
 });
 

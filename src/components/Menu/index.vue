@@ -9,7 +9,7 @@
                 class="menu-list-el"
                 text-color="#fff"
                 :unique-opened="true"
-                onSelect="select"
+                @select="select"
             >
                 <el-submenu
                     class="sub"
@@ -56,9 +56,9 @@
             getList() {
                 // this.$api('get_menu');
             },
-            // 选中事件
-            select() {
-
+            // 选中事件,根据indexPath的路径匹配路由
+            select(index, indexPath) {
+                this.$router.push({ name: indexPath.join('-') });
             }
         }
     }

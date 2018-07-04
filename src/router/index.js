@@ -2,9 +2,12 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 // 按需加载组件，在需要的时候才加载组件
-const Home = () => import ('@/pages/home' /* webpackChunkName: "pages/home" */ ).then(m => m.default || m)
-const BusinessList = () => import ('@/pages/business/list' /* webpackChunkName: "pages/business/list" */ ).then(m => m.default || m)
-const BusinessOrder = () => import ('@/pages/business/order' /* webpackChunkName: "pages/business/order" */ ).then(m => m.default || m)
+const Home = () =>
+    import ('@/pages/home' /* webpackChunkName: "pages/home" */ ).then(m => m.default || m)
+const BusinessList = () =>
+    import ('@/pages/business/list' /* webpackChunkName: "pages/business/list" */ ).then(m => m.default || m)
+const BusinessOrder = () =>
+    import ('@/pages/business/order' /* webpackChunkName: "pages/business/order" */ ).then(m => m.default || m)
 
 Vue.use(Router);
 
@@ -15,7 +18,7 @@ const scrollBehavior = (to, from, savedPosition) => {
         return savedPosition
     } else {
         let position = {}
-        // If no children detected
+            // If no children detected
         if (to.matched.length < 2) {
             // Scroll to the top of the page
             position = { x: 0, y: 0 }
@@ -40,10 +43,15 @@ const router = new Router({
     scrollBehavior,
     routes: [
         { name: 'home', path: '/home', component: Home },
-        { name: 'business', path: '/business', component: BusinessList, children: [
-            { name: 'business-list', path: 'list', component: BusinessList },
-            { name: 'business-order', path: 'order', component: BusinessOrder }
-        ]}
+        {
+            name: 'business',
+            path: '/business',
+            component: BusinessList,
+            children: [
+                { name: 'business-list', path: '/list', component: BusinessList },
+                { name: 'business-order', path: '/order', component: BusinessOrder }
+            ]
+        }
     ]
 });
 
@@ -52,7 +60,7 @@ const router = new Router({
  * to   从哪儿来
  * from 到哪儿去
  * next 必须执行才能路由过去
- */ 
+ */
 router.beforeEach((to, from, next) => {
     next();
 });

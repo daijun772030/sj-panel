@@ -3,6 +3,7 @@
         <Menu />
         <div class="wrapper">
             <Header />
+            <search />
             <div class="pages">
                 <div class="pages-inner">
                     <router-view></router-view>
@@ -15,11 +16,13 @@
 <script>
 import Menu from '@/components/Menu';
 import Header from '@/components/Header';
+import Search from '@/components/search' 
 export default {
     name: 'App',
     components: {
       Menu,
-      Header
+      Header,
+      Search
     }
 }
 </script>

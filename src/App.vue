@@ -10,7 +10,6 @@
                     <router-view></router-view>
                 </div>
             </div>
-            <Paging />
         </div>
     </div>
 </template>
@@ -54,7 +53,7 @@ export default {
             width: 100%;
             background-color:red;
             box-sizing: border-box;
-            height: calc(100% - 200px);
+            height: calc(100% - 150px);
             padding: 10px 10px 0;
             &-inner{
                 width: 100%;

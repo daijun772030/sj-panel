@@ -3,12 +3,14 @@
         <Menu />
         <div class="wrapper">
             <Header />
-            <search />
+            <Search />
+            <croumbs />
             <div class="pages">
                 <div class="pages-inner">
                     <router-view></router-view>
                 </div>
             </div>
+            <Paging />
         </div>
     </div>
 </template>
@@ -16,13 +18,18 @@
 <script>
 import Menu from '@/components/Menu';
 import Header from '@/components/Header';
-import Search from '@/components/search' 
+import Search from '@/components/search';
+import Paging from '@/components/footer';
+import Croumbs from '@/components/croumbs';
+
 export default {
     name: 'App',
     components: {
       Menu,
       Header,
-      Search
+      Search,
+      Paging,
+      Croumbs
     }
 }
 </script>
@@ -45,8 +52,9 @@ export default {
         left: 200px;
         .pages{
             width: 100%;
+            background-color:red;
             box-sizing: border-box;
-            height: calc(100% - 50px);
+            height: calc(100% - 200px);
             padding: 10px 10px 0;
             &-inner{
                 width: 100%;

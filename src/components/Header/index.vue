@@ -1,6 +1,7 @@
 <template>
     <div class="head">
         <div></div>
+        商家的信息
         <el-dropdown class="head-option" @command="handler">
             <span class="el-dropdown-link">
                 {{status}}<i class="el-icon-arrow-down el-icon--right"></i>

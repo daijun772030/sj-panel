@@ -9,22 +9,22 @@
     export default {
         data () {
             return {
-                message: "商家加一",
+                message: "商家订单的展示",
                 array: []
             }
         },
         created(){
-            var _this = this
-           _this.$axios.get('https://www.easy-mock.com/mock/5b3cb20beaf38c457dee359c/example/mock').then( function (data) {
+            
+        },
+        methods: {
+            divd () {
+                var _this = this
+                _this.$axios.get('https://www.easy-mock.com/mock/5b3cb20beaf38c457dee359c/example/mock').then( function (data) {
                 console.log(data.data.data.projects)
                 _this.array = data.data.data.projects
                 console.log(_this.array)
                 console.log(_this.message)
-            })
-        },
-        methods: {
-            divd () {
-            
+            }) 
             }
         }
     }

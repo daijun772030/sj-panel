@@ -1,6 +1,7 @@
 <template>
     <div class="head">
         <div></div>
+        查询搜索
         <el-dropdown class="head-option" @command="handler">
             <span class="el-dropdown-link">
                 {{status}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -48,7 +49,7 @@
     padding: 0 15px;
     display: flex;
     flex-flow: row nowrap;
-    justify-content: flex-end;
+    justify-content: space-around;
     align-items: center;
     box-shadow: 0 5px 10px -2px #ccc;
     &-option{

@@ -63,7 +63,7 @@
             <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="paging.currentPage1"
+            :current-page="paginObj.currentPage1"
             :page-sizes="[20, 30, 40, 60]"
             :page-size="paginObj.pageSize"
             layout="total, sizes, prev, pager, next, jumper"
@@ -80,17 +80,13 @@ export default {
             user: '',
             region: ''
         },
-        paging:{
-            currentPage1: 1,
-            currentPage2: 2,
-            currentPage3: 3,
-            currentPage4: 4
-        },
         paginObj: {
+            currentPage1: 1,
             pagnum:0,
             pageSize:20,
 
         },
+        dataNum:[],//需要渲染的条数
         pagingnum: '',//一共有多少条
         tableData: [{
           date: '2016-05-02',
@@ -203,11 +199,20 @@ export default {
         }
     },
     created () {
+        var val = this.paginObj.pageSize
         this.pagnum()
+        this.handleSizeChange(val)
     },
     methods: {
         handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
+        console.log(this.paginObj.pageSize)
+        for(let i=( this.paginObj.currentPage1-1)*this.paginObj.pageSize;i< this.currentPage1*this.paginObj.pageSize&&i<this.tableData.length;i++){
+            /*&&i<this.tableData.length*/
+          if(i<this.tableData.length){
+            this.dataNum.push(this.tableData[i])
+          }
+        }
         },
         handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
@@ -239,7 +244,7 @@ export default {
     .home-table{
         width: 100%;
         height: calc(100% - 120px);
-        border:1px solid blue;
+        // border:1px solid blue;
         overflow-x: auto;
         overflow-y: auto;
     }

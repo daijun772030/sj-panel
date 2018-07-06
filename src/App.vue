@@ -49,7 +49,7 @@ export default {
         left: 200px;
         .pages{
             width: 100%;
-            border:1px solid red;
+            // border:1px solid red;
             box-sizing: border-box;
             height: calc(100% - 50px);
             padding: 10px 10px 0;

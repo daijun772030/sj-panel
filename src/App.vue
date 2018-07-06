@@ -3,8 +3,6 @@
         <Menu />
         <div class="wrapper">
             <Header />
-            <Search />
-            <croumbs />
             <div class="pages">
                 <div class="pages-inner">
                     <router-view></router-view>
@@ -51,9 +49,9 @@ export default {
         left: 200px;
         .pages{
             width: 100%;
-            background-color:red;
+            border:1px solid red;
             box-sizing: border-box;
-            height: calc(100% - 150px);
+            height: calc(100% - 50px);
             padding: 10px 10px 0;
             &-inner{
                 width: 100%;

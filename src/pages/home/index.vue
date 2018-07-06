@@ -1,28 +1,40 @@
 <template>
-    <div class="home">  
-    <el-table class="table"
-    :data="tableData"
-    :slot="empty"
-    style="width: 100%">
-        <el-table-column
-        label="日期"
-        style="text-aligin:center"
-        >
+    <div class="home"> 
+        <!-- 搜索框的展示  -->
+        <el-form :inline="true" :model="formInline" class="searchForm">
+            <el-form-item label="审批人">
+                <el-input v-model="formInline.user" placeholder="审批人"></el-input>
+            </el-form-item>
+            <el-form-item label="活动区域">
+                <el-select v-model="formInline.region" placeholder="活动区域">
+                <el-option label="区域一" value="shanghai"></el-option>
+                <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary">查询</el-button>
+            </el-form-item>
+        </el-form>
+    <!-- 表格的展示 -->
+        <el-table
+            :data="tableData"
+            style="
+            height: calc(100% -60px)"
+            class="home-table">
+
+            <el-table-column
+            align="center"
+            label="日期"
+            width="180">
             <template slot-scope="scope">
                 <i class="el-icon-time"></i>
                 <span style="margin-left: 10px">{{ scope.row.date }}</span>
             </template>
-        </el-table-column>
-        <el-table-column
-        label="状态">
-            <template slot-scope="scope">
-                <I class="el-icon-time"></i>
-                <span style="margin-left:10px">{{scope.row.state}}</span>
-            </template>
-        </el-table-column>
-        <el-table-column
-        label="姓名"
-       >
+            </el-table-column>
+            <el-table-column
+             align="center"
+            label="姓名"
+            width="180">
             <template slot-scope="scope">
                 <el-popover trigger="hover" placement="top">
                 <p>姓名: {{ scope.row.name }}</p>
@@ -32,8 +44,10 @@
                 </div>
                 </el-popover>
             </template>
-        </el-table-column>
-        <el-table-column label="操作" >
+            </el-table-column>
+            <el-table-column
+             align="center"
+             label="操作">
             <template slot-scope="scope">
                 <el-button
                 size="mini"
@@ -43,260 +57,197 @@
                 type="danger"
                 @click="handleDelete(scope.$index, scope.row)">删除</el-button>
             </template>
-        </el-table-column>
-    </el-table>
-    <!-- <div class="pagination" v-show="searchObj.totalCount > 0">
-        <el-pagination
+            </el-table-column>
+        </el-table>
+        <div class="block">
+            <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            background
-            :current-page="searchObj.pageNum"
-            :page-sizes="[15, 30, 45, 60]"
+            :current-page="paging.currentPage1"
+            :page-sizes="[20, 30, 40, 60]"
+            :page-size="paginObj.pageSize"
             layout="total, sizes, prev, pager, next, jumper"
-            :page-size="searchObj.pageSize"
-            :total="searchObj.totalCount">
-        </el-pagination>
-    </div> -->
-    <div class="block">
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage4"
-      :page-sizes="[100, 200, 300, 400]"
-      :page-size="100"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="400">
-    </el-pagination>
-    </div>
+            :total="paginObj.pagnum">
+            </el-pagination>
+  </div>
     </div>
 </template>
 <script>
-    // 首页
-    export default {
-        data () {
-            return {
-            djdata: [],
-            tableData: [{
-                state:'成功',
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                state:'成功',
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄'
-                }, {
-                state:'成功',
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄'
-                }, {
-                state:'成功',
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-            },
-            {
-                state:'成功',
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                state:'成功',
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄'
-                }, {
-                state:'成功',
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄'
-                }, {
-                state:'成功',
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-            },
-            {
-                state:'成功',
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                state:'成功',
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄'
-                }, {
-                state:'成功',
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄'
-                }, {
-                state:'成功',
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-            },
-            {
-                state:'成功',
-                date: '2016-05-02',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                state:'成功',
-                date: '2016-05-04',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1517 弄'
-                }, {
-                state:'成功',
-                date: '2016-05-01',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1519 弄'
-                }, {
-                state:'成功',
-                date: '2016-05-03',
-                name: '王小虎',
-                address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                },{
-                    state:'成功',
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-            }]
-            }
+export default {
+    data(){
+        return {
+            formInline: {
+            user: '',
+            region: ''
         },
-        methods: {
-            handleEdit(index, row) {
-                console.log(index, row);
-            },
-            handleDelete(index, row) {
-                console.log(index, row);
-            }
+        paging:{
+            currentPage1: 1,
+            currentPage2: 2,
+            currentPage3: 3,
+            currentPage4: 4
         },
-        created () {
+        paginObj: {
+            pagnum:0,
+            pageSize:20,
 
+        },
+        pagingnum: '',//一共有多少条
+        tableData: [{
+          date: '2016-05-02',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          date: '2016-05-04',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1517 弄'
+        }, {
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1519 弄'
+        }, {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }, 
+        {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
         }
-         }
+        , {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }
+        , {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }
+        , {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }
+        , {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }
+        , {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        },
+        {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }
+        , {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }
+        , {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }
+        , {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }
+        , {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        },
+        {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        },
+        {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        },
+        {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        },
+        {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        },
+        {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        },
+        {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        },
+        {
+          date: '2016-05-03',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }
+        ]
+        }
+    },
+    created () {
+        this.pagnum()
+    },
+    methods: {
+        handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+        },
+        handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        },
+        //一共有多少条
+        pagnum () {
+            console.log(this.tableData.length)
+            this.paginObj.pagnum = this.tableData.length
+        }
+        }
+    }
+
 </script>
-<style lang="less" scoped>
+
+  <style lang="less" scoped>
     .home{
         width: 100%;
-        height: 100%;
+        height:100%;
         text-align: center;
-        background-color: red;
+        color: black;
+        // background-color: aqua;
     }
-    .table{
-        width:100%;
-        height: calc(100%-50px); 
+    .searchForm{
+        padding: 10px;
+
+    }
+</style>
+<style lang="less">
+    .home-table{
+        width: 100%;
+        height: calc(100% - 120px);
+        border:1px solid blue;
         overflow-x: auto;
         overflow-y: auto;
     }
     .block{
-    box-sizing: border-box;
-      width: 100%;
-      height: 50px;
-      padding: 0 15px;
-      display: flex;
-      flex-flow: row nowrap;
-      justify-content: space-around;
-      align-items: center;
-      box-shadow: 0 5px 10px -2px #ccc;
+        padding:10px;
     }
+    
 </style>
+
+
+

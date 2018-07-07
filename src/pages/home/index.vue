@@ -25,24 +25,39 @@
             <el-table-column
             align="center"
             label="日期"
-            width="180">
+            >
             <template slot-scope="scope">
                 <i class="el-icon-time"></i>
                 <span style="margin-left: 10px">{{ scope.row.number }}</span>
             </template>
             </el-table-column>
             <el-table-column
-             align="center"
-            label="姓名"
-            width="180">
+            align="center"
+            label="等级"
+            >
             <template slot-scope="scope">
-                <el-popover trigger="hover" placement="top">
-                <p>姓名: {{ scope.row.name }}</p>
-                <p>住址: {{ scope.row.address }}</p>
-                <div slot="reference" class="name-wrapper">
-                    <el-tag size="medium">{{ scope.row.name }}</el-tag>
-                </div>
+                <p style="color: red">{{scope.row.string}}</p>
+            </template>
+            </el-table-column>
+            <el-table-column
+            label="地址"
+            align="center">
+                <template slot-scope="scope">
+                    <el-popover trigger="hover" placement="top">
+                        <p>中心城市: {{ scope.row.object}}</p>
+                        <p>省份: {{ scope.row.object }}</p>
+                        <div slot="reference" class="name-wrapper">
+                        <el-tag size="medium">{{ scope.row.address }}</el-tag>
+                        </div>
                 </el-popover>
+                </template>
+            </el-table-column>
+            <el-table-column
+             align="center"
+            label="用途"
+           >
+            <template slot-scope="scope">
+                <p>{{scope.row.name}}</p>
             </template>
             </el-table-column>
             <el-table-column

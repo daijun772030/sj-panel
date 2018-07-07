@@ -28,7 +28,7 @@
             width="180">
             <template slot-scope="scope">
                 <i class="el-icon-time"></i>
-                <span style="margin-left: 10px">{{ scope.row.date }}</span>
+                <span style="margin-left: 10px">{{ scope.row.number }}</span>
             </template>
             </el-table-column>
             <el-table-column
@@ -199,28 +199,50 @@ export default {
         }
     },
     created () {
+        this.$axios.get('https://www.easy-mock.com/mock/5b3cb20beaf38c457dee359c/example/mock').then((data)=>{
+            console.log(data.data.data.projects)
+            this.dataNum = data.data.data.projects
+            console.log(this.dataNum)
+            
+        })
         var val = this.paginObj.pageSize
+         this.handleSizeChange(val)
         this.pagnum()
-        this.handleSizeChange(val)
+        console.log(this.dataNum)
+    },
+    computed: {
+
     },
     methods: {
         handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
+        console.log(this.tableData)
         console.log(this.paginObj.pageSize)
-        for(let i=( this.paginObj.currentPage1-1)*this.paginObj.pageSize;i< this.currentPage1*this.paginObj.pageSize&&i<this.tableData.length;i++){
+        this.paginObj.pageSize = val
+        this.dataNum = []
+        for(var i=( this.paginObj.currentPage1-1)*this.paginObj.pageSize;i< this.currentPage1*this.paginObj.pageSize&&i<this.tableData.length;i++){
             /*&&i<this.tableData.length*/
           if(i<this.tableData.length){
             this.dataNum.push(this.tableData[i])
           }
-        }
+        } 
         },
         handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+            this.paginObj.currentPage1 = val
+            this.dataNum = []
+            for(var i=( this.paginObj.currentPage1-1)*this.paginObj.pageSize;i< this.currentPage1*this.paginObj.pageSize&&i<this.tableData.length;i++){
+            /*&&i<this.tableData.length*/
+            if(i<this.tableData.length){
+                this.dataNum.push(this.tableData[i])
+                }
+            }
+            console.log(`当前页: ${val}`);
         },
-        //一共有多少条
+        //一共有多少条 
         pagnum () {
             console.log(this.tableData.length)
-            this.paginObj.pagnum = this.tableData.length
+            console.log(this.dataNum.length)
+            this.paginObj.pagnum = this.dataNum.length
         }
         }
     }

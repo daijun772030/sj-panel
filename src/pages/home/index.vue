@@ -17,7 +17,7 @@
         </el-form>
     <!-- 表格的展示 -->
         <el-table
-            :data="tableData"
+            :data="dataNum"
             style="
             height: calc(100% -60px)"
             class="home-table">
@@ -51,7 +51,7 @@
             <template slot-scope="scope">
                 <el-button
                 size="mini"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                @click="handleEdit(scope.$index, scope.row)">查看</el-button>
                 <el-button
                 size="mini"
                 type="danger"
@@ -63,11 +63,12 @@
             <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="paginObj.currentPage1"
-            :page-sizes="[20, 30, 40, 60]"
+            :current-page="paginObj.currentPage"
+            background
+            :page-sizes="[3, 5, 6, 8]"
             :page-size="paginObj.pageSize"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="paginObj.pagnum">
+            :total="tableData.length">
             </el-pagination>
   </div>
     </div>
@@ -81,134 +82,28 @@ export default {
             region: ''
         },
         paginObj: {
-            currentPage1: 1,
             pagnum:0,
-            pageSize:20,
+            pageSize:3,
+            currentPages: 1,
+            currentPage: 1
 
         },
         dataNum:[],//需要渲染的条数
         pagingnum: '',//一共有多少条
-        tableData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }, 
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-        , {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-        , {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-        , {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-        , {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-        , {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-        , {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-        , {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-        , {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-        , {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-        ]
+        tableData: []
+        
         }
     },
     created () {
         this.$axios.get('https://www.easy-mock.com/mock/5b3cb20beaf38c457dee359c/example/mock').then((data)=>{
             console.log(data.data.data.projects)
-            this.dataNum = data.data.data.projects
-            console.log(this.dataNum)
-            
+            this.tableData = data.data.data.projects
+            console.log(this.tableData)
+            for(let i = 0; i<this.paginObj.pageSize&&i<this.tableData.length;i++) {
+                this.dataNum.push(this.tableData[i])
+
+            }
         })
-        var val = this.paginObj.pageSize
-         this.handleSizeChange(val)
-        this.pagnum()
-        console.log(this.dataNum)
     },
     computed: {
 
@@ -217,10 +112,11 @@ export default {
         handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
         console.log(this.tableData)
-        console.log(this.paginObj.pageSize)
+        // console.log(this.paginObj.pageSize)
         this.paginObj.pageSize = val
+        console.log(this.paginObj.pageSize)
         this.dataNum = []
-        for(var i=( this.paginObj.currentPage1-1)*this.paginObj.pageSize;i< this.currentPage1*this.paginObj.pageSize&&i<this.tableData.length;i++){
+        for(var i=( this.paginObj.currentPage-1)*this.paginObj.pageSize;i< this.paginObj.currentPage*this.paginObj.pageSize&&i<this.tableData.length;i++){
             /*&&i<this.tableData.length*/
           if(i<this.tableData.length){
             this.dataNum.push(this.tableData[i])
@@ -228,21 +124,17 @@ export default {
         } 
         },
         handleCurrentChange(val) {
-            this.paginObj.currentPage1 = val
+            this.paginObj.currentPages = val
+            console.log(`当前页: ${val}`);
+            this.paginObj.currentPage = val
             this.dataNum = []
-            for(var i=( this.paginObj.currentPage1-1)*this.paginObj.pageSize;i< this.currentPage1*this.paginObj.pageSize&&i<this.tableData.length;i++){
+            for(var i=( this.paginObj.currentPage-1)*this.paginObj.pageSize;i< this.paginObj.currentPage*this.paginObj.pageSize&&i<this.tableData.length;i++){
             /*&&i<this.tableData.length*/
             if(i<this.tableData.length){
                 this.dataNum.push(this.tableData[i])
                 }
             }
             console.log(`当前页: ${val}`);
-        },
-        //一共有多少条 
-        pagnum () {
-            console.log(this.tableData.length)
-            console.log(this.dataNum.length)
-            this.paginObj.pagnum = this.dataNum.length
         }
         }
     }

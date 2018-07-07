@@ -111,9 +111,7 @@ export default {
     },
     created () {
         this.$axios.get('https://www.easy-mock.com/mock/5b3cb20beaf38c457dee359c/example/mock').then((data)=>{
-            console.log(data.data.data.projects)
             this.tableData = data.data.data.projects
-            console.log(this.tableData)
             for(let i = 0; i<this.paginObj.pageSize&&i<this.tableData.length;i++) {
                 this.dataNum.push(this.tableData[i])
 
@@ -125,11 +123,8 @@ export default {
     },
     methods: {
         handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-        console.log(this.tableData)
         // console.log(this.paginObj.pageSize)
         this.paginObj.pageSize = val
-        console.log(this.paginObj.pageSize)
         this.dataNum = []
         for(var i=( this.paginObj.currentPage-1)*this.paginObj.pageSize;i< this.paginObj.currentPage*this.paginObj.pageSize&&i<this.tableData.length;i++){
             /*&&i<this.tableData.length*/
@@ -140,7 +135,6 @@ export default {
         },
         handleCurrentChange(val) {
             this.paginObj.currentPages = val
-            console.log(`当前页: ${val}`);
             this.paginObj.currentPage = val
             this.dataNum = []
             for(var i=( this.paginObj.currentPage-1)*this.paginObj.pageSize;i< this.paginObj.currentPage*this.paginObj.pageSize&&i<this.tableData.length;i++){
@@ -149,7 +143,6 @@ export default {
                 this.dataNum.push(this.tableData[i])
                 }
             }
-            console.log(`当前页: ${val}`);
         }
         }
     }

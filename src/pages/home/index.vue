@@ -18,6 +18,8 @@
     <!-- 表格的展示 -->
         <el-table
             :data="dataNum"
+            v-loading="loading" 
+            element-loading-text="加载中..."
             style="
             height: calc(100% -60px)"
             class="home-table">
@@ -92,6 +94,7 @@
 export default {
     data(){
         return {
+            loading: false,
             formInline: {
             user: '',
             region: ''
@@ -110,39 +113,47 @@ export default {
         }
     },
     created () {
-        this.$axios.get('https://www.easy-mock.com/mock/5b3cb20beaf38c457dee359c/example/mock').then((data)=>{
-            this.tableData = data.data.data.projects
-            for(let i = 0; i<this.paginObj.pageSize&&i<this.tableData.length;i++) {
-                this.dataNum.push(this.tableData[i])
-
-            }
-        })
+        this.getList()
     },
     computed: {
 
     },
     methods: {
-        handleSizeChange(val) {
-        // console.log(this.paginObj.pageSize)
-        this.paginObj.pageSize = val
-        this.dataNum = []
-        for(var i=( this.paginObj.currentPage-1)*this.paginObj.pageSize;i< this.paginObj.currentPage*this.paginObj.pageSize&&i<this.tableData.length;i++){
+        getList () {
+            //这里用来组件一进来渲染的数据
+            this.loading = true 
+            this.$api('mock').then((data)=>{
+                console.log(data)
+            this.tableData = data.data.data.projects
+            for(let i = 0; i<this.paginObj.pageSize&&i<this.tableData.length;i++) {
+                this.dataNum.push(this.tableData[i])   
+            }
+        })
+        this.loading = false
+        },
+        seach () {
+            //在这里用来分页查询
+            for(var i=( this.paginObj.currentPage-1)*this.paginObj.pageSize;i< this.paginObj.currentPage*this.paginObj.pageSize&&i<this.tableData.length;i++){
             /*&&i<this.tableData.length*/
           if(i<this.tableData.length){
             this.dataNum.push(this.tableData[i])
           }
-        } 
+        }
+        },
+        handleSizeChange(val) {
+
+            //选择显示多少条每页
+        // console.log(this.paginObj.pageSize)
+        this.paginObj.pageSize = val
+        this.dataNum = []
+        this.seach()
+        
         },
         handleCurrentChange(val) {
-            this.paginObj.currentPages = val
+            // 选择第几页
             this.paginObj.currentPage = val
             this.dataNum = []
-            for(var i=( this.paginObj.currentPage-1)*this.paginObj.pageSize;i< this.paginObj.currentPage*this.paginObj.pageSize&&i<this.tableData.length;i++){
-            /*&&i<this.tableData.length*/
-            if(i<this.tableData.length){
-                this.dataNum.push(this.tableData[i])
-                }
-            }
+            this.seach()
         }
         }
     }
@@ -155,6 +166,7 @@ export default {
         height:100%;
         text-align: center;
         color: black;
+        color: rgba(0, 0, 0, 0.349)
         // background-color: aqua;
     }
     .searchForm{

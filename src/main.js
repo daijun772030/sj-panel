@@ -7,13 +7,16 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-import Axios from 'axios'
+import api from '../src/plugin/myapi'
 // import api from '~/static/api';
+// import axios from 'axios'
 Vue.use(ElementUI, { size: 'mini', zIndex: 3000 });
 Vue.config.productionTip = false
     // Vue.propotype.$api = api;
     /* eslint-disable no-new */
-Vue.prototype.$axios = Axios;
+Vue.prototype.$api = api
+    // Vue.prototype.$api = create()
+    // Vue.prototype.$axios = axios
 new Vue({
     el: '#app',
     router,

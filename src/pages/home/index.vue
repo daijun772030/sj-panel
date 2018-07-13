@@ -87,7 +87,7 @@
             layout="total, sizes, prev, pager, next, jumper"
             :total="tableData.length">
             </el-pagination>
-  </div>
+        </div>
     </div>
 </template>
 <script>
@@ -179,8 +179,6 @@ export default {
         width: 100%;
         height: calc(100% - 120px);
         // border:1px solid blue;
-        overflow-x: auto;
-        overflow-y: auto;
     }
     .block{
         padding:10px;

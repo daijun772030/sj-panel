@@ -56,6 +56,7 @@ const server = axios.create({
     }
 })
 server.interceptors.request.use(config => {
+    console.log(config)
     return config
 }, error => {
     return Promise.reject(error)
@@ -68,3 +69,16 @@ server.interceptors.response.use(response => {
 })
 
 export default server
+
+// const api = function(entry, data, param) {
+//     axios.create({
+//         baseURL: 'https://www.easy-mock.com/mock/5b3cb20beaf38c457dee359c/example/',
+//         timeout: 3000,
+//         withCredentials: true,
+//         headers: {
+//             'Content-Type': 'application/json; charset=utf-8'
+//         },
+//         url: entry,
+//         params: param
+//     })
+// }

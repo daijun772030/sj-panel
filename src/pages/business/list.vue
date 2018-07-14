@@ -108,6 +108,9 @@
                 currentPages: 1,
                 currentPage: 1
             },
+            pageNum: {
+
+            },
             dataNum:[],//需要渲染的条数
             pagingnum: '',//一共有多少条
             tableData: []
@@ -131,6 +134,9 @@
             this.loading = false
 
             
+        },
+        getconfig () {
+            this.dataNum = [1, 2, 3, 4, 5]
         }
     }
     }
@@ -142,11 +148,6 @@
         border:1px solid red;
         overflow: hidden;
     }
-    
-    // .float_right{
-    //     float: right;
-    //     right: 10px;
-    // }
 </style>
 <style lang="less">
    .searchForm{
@@ -160,8 +161,9 @@
         margin-top: 10px;
         // background-color: red;
     }
-
-    
+    .list{
+        background-color: red;
+    }
     
 </style>
 

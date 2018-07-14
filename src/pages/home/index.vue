@@ -1,5 +1,5 @@
 <template>
-    <div class="home"> 
+    <div class="home">
         <!-- 搜索框的展示  -->
         <el-form :inline="true" :model="formInline" class="searchForm">
             <el-form-item label="审批人">
@@ -95,6 +95,7 @@ export default {
     data(){
         return {
             loading: false,
+            input1: '',
             formInline: {
             user: '',
             region: ''
@@ -114,11 +115,21 @@ export default {
     },
     created () {
         this.getList()
+        this.gitSj()
     },
     computed: {
 
     },
     methods: {
+        // gitSj () {
+        //     this.$axios.post('http://192.168.0.124:8080/user/loginCode',{
+        //         code: 341864,
+        //         phone:18208144363,
+        //         state:0
+        //     }).then((data)=>{
+        //         console.log(data)
+        //     })
+        // },
         getList () {
             //这里用来组件一进来渲染的数据
             this.loading = true 

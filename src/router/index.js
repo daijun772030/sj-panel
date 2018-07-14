@@ -13,28 +13,27 @@ Vue.use(Router);
 
 // 路由后记住滚动条的位置
 const scrollBehavior = (to, from, savedPosition) => {
-    // SavedPosition is only available for popstate navigations.
-    if (savedPosition) {
-        return savedPosition
-    } else {
-        let position = {}
-            // If no children detected
-        if (to.matched.length < 2) {
-            // Scroll to the top of the page
-            position = { x: 0, y: 0 }
-        } else if (to.matched.some((r) => r.components.default.scrollToTop)) {
-            // If one of the children has scrollToTop option set to true
-            position = { x: 0, y: 0 }
+        // SavedPosition is only available for popstate navigations.
+        if (savedPosition) {
+            return savedPosition
+        } else {
+            let position = {}
+                // If no children detected
+            if (to.matched.length < 2) {
+                // Scroll to the top of the page
+                position = { x: 0, y: 0 }
+            } else if (to.matched.some((r) => r.components.default.scrollToTop)) {
+                // If one of the children has scrollToTop option set to true
+                position = { x: 0, y: 0 }
+            }
+            // If link has anchor, scroll to anchor by returning the selector
+            if (to.hash) {
+                position = { selector: to.hash }
+            }
+            return position
         }
-        // If link has anchor, scroll to anchor by returning the selector
-        if (to.hash) {
-            position = { selector: to.hash }
-        }
-        return position
     }
-}
-
-// 注册路由
+    // 注册路由
 const router = new Router({
     mode: 'history',
     base: '/sangjie/panel/', //项目的根名称 如：localhost:3000/sangjie/panel/index

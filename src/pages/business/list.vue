@@ -152,7 +152,7 @@
 <style lang="less">
    .searchForm{
         padding:10px;
-        border: 1px solid blue;
+        // border: 1px solid blue;
         overflow: hidden;
     }
     .list-table{

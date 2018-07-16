@@ -1,13 +1,13 @@
 export default [{
         id: "0",
-        name: "首页",
+        name: "订单管理",
         path: "home",
         icon: "home",
         children: []
     },
     {
         id: "0",
-        name: "商家管理",
+        name: "财务管理",
         path: "business",
         icon: "resource",
         children: [{
@@ -27,5 +27,26 @@ export default [{
 
         ]
     },
+    {
+        id: '0',
+        name: '商品管理',
+        path: 'shopping',
+        icon: "resource",
+        children: []
+    },
+    {
+        id: "0",
+        name: "活动管理",
+        path: "activity",
+        icon: "resource",
+        children: []
+    },
+    {
+        id: "0",
+        name: "推广",
+        path: "generalize",
+        icon: "resource",
+        children: []
+    }
 
 ];

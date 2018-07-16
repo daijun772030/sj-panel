@@ -1,23 +1,46 @@
 <template>
     <div class="home">
         <!-- 搜索框的展示  -->
-        <el-form :inline="true" :model="formInline" class="searchForm">
-            <el-form-item label="审批人">
-                <el-input v-model="formInline.user" placeholder="审批人"></el-input>
+
+        <el-form :inline="true" :model="seachObject" label-width="5px" size="mini"  class="searchForm">
+            <el-form-item class="float_left">
+                <el-input v-model="seachObject.input" placeholder="搜索" clearable prefix-icon="el-icon-search" style="width:217px"></el-input>
             </el-form-item>
-            <el-form-item label="活动区域">
-                <el-select v-model="formInline.region" placeholder="活动区域">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+            <el-form-item class="float_left">
+                <el-date-picker v-model="seachObject.starDate" type="date" clearable placeholder="起始日期"  class="wd"></el-date-picker>
+            </el-form-item>
+            <el-form-item class="float_left">
+                <el-date-picker v-model="seachObject.endDate" type="date" clearable placeholder="结束日期"  class="wd"></el-date-picker>
+            </el-form-item>
+            <el-form-item class="float_left">
+                <el-select v-model="seachObject.money" placeholder="金额区间" clearable>
+                    <el-option >
+                    </el-option>
+                </el-select>
+            </el-form-item >
+            <el-form-item class="float_left">
+                <el-select v-model="seachObject.state" placeholder="状态" clearable>
+                    <el-option >
+                    </el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item>
-                <el-button type="primary">查询</el-button>
+            <el-form-item class="float_left">
+                <el-button @click="earchForm" type="primary">确定</el-button>
+            </el-form-item>
+            <el-form-column
+            class="float-right">
+                <img src="" alt="">
+            </el-form-column>
+            <el-form-item  class="float_right" prop="region">
+                <el-select v-model="object.region" placeholder="营业状态">
+                <el-option label="营业中" value="shanghai"></el-option>
+                <el-option label="休息中" value="beijing"></el-option>
+                </el-select>
             </el-form-item>
         </el-form>
     <!-- 表格的展示 -->
         <el-table
-            :data="dataNum"
+            :data="object"
             v-loading="loading" 
             element-loading-text="加载中..."
             style="
@@ -26,41 +49,114 @@
 
             <el-table-column
             align="center"
-            label="日期"
+            label="订单号"
             >
             <template slot-scope="scope">
-                <i class="el-icon-time"></i>
-                <span style="margin-left: 10px">{{ scope.row.number }}</span>
+                <p>{{scope.row.orderNum}}</p>
             </template>
             </el-table-column>
             <el-table-column
             align="center"
-            label="等级"
+            width="80px"
+            label="姓名"
             >
             <template slot-scope="scope">
-                <p style="color: red">{{scope.row.string}}</p>
+                <p style="color: red">{{scope.row.name}}</p>
             </template>
             </el-table-column>
             <el-table-column
-            label="地址"
+            label="电话号码"
             align="center">
                 <template slot-scope="scope">
-                    <el-popover trigger="hover" placement="top">
-                        <p>中心城市: {{ scope.row.object}}</p>
-                        <p>省份: {{ scope.row.object }}</p>
-                        <div slot="reference" class="name-wrapper">
-                        <el-tag size="medium">{{ scope.row.address }}</el-tag>
-                        </div>
-                </el-popover>
+                    <p>{{scope.row.phone}}</p>
                 </template>
             </el-table-column>
             <el-table-column
              align="center"
-            label="用途"
+            label="地址"
            >
             <template slot-scope="scope">
-                <p>{{scope.row.name}}</p>
+                <p>{{scope.row.site}}</p>
             </template>
+            </el-table-column>
+            <el-table-column
+            align="center"
+            label="物品详情">
+                <!-- <el-popover trigger="hover" placement="top">
+                    <p>{{scope.row.object}}</p>
+                    <div slot="reference" class="name-wrapper">
+                    <el-tag size="medium">{{ scope.row.address }}</el-tag>
+                    </div>
+                </el-popover> -->
+                <template slot-scope="scope">
+                <p>{{scope.row.details}}</p>
+            </template>
+            </el-table-column>
+            <el-table-column
+            align="center"
+            label="付款时间"
+            width="100px">
+                <template slot-scope="scope">
+                    <p>{{scope.row.time}}</p>
+                </template>
+                
+            </el-table-column>
+            <el-table-column
+            align="center"
+            label="付款方式">
+                <template slot-scope="scope">
+                    <p>{{scope.row.paymentMethod}}</p>
+                </template>
+            </el-table-column>
+            <el-table-column
+            label="标签价格(元 )"
+            align="center"
+            width="80px">
+                <template slot-scope="scope">
+                    <p>{{scope.row.price}}</p>
+                </template>
+            </el-table-column>
+            <el-table-column
+            align="center"
+            label="实际价格(元)"
+            width="70px">
+            <template slot-scope="scope">
+                <p>{{scope.row.price}}</p>
+            </template>
+            </el-table-column>
+            <el-table-column
+            align="center"
+            label="客户备注">
+            <template slot-scope="scope">
+                <!-- <el-popover trigger="hover" placement="top">
+                    <p>{{scope.row.remark}}</p>
+                    <div slot="reference" class="name-wrapper">
+                    <el-tag size="medium">{{ scope.row.remark}}</el-tag>
+                    </div>
+                </el-popover> -->
+
+                <el-popover
+                placement="bottom"
+                title="客户备注详情:"
+                width="200"
+                trigger="hover"
+                :content="scope.row.remark">
+                    <el-button slot="reference">备注详情</el-button>
+                </el-popover>
+            </template>    
+            </el-table-column>
+            <el-table-column align="center"
+            label="取送时间">
+            <template slot-scope="scope">
+                <p>{{scope.row.takeTime}}</p>
+            </template>
+            </el-table-column>
+            <el-table-column
+            label="状态"
+            align="center">
+                <template slot-scope="scope">
+                    <p>{{scope.row.name}}</p>
+                </template>
             </el-table-column>
             <el-table-column
              align="center"
@@ -68,7 +164,7 @@
             <template slot-scope="scope">
                 <el-button
                 size="mini"
-                @click="handleEdit(scope.$index, scope.row)">查看</el-button>
+                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                 <el-button
                 size="mini"
                 type="danger"
@@ -88,12 +184,111 @@
             :total="tableData.length">
             </el-pagination>
         </div>
+        <el-dialog
+            title="订单修改"
+            :visible.sync="centerDialogVis"
+            width="50%"
+            center>
+            <!-- <span>需要注意的是内容是默认不居中的</span> -->
+            <el-form :model="myObject" label-width="100px" size="medium" class="searchForm1" :inline="true">
+                <el-form-item style="width: 40%" :size="medium"  label="订单号：">
+                    <input v-model="myObject.orderNum" :disabled="true" type="text">
+                </el-form-item>
+                <el-form-item style="width: 40% " label="姓名：">
+                    <input v-model="myObject.name" :disabled="true" type="text">
+                </el-form-item>
+                <el-form-item style="width: 40%" label="电话号码：">
+                    <input v-model="myObject.phone" :disabled="true" type="text">
+                </el-form-item>
+                <el-form-item  style="width: 40% " label="地址：">
+                    <input v-model="myObject.site" :disabled="true" type="text">
+                </el-form-item>
+                <el-form-item  style="width: 40% " label="物品详情：">
+                    <input v-model="myObject.details" :disabled="true" type="text">
+                </el-form-item>
+                <el-form-item  style="width: 40% " label="付款时间：">
+                    <input v-model="myObject.time" :disabled="true" type="text">
+                </el-form-item>
+                <el-form-item  style="width: 40% " label="付款方式：">
+                    <input v-model="myObject.paymentMethod" :disabled="true" type="text">
+                </el-form-item>
+                <el-form-item  style="width: 40% " label="标签价格：">
+                    <input v-model="myObject.price" :disabled="true" type="text">
+                </el-form-item>
+                <el-form-item  style="width: 40% " label="实际价格：">
+                    <input v-model="myObject.price" :disabled="true" type="text">
+                </el-form-item>
+                <el-form-item  style="width: 40% " label="客户备注：">
+                    <input v-model="myObject.remark" :disabled="false" type="text">
+                </el-form-item>
+                <el-form-item  style="width: 40% " label="取送时间：">
+                    <input v-model="myObject.takeTime" :disabled="false" type="text">
+                </el-form-item>
+                <el-form-item  style="width: 40% " label="状态：">
+                    <input v-model="myObject.name" :disabled="false" type="text">
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+            <el-button @click="centerDialogVis= false">取 消</el-button>
+            <el-button type="primary" @click="centerDialogVis = false">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
 export default {
     data(){
         return {
+            seachObject:{
+                input:'',
+                starDate: '',
+                endDate: '',
+                money: '',
+                state: ''
+            },
+            scopeIndex:"",
+            myObject:{},
+        centerDialogVis: false,
+         object:[{
+        region: '',
+        orderNum: "12348",
+        name: "万三",
+        phone: "13666288936",
+        site:"高新区王二大道",
+        details: "上衣/白色/有油脂",
+        time: "2018-07-16",
+        paymentMethod: "线上支付/微信",
+        price: "35",
+        remark: "上衣有油脂，上衣的位置还有一个洞，这是不能干洗，只能物理去除",
+        takeTime: "2018/07/16-2018/07/18"
+      },
+      {
+        orderNum: "12347",
+        name: "王五",
+        phone: "13666288964",
+        site: "高新区王二大道",
+        details: "上衣/白色/有油脂",
+        time: "2018-07-16",
+        paymentMethod: "线上支付/微信",
+        price: "35",
+        remark: "上衣有油脂，上衣的位置还有一个洞，这是不能干洗，只能物理去除",
+        takeTime: "2018/07/16-2018/07/18"
+      },
+      {
+        orderNum: "12345",
+        name: "刘二",
+        phone: "13666288968",
+        site: "高新区王二大道",
+        details: "上衣/白色/有油脂",
+        time: "2018-07-16",
+        paymentMethod: "线上支付/微信",
+        price: "35",
+        remark: "上衣有油脂，上衣的位置还有一个洞，这是不能干洗，只能物理去除",
+        takeTime: "2018/07/16-2018/07/18"
+      }
+
+    ],
+
             loading: false,
             input1: '',
             formInline: {
@@ -107,6 +302,9 @@ export default {
             currentPage: 1
 
         },
+        addForm: {
+
+        },
         dataNum:[],//需要渲染的条数
         pagingnum: '',//一共有多少条
         tableData: []
@@ -114,34 +312,37 @@ export default {
         }
     },
     created () {
-        this.getList()
-        this.gitSj()
+        // this.getList()
+        // this.gitSj()
     },
     computed: {
 
     },
     methods: {
-        // gitSj () {
-        //     this.$axios.post('http://192.168.0.124:8080/user/loginCode',{
-        //         code: 341864,
-        //         phone:18208144363,
-        //         state:0
-        //     }).then((data)=>{
-        //         console.log(data)
-        //     })
-        // },
-        getList () {
-            //这里用来组件一进来渲染的数据
-            this.loading = true 
-            this.$api('mock').then((data)=>{
-                console.log(data)
-            this.tableData = data.data.data.projects
-            for(let i = 0; i<this.paginObj.pageSize&&i<this.tableData.length;i++) {
-                this.dataNum.push(this.tableData[i])   
-            }
-        })
-        this.loading = false
+        earchForm () {//这里请求接口进行搜索然后渲染
+            console.log(this.seachObject)
         },
+        handleEdit (a,b) {
+            this.centerDialogVis = true;
+            console.log(b)
+            console.log(a)
+            this.scopeIndex = a
+            console.log(this.object[a])
+            this.myObject =this.object[a]
+            this.object[a]=this.myObject
+        },
+        // getList () {
+        //     //这里用来组件一进来渲染的数据
+        //     this.loading = true 
+        //     this.$api('mock').then((data)=>{
+        //         console.log(data)
+        //     this.tableData = data.data.data.projects
+        //     for(let i = 0; i<this.paginObj.pageSize&&i<this.tableData.length;i++) {
+        //         this.dataNum.push(this.tableData[i])   
+        //     }
+        // })
+        // this.loading = false
+        // },
         seach () {
             //在这里用来分页查询
             for(var i=( this.paginObj.currentPage-1)*this.paginObj.pageSize;i< this.paginObj.currentPage*this.paginObj.pageSize&&i<this.tableData.length;i++){
@@ -183,6 +384,12 @@ export default {
     .searchForm{
         padding: 10px;
 
+    }
+    .searchForm1{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content:center;
+        align-items: center;
     }
 </style>
 <style lang="less">

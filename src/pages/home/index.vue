@@ -41,7 +41,9 @@
     <!-- 表格的展示 -->
         <el-table
             :data="object"
+            empty-text="没有新东西"
             v-loading="loading" 
+            :default-sort = "{prop: 'condition', order: 'descending'}"
             element-loading-text="加载中..."
             style="
             height: calc(100% -60px)"
@@ -76,7 +78,7 @@
             label="地址"
            >
             <template slot-scope="scope">
-                <p>{{scope.row.site}}</p>
+                <p>{{scope.row.textarea}}</p>
             </template>
             </el-table-column>
             <el-table-column
@@ -155,7 +157,7 @@
             label="状态"
             align="center">
                 <template slot-scope="scope">
-                    <p>{{scope.row.name}}</p>
+                    <p>{{scope.row.condition}}</p>
                 </template>
             </el-table-column>
             <el-table-column
@@ -201,7 +203,8 @@
                     <input v-model="myObject.phone" :disabled="true" type="text">
                 </el-form-item>
                 <el-form-item  style="width: 40% " label="地址：">
-                    <input v-model="myObject.site" :disabled="true" type="text">
+                    <!-- <input v-model="myObject.site" :disabled="true" type="text"> -->
+                    <el-input type="textarea" :rows="2" placeholder="收货地址" v-model="myObject.textarea" :disabled="true"></el-input>
                 </el-form-item>
                 <el-form-item  style="width: 40% " label="物品详情：">
                     <input v-model="myObject.details" :disabled="true" type="text">
@@ -219,19 +222,21 @@
                     <input v-model="myObject.price" :disabled="true" type="text">
                 </el-form-item>
                 <el-form-item  style="width: 40% " label="客户备注：">
-                    <input v-model="myObject.remark" :disabled="false" type="text">
+                    <!-- <input v-model="myObject.remark" :disabled="false" type="text"> -->
+                    <el-input type="textarea" :rows="3" placeholder="客户备注" v-model="myObject.remark" :disabled="false"></el-input>
                 </el-form-item>
                 <el-form-item  style="width: 40% " label="取送时间：">
                     <input v-model="myObject.takeTime" :disabled="false" type="text">
                 </el-form-item>
                 <el-form-item  style="width: 40% " label="状态：">
-                    <input v-model="myObject.name" :disabled="false" type="text">
+                    <input v-model="myObject.condition" :disabled="false" type="text">
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
             <el-button @click="centerDialogVis= false">取 消</el-button>
             <el-button type="primary" @click="centerDialogVis = false">确 定</el-button>
             </span>
+            <!-- <audio src="">播放</audio> -->
         </el-dialog>
     </div>
 </template>
@@ -251,10 +256,12 @@ export default {
         centerDialogVis: false,
          object:[{
         region: '',
+        conditionNum: '0',
+        condition: "已接单",
         orderNum: "12348",
         name: "万三",
         phone: "13666288936",
-        site:"高新区王二大道",
+        textarea:"高新区王二大道",
         details: "上衣/白色/有油脂",
         time: "2018-07-16",
         paymentMethod: "线上支付/微信",
@@ -263,28 +270,32 @@ export default {
         takeTime: "2018/07/16-2018/07/18"
       },
       {
+        conditionNum: "0",
         orderNum: "12347",
         name: "王五",
         phone: "13666288964",
-        site: "高新区王二大道",
+        textarea: "高新区王二大道",
         details: "上衣/白色/有油脂",
         time: "2018-07-16",
         paymentMethod: "线上支付/微信",
         price: "35",
         remark: "上衣有油脂，上衣的位置还有一个洞，这是不能干洗，只能物理去除",
-        takeTime: "2018/07/16-2018/07/18"
+        takeTime: "2018/07/16-2018/07/18",
+        condition:"待接单"
       },
       {
+        conditionNum: '0',
         orderNum: "12345",
         name: "刘二",
         phone: "13666288968",
-        site: "高新区王二大道",
+        textarea: "高新区王二大道",
         details: "上衣/白色/有油脂",
         time: "2018-07-16",
         paymentMethod: "线上支付/微信",
         price: "35",
         remark: "上衣有油脂，上衣的位置还有一个洞，这是不能干洗，只能物理去除",
-        takeTime: "2018/07/16-2018/07/18"
+        takeTime: "2018/07/16-2018/07/18",
+        condition:"已接单"
       }
 
     ],
@@ -319,10 +330,14 @@ export default {
 
     },
     methods: {
+        //这里做列表的轮询。。查看是不是有新订单
+
+
         earchForm () {//这里请求接口进行搜索然后渲染
             console.log(this.seachObject)
         },
-        handleEdit (a,b) {
+        handleEdit (a,b) {//这个是点击编辑以后当前行的数据在input框中
+
             this.centerDialogVis = true;
             console.log(b)
             console.log(a)

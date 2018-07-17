@@ -21,6 +21,7 @@
                 <el-dropdown-item command="modifyPassword">修改密码</el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>
+        <audio v-if="true" src=""></audio>
     </div>
 </template>
 <script>

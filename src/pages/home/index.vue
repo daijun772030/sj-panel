@@ -253,77 +253,71 @@ export default {
             },
             scopeIndex:"",
             myObject:{},
-        centerDialogVis: false,
-         object:[{
-        region: '',
-        conditionNum: '0',
-        condition: "已接单",
-        orderNum: "12348",
-        name: "万三",
-        phone: "13666288936",
-        textarea:"高新区王二大道",
-        details: "上衣/白色/有油脂",
-        time: "2018-07-16",
-        paymentMethod: "线上支付/微信",
-        price: "35",
-        remark: "上衣有油脂，上衣的位置还有一个洞，这是不能干洗，只能物理去除",
-        takeTime: "2018/07/16-2018/07/18"
-      },
-      {
-        conditionNum: "0",
-        orderNum: "12347",
-        name: "王五",
-        phone: "13666288964",
-        textarea: "高新区王二大道",
-        details: "上衣/白色/有油脂",
-        time: "2018-07-16",
-        paymentMethod: "线上支付/微信",
-        price: "35",
-        remark: "上衣有油脂，上衣的位置还有一个洞，这是不能干洗，只能物理去除",
-        takeTime: "2018/07/16-2018/07/18",
-        condition:"待接单"
-      },
-      {
-        conditionNum: '0',
-        orderNum: "12345",
-        name: "刘二",
-        phone: "13666288968",
-        textarea: "高新区王二大道",
-        details: "上衣/白色/有油脂",
-        time: "2018-07-16",
-        paymentMethod: "线上支付/微信",
-        price: "35",
-        remark: "上衣有油脂，上衣的位置还有一个洞，这是不能干洗，只能物理去除",
-        takeTime: "2018/07/16-2018/07/18",
-        condition:"已接单"
-      }
-
-    ],
-
+            centerDialogVis: false,
+            object:[{
+                region: '',
+                conditionNum: '0',
+                condition: "已接单",
+                orderNum: "12348",
+                name: "万三",
+                phone: "13666288936",
+                textarea:"高新区王二大道",
+                details: "上衣/白色/有油脂",
+                time: "2018-07-16",
+                paymentMethod: "线上支付/微信",
+                price: "35",
+                remark: "上衣有油脂，上衣的位置还有一个洞，这是不能干洗，只能物理去除",
+                takeTime: "2018/07/16-2018/07/18"
+            },
+            {
+                conditionNum: "0",
+                orderNum: "12347",
+                name: "王五",
+                phone: "13666288964",
+                textarea: "高新区王二大道",
+                details: "上衣/白色/有油脂",
+                time: "2018-07-16",
+                paymentMethod: "线上支付/微信",
+                price: "35",
+                remark: "上衣有油脂，上衣的位置还有一个洞，这是不能干洗，只能物理去除",
+                takeTime: "2018/07/16-2018/07/18",
+                condition:"待接单"
+            },
+            {
+                conditionNum: '0',
+                orderNum: "12345",
+                name: "刘二",
+                phone: "13666288968",
+                textarea: "高新区王二大道",
+                details: "上衣/白色/有油脂",
+                time: "2018-07-16",
+                paymentMethod: "线上支付/微信",
+                price: "35",
+                remark: "上衣有油脂，上衣的位置还有一个洞，这是不能干洗，只能物理去除",
+                takeTime: "2018/07/16-2018/07/18",
+                condition:"已接单"
+            }],
             loading: false,
             input1: '',
             formInline: {
-            user: '',
-            region: ''
-        },
-        paginObj: {
-            pagnum:0,
-            pageSize:3,
-            currentPages: 1,
-            currentPage: 1
+                user: '',
+                region: ''
+            },
+            paginObj: {
+                pagnum:0,
+                pageSize:3,
+                currentPages: 1,
+                currentPage: 1
+            },
+            addForm: {
 
-        },
-        addForm: {
-
-        },
-        dataNum:[],//需要渲染的条数
-        pagingnum: '',//一共有多少条
-        tableData: []
-        
+            },
+            dataNum:[],//需要渲染的条数
+            pagingnum: '',//一共有多少条
+            tableData: []
         }
     },
     created () {
-        
         this.getList()
     },
     computed: {
@@ -332,17 +326,13 @@ export default {
     methods: {
         //这里做列表的轮询。。查看是不是有新订单
 
-            //测试接口的方法
-            getList () {
-              this.$axios.get("https://www.easy-mock.com/mock/5b3cb20beaf38c457dee359c/example/query",{
-                  params:{
-                      name:"hah"
-                  }
-              }
-              ).then((data)=>{
-                  console.log(data)
-              })
-            },
+        //测试接口的方法
+        getList () {
+            this.$api("query").then((data)=>{
+                debugger;
+                console.log(data)
+            })
+        },
         earchForm () {//这里请求接口进行搜索然后渲染
             console.log(this.seachObject)
         },

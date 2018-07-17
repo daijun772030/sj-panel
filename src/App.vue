@@ -4,7 +4,8 @@
         <div class="wrapper">
             <Header />
             <div class="pages">
-                <div class="pages-inner">
+                <div class="pages-inner animated fadeInLeft"
+                >
                     <router-view></router-view>
                 </div>
             </div>
@@ -32,6 +33,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@import "animate.css";
 #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -65,3 +67,8 @@ export default {
     }
 }
 </style>
+<style>
+  
+  
+</style>
+

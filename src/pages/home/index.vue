@@ -323,8 +323,8 @@ export default {
         }
     },
     created () {
-        // this.getList()
-        // this.gitSj()
+        
+        this.getList()
     },
     computed: {
 
@@ -332,7 +332,17 @@ export default {
     methods: {
         //这里做列表的轮询。。查看是不是有新订单
 
-
+            //测试接口的方法
+            getList () {
+              this.$axios.get("https://www.easy-mock.com/mock/5b3cb20beaf38c457dee359c/example/query",{
+                  params:{
+                      name:"hah"
+                  }
+              }
+              ).then((data)=>{
+                  console.log(data)
+              })
+            },
         earchForm () {//这里请求接口进行搜索然后渲染
             console.log(this.seachObject)
         },

@@ -48,11 +48,11 @@ import axios from 'axios'
 // }
 
 const server = axios.create({
-    baseURL: 'https://www.easy-mock.com/mock/5b3cb20beaf38c457dee359c/example/',
     timeout: 3000,
     withCredentials: true,
     headers: {
-        'Content-Type': 'application/json; charset=utf-8'
+        'Content-Type': 'application/json; charset=utf-8',
+        'Accept': 'application/json'
     }
 })
 server.interceptors.request.use(config => {

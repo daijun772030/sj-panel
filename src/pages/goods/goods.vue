@@ -30,7 +30,7 @@
           <el-table-column prop="price" label="商品价格" align="center"></el-table-column>
           <el-table-column prop="putawayState" label="是否上架" align="center">
             <template slot-scope="scope">
-              <span v-if="scope.row.putawayState === '1' ">已上架</span>
+              <span v-if="scope.row.putawayState === '1'">已上架</span>
               <span v-else>未上架</span>
             </template>
           </el-table-column>
@@ -40,8 +40,8 @@
             <template slot-scope="scope">
               <el-button type="text" size="mini">编辑</el-button>
               <el-button type="text" size="mini">删除</el-button>
-              <el-button v-if="scope.row.putawayState === '1' " type="text" size="mini">上架</el-button>
-              <el-button v-if="scope.row.putawayState === '0' " type="text" size="mini">下架</el-button>
+              <el-button v-if="scope.row.putawayState === '1'" type="text" size="mini">上架</el-button>
+              <el-button v-if="scope.row.putawayState === '0'" type="text" size="mini">下架</el-button>
             </template>  
           </el-table-column>
         </el-table>
@@ -51,7 +51,7 @@
     </div>
 </template>
 <script>
-  import GoodsObJ from './goods.js'
+  import GoodsObJ from './goods2.js'
   export default {
     data () {
       return {

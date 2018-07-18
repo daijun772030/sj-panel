@@ -25,11 +25,11 @@ export default {
     }
   },
   created () {
-    var _this = this
-    _this.$axios.get('https://www.easy-mock.com/mock/5b3cb20beaf38c457dee359c/example/mock').then((data)=> {
-      console.log(data.data.data.projects.length)
-      _this.total = data.data.data.projects.length
-    })
+    // var _this = this
+    // _this.$axios.get('https://www.easy-mock.com/mock/5b3cb20beaf38c457dee359c/example/mock').then((data)=> {
+    //   console.log(data.data.data.projects.length)
+    //   _this.total = data.data.data.projects.length
+    // })
   },
   methods: {
     handleSizeChange(val) {

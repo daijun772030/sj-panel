@@ -8,6 +8,15 @@ const BusinessList = () =>
     import ('@/pages/business/list' /* webpackChunkName: "pages/business/list" */ ).then(m => m.default || m)
 const BusinessOrder = () =>
     import ('@/pages/business/order' /* webpackChunkName: "pages/business/order" */ ).then(m => m.default || m)
+const Goods = () =>
+    import ('@/pages/goods/goods' /* webpackChunkName: "pages/home" */ ).then(m => m.default || m)
+const Activity = () =>
+    import ('@/pages/activity/activity' /* webpackChunkName: "pages/activity" */ ).then(m => m.default || m)
+const Finance = () =>
+    import ('@/pages/finance/finance' /* webpackChunkName: "pages/activity" */ ).then(m => m.default || m)
+const Generalize = () =>
+    import ('@/pages/generalize/generalize' /* webpackChunkName: "pages/activity" */ ).then(m => m.default || m)
+
 
 Vue.use(Router);
 
@@ -50,7 +59,11 @@ const router = new Router({
                 { name: 'business-list', path: '/list', component: BusinessList },
                 { name: 'business-order', path: '/order', component: BusinessOrder }
             ]
-        }
+        },
+        { name: 'goods', path: '/goods', component: Goods },
+        { name: 'activity', path: '/activity', component: Activity },
+        { name: 'finance', path: '/finance', component: Finance },
+        { name: 'generalize', path: '/generalize', component: Generalize }
     ]
 });
 

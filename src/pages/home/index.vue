@@ -27,12 +27,8 @@
             <el-form-item class="float_left">
                 <el-button @click="earchForm" type="primary">确定</el-button>
             </el-form-item>
-            <el-form-column
-            class="float-right">
-                <img src="" alt="">
-            </el-form-column>
             <el-form-item  class="float_right" prop="region">
-                <el-select v-model="object.region" placeholder="营业状态">
+                <el-select v-model="seachObject.region" placeholder="营业状态">
                 <el-option label="营业中" value="shanghai"></el-option>
                 <el-option label="休息中" value="beijing"></el-option>
                 </el-select>
@@ -40,7 +36,7 @@
         </el-form>
     <!-- 表格的展示 -->
         <el-table
-            :data="object"
+            :data="tableData"
             empty-text="没有新东西"
             v-loading="loading" 
             :default-sort = "{prop: 'condition', order: 'descending'}"
@@ -84,12 +80,6 @@
             <el-table-column
             align="center"
             label="物品详情">
-                <!-- <el-popover trigger="hover" placement="top">
-                    <p>{{scope.row.object}}</p>
-                    <div slot="reference" class="name-wrapper">
-                    <el-tag size="medium">{{ scope.row.address }}</el-tag>
-                    </div>
-                </el-popover> -->
                 <template slot-scope="scope">
                 <p>{{scope.row.details}}</p>
             </template>
@@ -130,13 +120,6 @@
             align="center"
             label="客户备注">
             <template slot-scope="scope">
-                <!-- <el-popover trigger="hover" placement="top">
-                    <p>{{scope.row.remark}}</p>
-                    <div slot="reference" class="name-wrapper">
-                    <el-tag size="medium">{{ scope.row.remark}}</el-tag>
-                    </div>
-                </el-popover> -->
-
                 <el-popover
                 placement="bottom"
                 title="客户备注详情:"
@@ -192,8 +175,8 @@
             width="50%"
             center>
             <!-- <span>需要注意的是内容是默认不居中的</span> -->
-            <el-form :model="myObject" label-width="100px" size="medium" class="searchForm1" :inline="true">
-                <el-form-item style="width: 40%" :size="medium"  label="订单号：">
+            <el-form :model="myObject" label-width="100px" class="searchForm1" :inline="true">
+                <el-form-item style="width: 40%"  label="订单号：">
                     <input v-model="myObject.orderNum" :disabled="true" type="text">
                 </el-form-item>
                 <el-form-item style="width: 40% " label="姓名：">
@@ -241,7 +224,8 @@
     </div>
 </template>
 <script>
-export default {
+    import DjObject from './object.js';
+    export default {
     data(){
         return {
             seachObject:{
@@ -249,54 +233,13 @@ export default {
                 starDate: '',
                 endDate: '',
                 money: '',
-                state: ''
+                state: '',
+                region: ''
             },
             scopeIndex:"",
             myObject:{},
             centerDialogVis: false,
-            object:[{
-                region: '',
-                conditionNum: '0',
-                condition: "已接单",
-                orderNum: "12348",
-                name: "万三",
-                phone: "13666288936",
-                textarea:"高新区王二大道",
-                details: "上衣/白色/有油脂",
-                time: "2018-07-16",
-                paymentMethod: "线上支付/微信",
-                price: "35",
-                remark: "上衣有油脂，上衣的位置还有一个洞，这是不能干洗，只能物理去除",
-                takeTime: "2018/07/16-2018/07/18"
-            },
-            {
-                conditionNum: "0",
-                orderNum: "12347",
-                name: "王五",
-                phone: "13666288964",
-                textarea: "高新区王二大道",
-                details: "上衣/白色/有油脂",
-                time: "2018-07-16",
-                paymentMethod: "线上支付/微信",
-                price: "35",
-                remark: "上衣有油脂，上衣的位置还有一个洞，这是不能干洗，只能物理去除",
-                takeTime: "2018/07/16-2018/07/18",
-                condition:"待接单"
-            },
-            {
-                conditionNum: '0',
-                orderNum: "12345",
-                name: "刘二",
-                phone: "13666288968",
-                textarea: "高新区王二大道",
-                details: "上衣/白色/有油脂",
-                time: "2018-07-16",
-                paymentMethod: "线上支付/微信",
-                price: "35",
-                remark: "上衣有油脂，上衣的位置还有一个洞，这是不能干洗，只能物理去除",
-                takeTime: "2018/07/16-2018/07/18",
-                condition:"已接单"
-            }],
+            tableData:DjObject.tableData,
             loading: false,
             input1: '',
             formInline: {
@@ -314,11 +257,10 @@ export default {
             },
             dataNum:[],//需要渲染的条数
             pagingnum: '',//一共有多少条
-            tableData: []
         }
     },
     created () {
-        this.getList()
+        // this.getList()
     },
     computed: {
 
@@ -328,8 +270,13 @@ export default {
 
         //测试接口的方法
         getList () {
-            this.$api("query").then((data)=>{
-                debugger;
+            this.$api("findByTypeIdAndMerId",{
+                params:{
+                    merchantid:"12",
+                    typeid:"1"
+                }
+            }).then((data)=>{
+                //  debugger;
                 console.log(data)
             })
         },
@@ -346,18 +293,6 @@ export default {
             this.myObject =this.object[a]
             this.object[a]=this.myObject
         },
-        // getList () {
-        //     //这里用来组件一进来渲染的数据
-        //     this.loading = true 
-        //     this.$api('mock').then((data)=>{
-        //         console.log(data)
-        //     this.tableData = data.data.data.projects
-        //     for(let i = 0; i<this.paginObj.pageSize&&i<this.tableData.length;i++) {
-        //         this.dataNum.push(this.tableData[i])   
-        //     }
-        // })
-        // this.loading = false
-        // },
         seach () {
             //在这里用来分页查询
             for(var i=( this.paginObj.currentPage-1)*this.paginObj.pageSize;i< this.paginObj.currentPage*this.paginObj.pageSize&&i<this.tableData.length;i++){
@@ -368,9 +303,7 @@ export default {
         }
         },
         handleSizeChange(val) {
-
             //选择显示多少条每页
-        // console.log(this.paginObj.pageSize)
         this.paginObj.pageSize = val
         this.dataNum = []
         this.seach()
@@ -384,10 +317,8 @@ export default {
         }
         }
     }
-
 </script>
-
-  <style lang="less" scoped>
+<style lang="less" scoped>
     .home{
         width: 100%;
         height:100%;
@@ -416,7 +347,6 @@ export default {
     .block{
         padding:10px;
     }
-    
 </style>
 
 

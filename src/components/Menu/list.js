@@ -30,7 +30,7 @@ export default [{
     {
         id: '0',
         name: '商品管理',
-        path: 'shopping',
+        path: 'goods',
         icon: "resource",
         children: []
     },

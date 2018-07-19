@@ -55,7 +55,7 @@
     },
     methods: {
      login () {
-       this.$api("logPwd",{phone:'13666288963'~,password:'qweasd'}).then((data)=>{
+       this.$api("logPwd",{phone:'13666288963',password:'qweasd'}).then((data)=>{
          console.log(data)
        })
      }

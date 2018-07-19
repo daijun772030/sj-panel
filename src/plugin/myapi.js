@@ -60,20 +60,24 @@ const get = (url) => {
         }
     }
 };
-// const post = (url) => {
-//     return (data) => {
-//         return (config) => {
-//             return instance.post(url, data, config);
-//         }
-//     }
-// };
+const post = (url) => {
+    return (data) => {
+        return (config) => {
+            return instance.post(url, data, config);
+        }
+    }
+};
 
 // 接口map 表
 const apis = {
     query: get('/example/query'),
+    merchant: get('/merchant/findByEvaluate'),
     Evaluete: get('/merchant/findByMerchantId'),
     // GET /merchant/findByTypeIdAndMerId
-    findByTypeIdAndMerId: get('/merchant/findByTypeIdAndMerId')
+    findByTypeIdAndMerId: get('/merchant/findByTypeIdAndMerId'),
+    logPwd: post('/user/loginPwd'),
+    //验证码登录
+    loginCOde: post('/user/loginCode')
 
 }
 const request = function(name, data, config) {

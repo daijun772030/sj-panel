@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+// import { resolve } from 'upath';
 
 // 按需加载组件，在需要的时候才加载组件
 const Home = () =>
@@ -16,7 +17,6 @@ const Finance = () =>
     import ('@/pages/finance/finance' /* webpackChunkName: "pages/finance" */ ).then(m => m.default || m)
 const Generalize = () =>
     import ('@/pages/generalize/generalize' /* webpackChunkName: "pages/generalize" */ ).then(m => m.default || m)
-
 
 Vue.use(Router);
 
@@ -51,6 +51,8 @@ const router = new Router({
     scrollBehavior,
     routes: [
         { name: 'home', path: '/home', component: Home },
+        { path: '/', redirect: '/login' },
+        { path: '/login', name: 'login', component: (resolve) => { require(['@/pages/login'], resolve) } },
         {
             name: 'business',
             path: '/business',
@@ -74,6 +76,14 @@ const router = new Router({
  * next 必须执行才能路由过去
  */
 router.beforeEach((to, from, next) => {
-    next();
+    if (to.path === '/login') {
+        next();
+    } else {
+        if (sessionStorage.username) {
+            next();
+        } else {
+            next({ path: 'login' })
+        }
+    }
 });
 export default router;

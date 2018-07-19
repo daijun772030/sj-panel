@@ -30,7 +30,7 @@
           <el-table-column prop="price" label="商品价格" align="center"></el-table-column>
           <el-table-column prop="putawayState" label="是否上架" align="center">
             <template slot-scope="scope">
-              <span v-if="scope.row.putawayState === '1' ">已上架</span>
+              <span v-if="scope.row.putawayState === '1'">已上架</span>
               <span v-else>未上架</span>
             </template>
           </el-table-column>
@@ -42,6 +42,7 @@
               <el-button type="text" size="mini">删除</el-button>
               <el-button v-if="scope.row.putawayState === '1' " type="text" size="mini" @click="status(scope.row)">上架</el-button>
               <el-button v-if="scope.row.putawayState === '0' " type="text" size="mini" @click="status(scope.row)">下架</el-button>
+
             </template>  
           </el-table-column>
         </el-table>
@@ -133,7 +134,7 @@
         this.dialogVisible = false;
       },
       save () {//保存
-        
+
       },
       //添加商品
       add () {

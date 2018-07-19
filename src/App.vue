@@ -4,8 +4,7 @@
         <div class="wrapper">
             <Header />
             <div class="pages">
-                <div class="pages-inner animated fadeInLeft"
-                >
+                <div class="pages-inner animated fadeInLeft">
                     <router-view></router-view>
                 </div>
             </div>

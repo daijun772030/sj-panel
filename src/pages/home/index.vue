@@ -14,14 +14,14 @@
             </el-form-item>
             <el-form-item class="float_left">
                 <el-select v-model="seachObject.money" placeholder="金额区间" clearable>
-                    <el-option >
-                    </el-option>
+                    <!-- <el-option >
+                    </el-option> -->
                 </el-select>
             </el-form-item >
             <el-form-item class="float_left">
                 <el-select v-model="seachObject.state" placeholder="状态" clearable>
-                    <el-option >
-                    </el-option>
+                    <!-- <el-option >
+                    </el-option> -->
                 </el-select>
             </el-form-item>
             <el-form-item class="float_left">
@@ -171,7 +171,9 @@
         </div>
         <el-dialog
             title="订单修改"
+            :show-close="false"
             :visible.sync="centerDialogVis"
+            :modal-append-to-body="false" 
             width="50%"
             center>
             <!-- <span>需要注意的是内容是默认不居中的</span> -->

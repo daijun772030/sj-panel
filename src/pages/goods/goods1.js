@@ -1,26 +1,29 @@
 export default {
     list: [{
-            goodsName: '毛绒大衣',
+            classify: '1',
+            goodsName: '运动裤',
             goodsLogo: '没有图片',
-            producType: '上衣',
+            producType: '裤子',
             price: '35',
             putawayState: '1',
             upData: '2018-07-14',
             endData: '2018-7-18'
         },
         {
-            goodsName: '毛绒大衣',
+            classify: '2',
+            goodsName: '西服套装',
             goodsLogo: '没有图片',
-            producType: '上衣',
+            producType: '套装',
             price: '35',
             putawayState: '0',
             upData: '2018-07-14',
             endData: '2018-7-18'
         },
         {
-            goodsName: '毛绒大衣',
+            classify: '3',
+            goodsName: '皮鞋',
             goodsLogo: '没有图片',
-            producType: '上衣',
+            producType: '鞋子',
             price: '35',
             putawayState: '1',
             upData: '2018-07-14',

@@ -276,6 +276,8 @@
             this.$api("test").then((data)=>{
                 //  debugger;
                 console.log(data)
+            }).catch(err => {
+
             })
         },
         earchForm () {//这里请求接口进行搜索然后渲染

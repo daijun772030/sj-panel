@@ -12,7 +12,7 @@ module.exports = {
         proxyTable: {
             //这里设置代理的接口头部
             '/api': {
-                target: 'http://192.168.0.124:8082/',
+                target: 'https://www.easy-mock.com/mock/5b51ef429ce5fe26a0a30504/',
                 changeOrigin: true, // 是否跨域
                 pathRewrite: {
                     '^/api': ''

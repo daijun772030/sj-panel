@@ -263,7 +263,7 @@
         }
     },
     created () {
-        // this.getList()
+        this.getList()
     },
     computed: {
 
@@ -273,12 +273,7 @@
 
         //测试接口的方法
         getList () {
-            this.$api("findByTypeIdAndMerId",{
-                params:{
-                    merchantid:"12",
-                    typeid:"1"
-                }
-            }).then((data)=>{
+            this.$api("test").then((data)=>{
                 //  debugger;
                 console.log(data)
             })

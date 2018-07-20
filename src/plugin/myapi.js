@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Vue from 'vue';
 const baseURL = process.env.baseURL || "/api";
 console.log(process.env.baseURL);
 
@@ -32,8 +33,17 @@ const create = function() {
 
     // 响应拦截器
     http.interceptors.response.use(response => {
-        if (response) {
-            return response
+        debugger;
+        // 响应状态统一处理
+        const { data } = response;
+        if(data.retCode == 200){
+            return data;
+        }else if(data.retCode == -200){
+            window.location.replace('/sangjie/panel/login');
+            // Vue.prototype.$router.replace('/login');
+        }else {
+            Vue.prototype.$message.error(data.message);
+            return Promise.reject(data);
         }
     }, error => {
         return Promise.reject(error)
@@ -54,13 +64,13 @@ const instance = create();
 //         };
 //     };
 // });
-// const get = (url) => {
-//     return (data) => {
-//         return (config) => {
-//             return instance.get(url, data, config);
-//         }
-//     }
-// };
+const get = (url) => {
+    return (data) => {
+        return (config) => {
+            return instance.get(url, data, config);
+        }
+    }
+};
 const post = (url) => {
     return (data) => {
         return (config) => {
@@ -73,6 +83,7 @@ const post = (url) => {
 const apis = {
     //商户后台登录的接口
     login: post('/merchant/login'),
+    test: get('/example/query')
 }
 const request = function(name, data, config) {
     return apis[name](data)(config);

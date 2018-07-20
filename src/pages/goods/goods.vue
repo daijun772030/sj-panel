@@ -4,12 +4,12 @@
             <el-form-item class="float_left">
                 <el-input v-model="searchObj.searchKey" placeholder="搜索" clearable prefix-icon="el-icon-search" style="width:217px"></el-input>
             </el-form-item>
-            <el-form-item class="float_left">
+            <!-- <el-form-item class="float_left">
               <el-date-picker type="date" clearable placeholder="选择上传时间" v-model="searchObj.createDay" class="wd"></el-date-picker>
             </el-form-item>
             <el-form-item class="float_left">
               <el-date-picker type="date" clearable placeholder="选择上传时间" v-model="searchObj.updateDay" class="wd"></el-date-picker>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item class="float_left">
               <el-select v-model="searchObj.productType" placeholder="商品类型" clearable>
                 <el-option v-for="channel in productTypes" :key="channel.productType" :label="channel.productName" :value="channel.productType">
@@ -34,15 +34,14 @@
               <span v-else>未上架</span>
             </template>
           </el-table-column>
-          <el-table-column prop="upData" label="上传时间" align="center"></el-table-column>
-          <el-table-column prop="endData" label="最后编辑时间" align="center"></el-table-column>
+          <!-- <el-table-column prop="upData" label="上传时间" align="center"></el-table-column>
+          <el-table-column prop="endData" label="最后编辑时间" align="center"></el-table-column> -->
           <el-table-column label="操作" align="center" width="200">
             <template slot-scope="scope">
               <el-button type="text" size="mini" @click="edit(scope.row.classify)">编辑</el-button>
-              <el-button type="text" size="mini">删除</el-button>
+              <!-- <el-button type="text" size="mini">删除</el-button> -->
               <el-button v-if="scope.row.putawayState === '1' " type="text" size="mini" @click="status(scope.row)">上架</el-button>
               <el-button v-if="scope.row.putawayState === '0' " type="text" size="mini" @click="status(scope.row)">下架</el-button>
-
             </template>  
           </el-table-column>
         </el-table>
@@ -53,16 +52,16 @@
                 <el-option v-for="item in productTypes" :key="item.productType" :label="item.productName" :value="item.productType"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="商品类型：" prop="productType" class="uniq">
-              <el-select v-model="addform.productType" placeholder="请选择商品得类型">
+            <el-form-item label="商品名称：" prop="productType" class="uniq">
+              <el-select v-model="addform.productType" placeholder="请选择商品">
                 <el-option v-for="item in productTypes" :key="item.productType" :label="item.productName" :value="item.productType"></el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="商品logo：" class="uniq">
+            <!-- <el-form-item label="商品logo：" class="uniq">
               <div><img src="" alt=""></div>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item label="商品价格：" prop="price" class="uniq">
-              <el-input type="text" placeholder="请输入商品定价金额" v-model="addform.price">
+              <el-input width='100' type="text" placeholder="请输入商品定价金额" v-model="addform.price">
                 <template slot="append">元</template>
               </el-input>
             </el-form-item>
@@ -145,6 +144,7 @@
       edit (myCode) {
         this.dialogVisible = true;
         this.title = '编辑商品';
+        
       },
       //上下架状态
       status (row) {

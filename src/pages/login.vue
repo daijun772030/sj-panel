@@ -1,64 +1,124 @@
 <template>
   <div class="login">
-    <el-row class="title">
-      <el-col :span="10" class="login-form">
-        <div class="grid-content bg-purple">
-          <el-form :model="loginForm" :rules="loginRule" ref="loginForm" label-width="0">
-            <el-row>
-              <el-col>
-                <el-form-item prop="phone">
-                  <el-input type="text" placeholder="请输入用户名" v-model="loginForm.phone" auto-complete="off"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col>
-                <el-form-item prop="password">
-                  <el-input type="text" placeholder="请输入密码" v-model="loginForm.password" auto-complete="off"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col class="menus">
-                <el-button class="loginBtn" type="primary" @click.stop="submitFrom('loginFrom')">登录</el-button>
-              </el-col>
-            </el-row>
-          </el-form>
-        </div>
-      </el-col>
-    </el-row>
+    <div class="login-page">
+      <el-form class="login-form">
+        <el-form-item>
+          <el-input
+          :autofocus="true"
+          placeholder="请输入密码"
+          v-model="username">
+          <template slot="prepend"><i class="el-icon-mobile-phone"></i></template>
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-input
+            placeholder="请输入密码"
+            type="password"
+            v-model="password">
+            <template slot="prepend"><i class="el-icon-info"></i></template>
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button style="width:100%" @click.native="login" type="primary" :loading="isBtnLoading">{{btnText}}</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 <script>
+// import Hashes from 'jshashes'
   export default {
+    // components: {
+    //   has: Hashes
+    // },
+    // data () {
+    //   return {
+    //     loginForm: {
+    //       mobole: "",
+    //       password: ""
+    //     },
+    //     loginRule: {
+    //       phone:[
+    //         {required: true, message: "请输入用户名", trigger: "blur"}
+    //       ],
+    //       password: [
+    //         {required: true, message: "请输入密码", trigger: "blur"},
+    //         {min: 6,max:18, message: "请输入6-18位密码", trigger: "blur"}
+    //       ]
+    //     }
+    //   }
+    // },
+    // created: function () {
+    //   // this.login (),
+    //   this.myp()
+    // },
+    // mounted: function () {
+    // },
+    // methods: {
+    //   myp () {
+    //      var a = "adadaaa";
+    //      var b = '123456'
+    //     var MD5 = new Hashes.MD5;
+    //     // 4a487207c071c0a1e8689906a7eacdc0
+    //     console.log(MD5.hex(a))
+    //     console.log(MD5.hex(b))
+    //   },
+    //  login () {
+    //    this.$api('login',{mobole:'123',password:'123'}).then((res)=>{
+    //      debugger;
+    //      console.log(res)
+    //    })
+    //  },
+    //   submitFrom (data) {
+    //     console.log("这是登录页面")
+    //   }
+    // }
+
     data () {
       return {
-        loginForm: {
-          phone: "",
-          password: ""
-        },
-        loginRule: {
-          phone:[
-            {required: true, message: "请输入用户名", trigger: "blur"}
-          ],
-          password: [
-            {required: true, message: "请输入密码", trigger: "blur"},
-            {min: 6,max:18, message: "请输入6-18位密码", trigger: "blur"}
-          ]
-        }
+        username: '',
+        password: '',
+        isBtnLoading: false
       }
     },
-    created: function () {
-      this.login ()
+    computed: {
+      btnText () {
+        if (this.isBtnLoading) return "登录中";
+        return '登录';
+      }
     },
-    mounted: function () {
+    created () {
+      this.login()
     },
     methods: {
-     login () {
-       this.$api("logPwd",{phone:'13666288963',password:'qweasd'}).then((data)=>{
-         console.log(data)
-       })
-     }
+      login () {
+        this.$api('login',{mobole:'123',password:'123'}).then((res)=>{
+          debugger;
+          console.log(res)
+        })
+      }
+      // login () {
+      //   var vm =this ;
+      //   if (!vm.username) {
+      //     vm.$message.error("请填写用户名");
+      //     return;
+      //   }
+      //   if(!vm.password) {
+      //     vm.$message.error("请填写密码");
+      //     return;
+      //   }
+      //   // let loginParams = {name:vm.username,password:vm.password};
+      //   this.$api('login',{mobole:'123',password:'123'}).then((res)=>{
+      //     debugger;
+      //     if(res.data.retCode ==200) {
+      //       //这里就要储存token，并且跳转路由
+      //     }else{
+      //       return Promise.error({
+      //         message:''
+      //       })
+      //     }
+      //   })
+      // }
     }
   }
 </script>
@@ -91,8 +151,9 @@
     }
     .login .title {
         position: absolute;
-        top: 20px;
-        left: 10rem;
+        top: 50%;
+        margin-left: -128px;
+        left: 50%;
         text-align: center;
         color: #abd0aa;
         font-size: 46px;

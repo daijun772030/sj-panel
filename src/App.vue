@@ -1,14 +1,20 @@
 <template>
     <div id="app">
-        <Menu />
-        <div class="wrapper">
-            <Header />
+        <div v-if="true">
+            <login/>
+        </div>
+        <div v-else>
+            <Menu />
+            <div class="wrapper">
+                <Header />
             <div class="pages">
                 <div class="pages-inner animated fadeInLeft">
                     <router-view></router-view>
                 </div>
             </div>
         </div>
+        </div>
+            
     </div>
 </template>
 
@@ -18,6 +24,7 @@ import Header from '@/components/Header';
 import Search from '@/components/search';
 import Paging from '@/components/footer';
 import Croumbs from '@/components/croumbs';
+import login from '@/pages/login'
 
 export default {
     name: 'App',
@@ -26,7 +33,8 @@ export default {
       Header,
       Search,
       Paging,
-      Croumbs
+      Croumbs,
+      login
     }
 }
 </script>

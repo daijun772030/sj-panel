@@ -12,15 +12,15 @@ const create = function() {
     });
     // 请求拦截器
     http.interceptors.request.use(config => {
-
-        // if (config.method === 'post') {
-        //     const FormData = new FormData()
-        //     Object.keys(config.data).forEach((key) => FormData.append(key, config.data[key]))
-        //     config.data = FormData
-        // }
-        // config.headers = {
-        //     'content-type': 'application/x-www-form-urlencoded'
-        // }
+        if (config.method === 'post') {
+            // const FormData = new FormData()
+            // Object.keys(config.data).forEach((key) => FormData.append(key, config.data[key]))
+            // config.data = FormData
+            config.data = JSON.stringify(config.data)
+        }
+        config.headers = {
+            'content-type': 'application/x-www-form-urlencoded'
+        }
         return config
     }, error => {
         return Promise.reject(error)
@@ -28,8 +28,11 @@ const create = function() {
 
     // 响应拦截器
     http.interceptors.response.use(response => {
+        if (response) {
+            return response
+        }
         const { data } = response
-        if (data && data != "") {
+        if (data) {
             return data
         } else {
             console.log("没有任何东西")
@@ -70,15 +73,8 @@ const post = (url) => {
 
 // 接口map 表
 const apis = {
-    query: get('/example/query'),
-    merchant: get('/merchant/findByEvaluate'),
-    Evaluete: get('/merchant/findByMerchantId'),
-    // GET /merchant/findByTypeIdAndMerId
-    findByTypeIdAndMerId: get('/merchant/findByTypeIdAndMerId'),
-    logPwd: post('/user/loginPwd'),
-    //验证码登录
-    loginCOde: post('/user/loginCode')
-
+    //商户后台登录的接口
+    login: post('/merchant/login'),
 }
 const request = function(name, data, config) {
     return apis[name](data)(config);

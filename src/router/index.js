@@ -3,8 +3,13 @@ import Router from 'vue-router';
 // import { resolve } from 'upath';
 
 // 按需加载组件，在需要的时候才加载组件
-const Home = () =>
-    import ('@/pages/home' /* webpackChunkName: "pages/home" */ ).then(m => m.default || m)
+import App from '@/App';
+const Manager = () =>
+    import ('@/pages/manager' /* webpackChunkName: "pages/manager" */ ).then(m => m.default || m)
+const Login = () =>
+        import ('@/pages/login' /* webpackChunkName: "pages/login" */ ).then(m => m.default || m)
+const Order = () =>
+    import ('@/pages/order' /* webpackChunkName: "pages/order" */ ).then(m => m.default || m)
 const BusinessList = () =>
     import ('@/pages/business/list' /* webpackChunkName: "pages/business/list" */ ).then(m => m.default || m)
 const BusinessOrder = () =>
@@ -50,22 +55,27 @@ const router = new Router({
     linkExactActiveClass: 'b-c-link-active',
     scrollBehavior,
     routes: [
-        { name: 'home', path: '/home', component: Home },
-        { path: '/', redirect: '/login' },
-        { path: '/login', name: 'login', component: (resolve) => { require(['@/pages/login'], resolve) } },
-        {
-            name: 'business',
-            path: '/business',
-            component: BusinessList,
-            children: [
-                { name: 'business-list', path: '/list', component: BusinessList },
-                { name: 'business-order', path: '/order', component: BusinessOrder }
-            ]
-        },
-        { name: 'goods', path: '/goods', component: Goods },
-        { name: 'activity', path: '/activity', component: Activity },
-        { name: 'finance', path: '/finance', component: Finance },
-        { name: 'generalize', path: '/generalize', component: Generalize }
+        { name: '/', path: '/', component: App, children: [
+            { name: 'login', path: 'login', component: Login },
+            {name:'manager',path:'manager',component:Manager, 
+                children: [
+                    { name: 'order', path: 'order', component: Order },
+                    {
+                        name: 'business',
+                        path: 'business',
+                        component: BusinessList,
+                        children: [
+                            { name: 'business-list', path: 'list', component: BusinessList },
+                            { name: 'business-order', path: 'order', component: BusinessOrder }
+                        ]
+                    },
+                    { name: 'goods', path: 'goods', component: Goods },
+                    { name: 'activity', path: 'activity', component: Activity },
+                    { name: 'finance', path: 'finance', component: Finance },
+                    { name: 'generalize', path: 'generalize', component: Generalize }
+                ]
+            }
+        ]}
     ]
 });
 
@@ -76,15 +86,15 @@ const router = new Router({
  * next 必须执行才能路由过去
  */
 router.beforeEach((to, from, next) => {
-    if (to.path === '/login') {
-        next();
-    } else {
-        if (sessionStorage.username) {
-            next();
-        } else {
-            next({ path: 'login' })
-        }
-    }
+    // if (to.path === '/login') {
+    //     next();
+    // } else {
+    //     if (sessionStorage.username) {
+    //         next();
+    //     } else {
+    //         next({ path: 'login' })
+    //     }
+    // }
     next()
 });
 export default router

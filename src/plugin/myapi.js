@@ -18,9 +18,13 @@ const create = function() {
             // config.data = FormData
             config.data = JSON.stringify(config.data)
         }
-        config.headers = {
-            'content-type': 'application/x-www-form-urlencoded'
-        }
+        // const token = localStorage.getItem('token');
+        // if(token){
+        //     config.headers = {
+        //         cookie: `token=${token}`
+        //     }
+        // }
+        
         return config
     }, error => {
         return Promise.reject(error)
@@ -30,12 +34,6 @@ const create = function() {
     http.interceptors.response.use(response => {
         if (response) {
             return response
-        }
-        const { data } = response
-        if (data) {
-            return data
-        } else {
-            console.log("没有任何东西")
         }
     }, error => {
         return Promise.reject(error)
@@ -56,13 +54,13 @@ const instance = create();
 //         };
 //     };
 // });
-const get = (url) => {
-    return (data) => {
-        return (config) => {
-            return instance.get(url, data, config);
-        }
-    }
-};
+// const get = (url) => {
+//     return (data) => {
+//         return (config) => {
+//             return instance.get(url, data, config);
+//         }
+//     }
+// };
 const post = (url) => {
     return (data) => {
         return (config) => {

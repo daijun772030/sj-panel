@@ -30,50 +30,7 @@
   export default {
     // components: {
     //   has: Hashes
-    // },
-    // data () {
-    //   return {
-    //     loginForm: {
-    //       mobole: "",
-    //       password: ""
-    //     },
-    //     loginRule: {
-    //       phone:[
-    //         {required: true, message: "请输入用户名", trigger: "blur"}
-    //       ],
-    //       password: [
-    //         {required: true, message: "请输入密码", trigger: "blur"},
-    //         {min: 6,max:18, message: "请输入6-18位密码", trigger: "blur"}
-    //       ]
-    //     }
-    //   }
-    // },
-    // created: function () {
-    //   // this.login (),
-    //   this.myp()
-    // },
-    // mounted: function () {
-    // },
-    // methods: {
-    //   myp () {
-    //      var a = "adadaaa";
-    //      var b = '123456'
-    //     var MD5 = new Hashes.MD5;
-    //     // 4a487207c071c0a1e8689906a7eacdc0
-    //     console.log(MD5.hex(a))
-    //     console.log(MD5.hex(b))
-    //   },
-    //  login () {
-    //    this.$api('login',{mobole:'123',password:'123'}).then((res)=>{
-    //      debugger;
-    //      console.log(res)
-    //    })
-    //  },
-    //   submitFrom (data) {
-    //     console.log("这是登录页面")
-    //   }
-    // }
-
+//    }
     data () {
       return {
         username: '',
@@ -88,37 +45,37 @@
       }
     },
     created () {
-      this.login()
+    //   this.login()
     },
     methods: {
+    //   login () {
+    //     this.$api('login',{mobole:'123',password:'123'}).then((res)=>{
+    //       debugger;
+    //       console.log(res)
+    //     })
+    //   }
       login () {
+        var vm =this ;
+        if (!vm.username) {
+          vm.$message.error("请填写用户名");
+          return;
+        }
+        if(!vm.password) {
+          vm.$message.error("请填写密码");
+          return;
+        }
+        // let loginParams = {name:vm.username,password:vm.password};
         this.$api('login',{mobole:'123',password:'123'}).then((res)=>{
           debugger;
-          console.log(res)
+          if(res.data.retCode ==200) {
+            //这里就要储存token，并且跳转路由
+          }else{
+            return Promise.error({
+              message:''
+            })
+          }
         })
       }
-      // login () {
-      //   var vm =this ;
-      //   if (!vm.username) {
-      //     vm.$message.error("请填写用户名");
-      //     return;
-      //   }
-      //   if(!vm.password) {
-      //     vm.$message.error("请填写密码");
-      //     return;
-      //   }
-      //   // let loginParams = {name:vm.username,password:vm.password};
-      //   this.$api('login',{mobole:'123',password:'123'}).then((res)=>{
-      //     debugger;
-      //     if(res.data.retCode ==200) {
-      //       //这里就要储存token，并且跳转路由
-      //     }else{
-      //       return Promise.error({
-      //         message:''
-      //       })
-      //     }
-      //   })
-      // }
     }
   }
 </script>

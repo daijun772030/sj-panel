@@ -1,8 +1,8 @@
 export default [{
         id: "0",
         name: "订单管理",
-        path: "home",
-        icon: "home",
+        path: "order",
+        icon: "order",
         children: []
     },
     {

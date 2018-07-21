@@ -54,14 +54,14 @@ import Hashes from 'jshashes'
       login () {
           var MD5 = new Hashes.MD5;
         // debugger;
-        if (!this.login1.phone) {
-          this.$message.error("请填写用户名");
-          return;
-        }
-        if(!this.login1.password) {
-          this.$message.error("请填写密码");
-          return;
-        }
+        // if (!this.login1.phone) {
+        //   this.$message.error("请填写用户名");
+        //   return;
+        // }
+        // if(!this.login1.password) {
+        //   this.$message.error("请填写密码");
+        //   return;
+        // }
         // let loginParams = {name:vm.username,password:vm.password};
         this.$api("login",{"phone":this.login1.phone,"password": MD5.hex(this.login1.password)}).then((res)=>{
             console.log(res)

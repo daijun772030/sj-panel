@@ -1,7 +1,7 @@
 import axios from 'axios'
-import Vue from 'vue';
+// import Vue from 'vue';
 const baseURL = process.env.baseURL || "/api";
-console.log(process.env.baseURL);
+// console.log(process.env.baseURL);
 
 // 请求对象实例，具体的方法
 const create = function() {
@@ -13,10 +13,8 @@ const create = function() {
     });
     // 请求拦截器
     http.interceptors.request.use(config => {
+        // debugger;
         if (config.method === 'post') {
-            // const FormData = new FormData()
-            // Object.keys(config.data).forEach((key) => FormData.append(key, config.data[key]))
-            // config.data = FormData
             config.data = JSON.stringify(config.data)
         }
         // const token = localStorage.getItem('token');
@@ -25,7 +23,7 @@ const create = function() {
         //         cookie: `token=${token}`
         //     }
         // }
-        
+
         return config
     }, error => {
         return Promise.reject(error)
@@ -33,18 +31,19 @@ const create = function() {
 
     // 响应拦截器
     http.interceptors.response.use(response => {
-        debugger;
-        // 响应状态统一处理
-        const { data } = response;
-        if(data.retCode == 200){
-            return data;
-        }else if(data.retCode == -200){
-            window.location.replace('/sangjie/panel/login');
-            // Vue.prototype.$router.replace('/login');
-        }else {
-            Vue.prototype.$message.error(data.message);
-            return Promise.reject(data);
-        }
+        // debugger;
+        return response
+            // 响应状态统一处理
+            // const { data } = response;
+            // if (data.retCode == 200) {
+            //     return data;
+            // } else if (data.retCode == -200) {
+            //     window.location.replace('/sangjie/panel/login');
+            //     // Vue.prototype.$router.replace('/login');
+            // } else {
+            //     Vue.prototype.$message.error(data.message);
+            //     return Promise.reject(data);
+            // }
     }, error => {
         return Promise.reject(error)
     })
@@ -81,9 +80,15 @@ const post = (url) => {
 
 // 接口map 表
 const apis = {
+    //发送验证码
+    sendSms: get('/user/sendSms'),
+    status: get('/shoppingCar/findByShoppingCarStatus'),
     //商户后台登录的接口
     login: post('/merchant/login'),
-    test: get('/example/query')
+    shop: post('/shoppingCar/shoppingCarByNumberAndRemark'),
+    shopping: get('/shoppingCar/findByShoppingCarStatus'),
+    //商品接口
+    myshop: get('/commodity/all')
 }
 const request = function(name, data, config) {
     return apis[name](data)(config);

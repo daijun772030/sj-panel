@@ -6,7 +6,7 @@
 export default {
     data(){
         return {
-            index : "/manager"
+            index : "login"
         }
     },
     created(){
@@ -14,12 +14,12 @@ export default {
     },
     methods : {
         async showPage(){
-            // this.$api("islogin").then(res => {
-            //     if(res.retCode == 200) this.index = "/manager";
-            //     this.$router.push({ name : this.index });
+            this.$api("myshop",{"pageNum":'1',"pageSize":'1'}).then(res => {
+                if(res.data.retCode == 200) this.index = "manager";
+                this.$router.push({ name : this.index });
             // const { token } = res;
             // localStorage.setItem('token', token);
-            // });
+            });
             this.$router.replace({ path : this.index });
         }
     }

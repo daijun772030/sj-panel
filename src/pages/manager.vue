@@ -21,8 +21,10 @@ import Paging from '@/components/footer';
 import Croumbs from '@/components/croumbs';
 export default {
     name: 'App',
-    data() {
-        // isLogin: true
+    data () {
+        return {
+            
+        }
     },
     components: {
       Menu,

@@ -1,12 +1,12 @@
 <template>
   <div class="login">
     <div class="login-page">
-      <el-form class="login-form">
+      <el-form class="login-form" :model="login1">
         <el-form-item>
           <el-input
           :autofocus="true"
           placeholder="请输入密码"
-          v-model="username">
+          v-model="login1.phone">
           <template slot="prepend"><i class="el-icon-mobile-phone"></i></template>
           </el-input>
         </el-form-item>
@@ -14,28 +14,31 @@
           <el-input
             placeholder="请输入密码"
             type="password"
-            v-model="password">
+            v-model="login1.password">
             <template slot="prepend"><i class="el-icon-info"></i></template>
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button style="width:100%" @click.native="login" type="primary" :loading="isBtnLoading">{{btnText}}</el-button>
+          <el-button style="width:100%" @click="login" type="primary" :loading="isBtnLoading">{{btnText}}</el-button>
         </el-form-item>
       </el-form>
     </div>
   </div>
 </template>
 <script>
-// import Hashes from 'jshashes'
+import Hashes from 'jshashes'
   export default {
-    // components: {
-    //   has: Hashes
-//    }
+    components: {
+      Hashes: Hashes
+   },
     data () {
       return {
-        username: '',
-        password: '',
-        isBtnLoading: false
+          manager:"manager",
+        isBtnLoading: false,
+        login1:{
+            "phone":'',
+            "password": ''
+        }
       }
     },
     computed: {
@@ -45,35 +48,29 @@
       }
     },
     created () {
-    //   this.login()
+
     },
     methods: {
-    //   login () {
-    //     this.$api('login',{mobole:'123',password:'123'}).then((res)=>{
-    //       debugger;
-    //       console.log(res)
-    //     })
-    //   }
       login () {
-        var vm =this ;
-        if (!vm.username) {
-          vm.$message.error("请填写用户名");
+          var MD5 = new Hashes.MD5;
+        // debugger;
+        if (!this.login1.phone) {
+          this.$message.error("请填写用户名");
           return;
         }
-        if(!vm.password) {
-          vm.$message.error("请填写密码");
+        if(!this.login1.password) {
+          this.$message.error("请填写密码");
           return;
         }
         // let loginParams = {name:vm.username,password:vm.password};
-        this.$api('login',{mobole:'123',password:'123'}).then((res)=>{
-          debugger;
-          if(res.data.retCode ==200) {
-            //这里就要储存token，并且跳转路由
-          }else{
-            return Promise.error({
-              message:''
-            })
-          }
+        this.$api("login",{"phone":this.login1.phone,"password": MD5.hex(this.login1.password)}).then((res)=>{
+            console.log(res)
+            // var message = res.data.message
+        //   if(res.data.retCode==200) {
+        //       this.$router.replace({ path : this.manager });
+        //   }else if (res.data.retCode==500102) {
+        //       this.$message.error(message)
+        //   }
         })
       }
     }

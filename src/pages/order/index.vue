@@ -263,7 +263,7 @@
         }
     },
     created () {
-        this.getList()
+        // this.getList()
     },
     computed: {
 

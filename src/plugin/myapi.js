@@ -14,9 +14,9 @@ const create = function() {
     // 请求拦截器
     http.interceptors.request.use(config => {
         // debugger;
-        if (config.method === 'post') {
-            config.data = JSON.stringify(config.data)
-        }
+        // if (config.method === 'post') {
+        //     config.data = JSON.stringify(config.data)
+        // }
         // const token = localStorage.getItem('token');
         // if(token){
         //     config.headers = {
@@ -35,7 +35,7 @@ const create = function() {
         return response
             // 响应状态统一处理
             // const { data } = response;
-            // if (data.retCode == 200) {
+            // if (data.data.retCode == 200) {
             //     return data;
             // } else if (data.retCode == -200) {
             //     window.location.replace('/sangjie/panel/login');

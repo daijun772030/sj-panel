@@ -63,14 +63,14 @@ import Hashes from 'jshashes'
         //   return;
         // }
         // let loginParams = {name:vm.username,password:vm.password};
-        this.$api("login",{"phone":this.login1.phone,"password": MD5.hex(this.login1.password)}).then((res)=>{
+        this.$api("login",{phone:this.login1.phone,password: MD5.hex(this.login1.password)}).then((res)=>{
             console.log(res)
-            // var message = res.data.message
-        //   if(res.data.retCode==200) {
-        //       this.$router.replace({ path : this.manager });
-        //   }else if (res.data.retCode==500102) {
-        //       this.$message.error(message)
-        //   }
+            var message = res.data.message
+          if(res.data.retCode==200) {
+              this.$router.replace({ path : this.manager });
+          }else if (res.data.retCode==500102) {
+              this.$message.error(message)
+          }
         })
       }
     }

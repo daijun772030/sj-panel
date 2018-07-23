@@ -71,6 +71,8 @@ import Hashes from 'jshashes'
               this.$router.replace({ path : this.manager });
           }else if (res.data.retCode==500102) {
               this.$message.error(message)
+          }else if (res.data.retCode==500104) {
+              this.$message.error(message)
           }
         })
       }

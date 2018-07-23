@@ -62,7 +62,7 @@ const instance = create();
 const get = (url) => {
     return (data) => {
         return (config) => {
-            return instance.get(url, { data }, config);
+            return instance.get(url, data, config);
         }
     }
 };
@@ -82,8 +82,8 @@ const apis = {
     //商品接口
     myshop: get('/commodity/all'), //查询所有商品
     addshop: post('/commodity/addCommodity'), //添加商品
-    delshop: post('/commodity/deletByCommodity'), //删除商品
-    upshop: post('/commodity/aupdateByCommodity'), //修改商品
+    delshop: post('/commodity/deleteByCommodityid'), //删除商品
+    upshop: post('/commodity/updateByCommodityid'), //修改商品
     //商品类型
     typeFind: get('/type/findByTypeHigherup'), //根据一级下单栏查询下级
     typeStatus: get('/type/findByTypeStatus') //查询一级下单栏

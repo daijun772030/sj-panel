@@ -140,42 +140,52 @@
       //     console.log(data)
       //   })
       // },
-      //查询一级下单栏
+      //修改商品
       upshop () {
-        this.$api('upshop',{id:'1',price:'34'}).teh((res)=>{
+        this.$api('upshop',{id:'2',price:'34'}).then((res)=>{
           console.log(res)
         })
       },
+
+      //查询一级下单栏
       typeid (){
-        this.$api('typeFind',{id:'1'}).then((res)=>{
+        this.$api('typeFind',{params:{id:'1'}}).then((res)=>{
           console.log(res)
         })
       },
+      //添加商品
       addshop () {
         // debugger;
         this.$api('addshop',{typeid:'7',price:'36'}).then((res)=>{
-          console.log(res)
+          console.log( res)
         })
       },
+      //删除商品
       delshop () {
         this.$api('delshop',{id:'1'}).then((res)=>{
           console.log(res)
         })
       },
 
+        //查询所有商品
+      ces (){
+        // debugger;
+        this.$api("myshop",{params:{pageNum:'1',pageSize:'4'}}).then((res)=>{
+          console.log(res)
+        })
+      },
+
+
+
 
       close (addform) {
         this.dialogVisible = false;
       },
+
+
+
       save () {//保存
 
-      },
-      //测试代码
-      ces (){
-        // debugger;
-        this.$api("myshop",{pageNum:'1',pageSize:'1'}).then((res)=>{
-          console.log(res)
-        })
       },
       //添加商品
       add () {

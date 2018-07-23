@@ -129,6 +129,8 @@
       this.addshop();
       this.ces();
       this.delshop()
+      this.typeid()
+      this.upshop()
     },
     methods: {
       //弹窗修改和新增后的保存/取消
@@ -138,16 +140,30 @@
       //     console.log(data)
       //   })
       // },
+      //查询一级下单栏
+      upshop () {
+        this.$api('upshop',{id:'1',price:'34'}).teh((res)=>{
+          console.log(res)
+        })
+      },
+      typeid (){
+        this.$api('typeFind',{id:'1'}).then((res)=>{
+          console.log(res)
+        })
+      },
       addshop () {
-        this.$api('addshop',{typeid:'5',price:'36'}).then((res)=>{
+        // debugger;
+        this.$api('addshop',{typeid:'7',price:'36'}).then((res)=>{
           console.log(res)
         })
       },
       delshop () {
-        this.$api('delshop',{id:'5'}).then((res)=>{
+        this.$api('delshop',{id:'1'}).then((res)=>{
           console.log(res)
         })
       },
+
+
       close (addform) {
         this.dialogVisible = false;
       },
@@ -156,7 +172,8 @@
       },
       //测试代码
       ces (){
-        this.$api("myshop",{pageNum:'1',pageSize:'2'}).then((res)=>{
+        // debugger;
+        this.$api("myshop",{pageNum:'1',pageSize:'1'}).then((res)=>{
           console.log(res)
         })
       },

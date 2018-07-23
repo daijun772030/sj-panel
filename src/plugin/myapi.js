@@ -62,7 +62,7 @@ const instance = create();
 const get = (url) => {
     return (data) => {
         return (config) => {
-            return instance.get(url, data, config);
+            return instance.get(url, { data }, config);
         }
     }
 };

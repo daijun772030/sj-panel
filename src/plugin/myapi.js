@@ -32,18 +32,14 @@ const create = function() {
     // 响应拦截器
     http.interceptors.response.use(response => {
         // debugger;
-        return response
-            // 响应状态统一处理
-            // const { data } = response;
-            // if (data.data.retCode == 200) {
-            //     return data;
-            // } else if (data.retCode == -200) {
-            //     window.location.replace('/sangjie/panel/login');
-            //     // Vue.prototype.$router.replace('/login');
-            // } else {
-            //     Vue.prototype.$message.error(data.message);
-            //     return Promise.reject(data);
-            // }
+        return response;
+        // 响应状态统一处理
+        // if (response.data.retCode == 200) {
+        //     return response;
+        // } else if (response.data.retCode == -200) {
+        //     window.location.replace('/sangjie/panel/login');
+        //     // Vue.prototype.$router.replace('/login');
+        // }
     }, error => {
         return Promise.reject(error)
     })
@@ -80,15 +76,17 @@ const post = (url) => {
 
 // 接口map 表
 const apis = {
-    //发送验证码
-    sendSms: get('/user/sendSms'),
-    status: get('/shoppingCar/findByShoppingCarStatus'),
     //商户后台登录的接口
     login: post('/merchant/login'),
-    shop: post('/shoppingCar/shoppingCarByNumberAndRemark'),
-    shopping: get('/shoppingCar/findByShoppingCarStatus'),
+    cancellation: get('/merchant/cancellation'),
     //商品接口
-    myshop: get('/commodity/all')
+    myshop: get('/commodity/all'), //查询所有商品
+    addshop: post('/commodity/addCommodity'), //添加商品
+    delshop: post('/commodity/deletByCommodity'), //删除商品
+    upshop: post('/commodity/aupdateByCommodity'), //修改商品
+    //商品类型
+    typeFind: get('/type/findByTypeHigherup'), //根据一级下单栏查询下级
+    typeStatus: get('/type/findByTypeStatus') //查询一级下单栏
 }
 const request = function(name, data, config) {
     return apis[name](data)(config);

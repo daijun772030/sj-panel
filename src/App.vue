@@ -14,9 +14,10 @@ export default {
     },
     methods : {
         async showPage(){
-            this.$api("myshop",{"pageNum":'1',"pageSize":'1'}).then(res => {
-                if(res.data.retCode == 200) this.index = "manager";
-                this.$router.push({ name : this.index });
+            // debugger;
+            this.$api("typeFind",{id:'1'}).then(res => {
+                if(res.data.retCode !== -200) this.index = "manager";
+                this.$router.replace({ path: this.index });
             // const { token } = res;
             // localStorage.setItem('token', token);
             });

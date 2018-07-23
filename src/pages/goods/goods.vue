@@ -125,15 +125,40 @@
       }
     },
     created () {
-
+      // this.allshop()
+      this.addshop();
+      this.ces();
+      this.delshop()
     },
     methods: {
       //弹窗修改和新增后的保存/取消
+      //查询商品
+      // allshop () {
+      //   this.$api('upshop',{id:'1',price:'1'}).then((data)=>{
+      //     console.log(data)
+      //   })
+      // },
+      addshop () {
+        this.$api('addshop',{typeid:'5',price:'36'}).then((res)=>{
+          console.log(res)
+        })
+      },
+      delshop () {
+        this.$api('delshop',{id:'5'}).then((res)=>{
+          console.log(res)
+        })
+      },
       close (addform) {
         this.dialogVisible = false;
       },
       save () {//保存
 
+      },
+      //测试代码
+      ces (){
+        this.$api("myshop",{pageNum:'1',pageSize:'2'}).then((res)=>{
+          console.log(res)
+        })
       },
       //添加商品
       add () {

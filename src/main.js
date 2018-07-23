@@ -8,9 +8,11 @@ import router from './router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import create from '../src/plugin/myapi'
+import VueCookies from 'vue-cookies'
 Vue.use(ElementUI, { size: 'mini', zIndex: 3000 });
 Vue.config.productionTip = false
 Vue.prototype.$api = create
+Vue.prototype.$cookies = VueCookies
 new Vue({
     el: '#app',
     router,

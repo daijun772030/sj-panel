@@ -43,10 +43,13 @@
                 }
             },
             loginout() {
-                this.$model("loginout").then(res => {
-                    if(res.errcode == 0) this.$router.push({ name : "login" });
-                    this.$store.dispatch("UPDATE_LOGIN_STATE", false);
-                });
+                // debugger;
+            this.$api('cancellation').then((res)=>{
+                if(res.data.retCode==-200){
+                    this.$router.replace({ path : '/login' });
+                }
+                console.log(res)
+            })
             },
             modifyPassword() {
                 this.$router.push({ name : "reset" });

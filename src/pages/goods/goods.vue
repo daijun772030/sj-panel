@@ -38,7 +38,7 @@
         <el-table-column prop="endData" label="最后编辑时间" align="center"></el-table-column> -->
         <el-table-column label="操作" align="center" width="200">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" @click="edit(scope.row)">编辑</el-button>
+            <el-button type="text" size="mini" @click="edit(scope.row.classify)">编辑</el-button>
             <!-- <el-button type="text" size="mini">删除</el-button> -->
             <el-button v-if="scope.row.putawayState === '1' " type="text" size="mini" @click="status(scope.row)">上架</el-button>
             <el-button v-if="scope.row.putawayState === '0' " type="text" size="mini" @click="status(scope.row)">下架</el-button>
@@ -186,7 +186,11 @@
       save () {//保存
 
       },
-     
+      //添加商品
+      add () {
+        this.title = "添加商品"
+        this.dialogVisible = true
+      },
       //编辑商品
       edit (myCode) {
         this.dialogVisible = true;
@@ -194,29 +198,29 @@
         
       },
       //上下架状态
-      // status (row) {
-      //   let message = row.putawayState === "1" ? "上架" : "下架";
-      //   // let url = row.putawayState === '0';
-      //   this.$confirm(`是否确定${message}该商品？`, '提示', {
-      //     confirmButtonT: '确定',
-      //     concelButtonText: '取消',
-      //     type: 'warning',
-      //     closeOnClickModal: false
-      //   }).then(()=> {
-      //     this.$message ({
-      //       type: "success",
-      //       message:`${message}成功`
-      //     })
-      //   }).catch(()=> {
-      //     this.$message ({
-      //       type: 'info',
-      //       message:`已经取消${message}该商品？`
-      //     })
-      //   })
-      // },
-      // earchForm () {
-      //   console.log("戴军")
-      // }
+      status (row) {
+        let message = row.putawayState === "1" ? "上架" : "下架";
+        // let url = row.putawayState === '0';
+        this.$confirm(`是否确定${message}该商品？`, '提示', {
+          confirmButtonT: '确定',
+          concelButtonText: '取消',
+          type: 'warning',
+          closeOnClickModal: false
+        }).then(()=> {
+          this.$message ({
+            type: "success",
+            message:`${message}成功`
+          })
+        }).catch(()=> {
+          this.$message ({
+            type: 'info',
+            message:`已经取消${message}该商品？`
+          })
+        })
+      },
+      earchForm () {
+        console.log("戴军")
+      }
     },
     computed: {
 

@@ -248,6 +248,8 @@
         this.disable = true
         this.addform.price = myCode.row.price
         console.log(myCode.row);
+        this.addShop[myCode.$index] = myCode.row
+        
 
         this.title = '编辑商品';
         

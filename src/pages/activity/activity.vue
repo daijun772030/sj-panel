@@ -24,8 +24,8 @@
     <el-table class="activity-table" height="calc(100% - 105px)" border :data="list">
       <el-table-column prop="type" label="活动种类" align="center">
         <template slot-scope="scope">
-          <span v-if="scope.row.type==1">满减优惠</span>
-          <span v-if="scope.row.type==0">打折优惠</span>
+          <span v-if="scope.row.type=== '1' ">满减优惠</span>
+          <span v-if="scope.row.type=== '0' ">打折优惠</span>
         </template>
       </el-table-column>
       <el-table-column prop="dis" label="折扣(所有商品)" align="center"></el-table-column>

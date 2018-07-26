@@ -1,15 +1,6 @@
 <template>
     <div class="goods">
       <el-form :inline="true" :model="searchObj" label-width="5px" size="mini"  class="searchForm">
-        <!-- <el-form-item class="float_left">
-            <el-input v-model="searchObj.searchKey" placeholder="搜索" clearable prefix-icon="el-icon-search" style="width:217px"></el-input>
-        </el-form-item> -->
-        <!-- <el-form-item class="float_left">
-          <el-date-picker type="date" clearable placeholder="选择上传时间" v-model="searchObj.createDay" class="wd"></el-date-picker>
-        </el-form-item>
-        <el-form-item class="float_left">
-          <el-date-picker type="date" clearable placeholder="选择上传时间" v-model="searchObj.updateDay" class="wd"></el-date-picker>
-        </el-form-item> -->
         <el-form-item class="float_left">
           <el-select v-model="searchObj.productType" placeholder="商品类型" @change="changeValue" clearable>
             <el-option v-for="channel in productTypes" :key="channel.id" :label="channel.name" :value="channel.id">

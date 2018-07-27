@@ -217,34 +217,34 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(() => {
-          this.$api("deledDiscount",{id:this.addForm.id}).then((res)=>{
+          }).then(() => {
+            this.$api("deledDiscount",{id:this.addForm.id}).then((res)=>{
             // console.log(res)
-            this.discountAll()
-            if(res.data.retCode==200){
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              });
-            }else {
-              this.$message({
-                type: 'success',
-                message: '删除失败!'
-              });
-            }
-          })
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
-        });
+              this.discountAll()
+              if(res.data.retCode==200){
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                });
+              }else {
+                this.$message({
+                  type: 'success',
+                  message: '删除失败!'
+                });
+              }
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });          
+          });
       },
       cancel () {
         this.dialogVisible = false;
       },
       save () {
-        debugger;
+        // debugger;
         if(this.addForm.type==1 && this.title=="添加满减优惠活动"){
           this.$api("discountFull",{type:this.addForm.type,full:this.addForm.full,reduce:this.addForm.reduce})//新增满减优惠活动
         }else if(this.addForm.type==1 && this.title=="编辑满减优惠活动") {

@@ -31,43 +31,41 @@
         <el-table-column label="操作" align="center" width="200">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="edit(scope)">编辑</el-button>
-            <el-button type="text" size="mini">删除</el-button>
+            <el-button @click="deleShop(scope.row)" type="text" size="mini">删除</el-button>
             <el-button v-if="scope.row.putawayState === '1' " type="text" size="mini" @click="status(scope.row)">上架</el-button>
             <el-button v-if="scope.row.putawayState === '0' " type="text" size="mini" @click="status(scope.row)">下架</el-button>
           </template>  
         </el-table-column>
       </el-table>
-      <el-dialog :modal-append-to-body="false" :title="title" center :visible.sync="dialogVisible" :show-close="false" width="900px">
-        <el-form :inline="false" :model="addform" label-width="100px" class="searchform" >
-          <el-form-item label="商品类型：" class="uniq">
-            <el-select v-model="addform.productType" placeholder="请选择商品得类型" @change="changeValue1" :disabled="disable" clearable>
-              <el-option  v-for="item in productTypes" :key="item.id" :label="item.name" :value="item.id"></el-option>
+      <el-dialog :modal-append-to-body="false" :title="title" center @close="close(addform)" :visible.sync="dialogVisible" :show-close="false" width="900px">
+        <el-form :inline="false" :model="addform" ref="addform" label-width="100px" class="searchFrom" >
+          <el-form-item label="商品类型" prop="upName" class="uniq" >
+            <el-select v-model="addform.type" clearable placeholder="请选择商品类型" @change="getShop" :disabled='typeId'>
+              <el-option v-for="item in this.shopType" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="商品名称：" class="uniq">
-            <el-select v-model="addform.listName" placeholder="请选择商品" @change="myValue" :disabled="disable" clearable>
-              <el-option v-for="item in addShop" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          <el-form-item label="商品名称" prop="name" class="uniq">
+            <el-select v-model="addform.id" clearable placeholder="请选择商品名称" :disabled="typeId">
+              <el-option v-for="item in this.classShop" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
-          <!-- <el-form-item label="商品logo：" class="uniq">
-            <div><img src="" alt=""></div>
-          </el-form-item> -->
-          <el-form-item label="商品价格：" prop="price" class="uniq">
-            <el-input width='100' type="text" placeholder="请输入商品定价金额" v-model="addform.price">
+          <el-form-item label="商品价格" prop="price" class="uniq">
+            <el-input type="text" placeholder="请输入金额" v-model="addform.price">
               <template slot="append">元</template>
-            </el-input>
+            </el-input> 
           </el-form-item>
-          <el-form-item label="是否上架:" class="uniq">
-            <el-radio v-model="addform.putawayState" :label="1">是</el-radio>
-            <el-radio v-model="addform.putawayState" :label="0">否</el-radio>
-          </el-form-item>
-          <el-form-item label="是否上架:" class="uniq">
-            <div><img src="" alt=""></div>
+          <el-form-item label="编辑时间" class="uniq">
+            <el-date-picker
+          :disabled="true"
+            v-model="addform.id"
+            type="date"
+            placeholder="创建时间">
+          </el-date-picker>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="close(addform)">取消</el-button>
-          <el-button type="primary" @click="save(addform)">保存</el-button>
+          <el-button type="primary" @click="save">保存</el-button>
         </span>
       </el-dialog>
       <!-- 这里是分页功能 -->
@@ -90,6 +88,7 @@
   export default {
     data () {
       return {
+        typeId:false,
         disable:false,//是否禁用select框
         dialogVisible: false,
         title: null,
@@ -106,21 +105,21 @@
           pageSize: 10,
           totalCount:0
         },
-        higherup:null, //搜索框需要传递的参数
+        actionType:null,//操作类型
+        higherup:null, //搜索框需要传递的参数(这是商品类型)
         shopId:null,
         addform: {
-          productTypes:[],
-          classify: null,
-          goodsName:null,
-          goodsLogo: null,
-          producType: null,
-          price: null,
-          listName:null,
-          putawayState: 0,
-          upData: null,
-          endData: null
+          id:null,
+          merchantid:null,
+          name:null,
+          number:null,
+          type:null,
+          upName:null,
+          price:null,
         },
-         addShop:[],
+        shopType:[],//商品类型
+        classShop:[],//根据商品类型获得相应的商品
+        addShop:[],
         productTypes: [],
         list1:[]
       }
@@ -129,26 +128,65 @@
       // this.allshop()
       // this.addshop();
       this.ces();
-      // this.delshop()
-      // this.typeid()
-      // this.upshop()
-      this.status()
+      this.status();
+      // this.clasShop();
     },
     methods: {
-      //这里是添加商品的函数
-      changeValue1(value) {
-        this.changeValue(value)
-        this.typeid()
+      getShop(){//这里是点击商品类型获取相应商品
+        this.clasShop()
       },
-       save (addform) {//保存
-       var price = addform.price
-        this.$api('addshop',{typeid:this.shopId,price:price}).then((res)=>{
-          console.log( res);
-          this.dialogVisible = false;
-        });
+      deleShop(scope) {//删除商品相当于下架订单
+        console.log(scope);
+        this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+          }).then(() => {
+            this.$api("delshop",{id:scope.id}).then((res)=>{
+              if(res.data.retCode==200){
+                this.ces()
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                });
+              }else {
+                this.$message({
+                  type: 'success',
+                  message: '删除失败!'
+                });
+              }
+            })
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });          
+          });
+        // this.$api("delshop",{params:{id:scope.id}}).then((res)=>{
+
+        // })
+      },
+       save () {//保存
+        this.dialogVisible = false
+       console.log(this.addform)
+        if(this.actionType==1){
+          this.$api("addshop",{typeid:this.addform.id,price:this.addform.price}).then((res)=>{
+            console.log(res)
+          })
+        }
+        if(this.actionType==2) {
+          this.$api('upshop',{id:this.addform.id,price:this.addform.price}).then((res)=>{
+            console.log(res)
+          })
+        }
       },
       close (addform) {//取消的时候数据消失
+        this.ces()
         this.dialogVisible = false;
+        this.typeId =false;
+        for(var i in addform) {
+          addform[i] = null;
+        }
       },
 
       changeValue (value) {//这里获取搜索框的id
@@ -160,28 +198,19 @@
          console.log(this.higherup)
          console.log(obj)
       },
-      myValue (value) {
-        console.log(value)
-        var obj ={};
-        obj = this.addShop.find((item)=>{
-          return item.id ==value
-        });
-        this.shopId = value;
-        console.log(obj)
-      },
-      status () {//查询一级菜单函数
-        this.$api('typeStatus',{params:{status:"1"}}).then ((res)=>{
-          console.log(res.data.data)
-          this.productTypes = res.data.data
+      status () {//查询我们的所有商品的类型
+        this.$api('typeStatus',{params:{status:"1"}}).then((res)=>{
+          console.log(res.data.data);
+          this.shopType = res.data.data
         })
       },
-      typeid (){
-        this.addShop = null;      //查询一级下单栏
-        this.$api('typeFind',{params:{id:this.higherup}}).then((res)=>{
-          console.log(res)
-          this.addShop = res.data.data
+      clasShop () {//这里根据商品类型查询相应的商品集
+        this.$api('typeFind',{params:{id:this.addform.type}}).then((res)=>{
+          console.log(res);
+          this.classShop = res.data.data;
         })
       },
+     
       earchForm () {       //搜索框搜索内容的
          this.$api("myshop",{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,higherup:this.higherup}}).then((res)=>{
            var list = res.data.data.list;
@@ -230,49 +259,52 @@
       
      
       add () {       //添加商品函数
+      this.actionType =1;
       this.disable = false
         this.title = "添加商品"
         this.dialogVisible = true
       },
-      edit (myCode) {        //编辑商品
+      edit (myCode) {
+        // debugger;        //编辑商品
+        this.typeId =true;
         this.dialogVisible = true;
-        this.disable = true
-        this.addform.price = myCode.row.price
-        console.log(myCode.row);
-        this.addShop[myCode.$index] = myCode.row
-        
-
+        this.actionType=2;
+        this.addform = myCode.row;
+        console.log(myCode.row)
         this.title = '编辑商品';
         
       },
-      //上下架状态
-      // status (row) {
-      //   let message = row.putawayState === "1" ? "上架" : "下架";
-      //   // let url = row.putawayState === '0';
-      //   this.$confirm(`是否确定${message}该商品？`, '提示', {
-      //     confirmButtonT: '确定',
-      //     concelButtonText: '取消',
-      //     type: 'warning',
-      //     closeOnClickModal: false
-      //   }).then(()=> {
-      //     this.$message ({
-      //       type: "success",
-      //       message:`${message}成功`
-      //     })
-      //   }).catch(()=> {
-      //     this.$message ({
-      //       type: 'info',
-      //       message:`已经取消${message}该商品？`
-      //     })
-      //   })
-      // },
-      
     },
     computed: {
     } 
   }
 </script>
 <style long="less">
+
+  .uniq {
+    width: 50%;
+    float: left !important;
+    .el-form-item__label {
+      float: none;
+      width: 300px !important;
+    }
+    .el-form-item__content {
+      margin-left: 0 !important;
+      .el-input {
+        width: 90% !important;
+      }
+      .el-select {
+        width: 90% !important;
+        .el-input {
+          width: 100% !important;
+        }
+      }
+      .radio {
+        width: 90% !important;
+      }
+    }
+}
+
   .goods{
         width: 100%;
         height:100%;
@@ -283,7 +315,7 @@
     .searchForm{
         padding: 10px;
     }
-  .uniq {
+  /* .uniq {
     width: 50%;
     float: left !important;
     }
@@ -305,6 +337,6 @@
       }
     .radio {
       width: 90% !important;
-    }
+    } */
 </style>
 

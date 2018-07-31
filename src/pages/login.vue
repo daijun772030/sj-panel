@@ -54,6 +54,8 @@ import Hashes from 'jshashes'
         
       login () {
           var MD5 = new Hashes.MD5;
+          console.log(MD5.hex('shan5201314000'))
+          console.log(MD5.hex('qweasd'))
         // debugger;
         if (!this.login1.phone) {
           this.$message.error("请填写用户名");

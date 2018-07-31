@@ -18,16 +18,24 @@
             </span>
             <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="loginout">注销</el-dropdown-item>
-                <el-dropdown-item command="modifyPassword">修改密码</el-dropdown-item>
+                <el-dropdown-item command="modifyPassword">修改个人信息</el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>
         <audio v-if="true" src=""></audio>
+        <el-dialog :modal-append-to-body="false" @close="close(addForm)" :title="title" center :visible.sync="dialogVisible" :show-close="false" width="900px">
+            
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancel" type="primary">取消</el-button>
+        <el-button @click="save" type="primary">保存</el-button>
+      </span>
+    </el-dialog>
     </div>
 </template>
 <script>
     export default {
         data() {
             return {
+                dialogVisible:false,
                 object: {
                     region: ""
                 },
@@ -52,7 +60,7 @@
             })
             },
             modifyPassword() {
-                this.$router.push({ name : "reset" });
+                this.dialogVisible= true;
             }
         }
     }

@@ -22,13 +22,7 @@
             </el-dropdown-menu>
         </el-dropdown>
         <audio v-if="true" src=""></audio>
-        <el-dialog :modal-append-to-body="false" @close="close(addForm)" :title="title" center :visible.sync="dialogVisible" :show-close="false" width="900px">
-            
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel" type="primary">取消</el-button>
-        <el-button @click="save" type="primary">保存</el-button>
-      </span>
-    </el-dialog>
+
     </div>
 </template>
 <script>
@@ -40,10 +34,31 @@
                     region: ""
                 },
                 activeIndex : "1",
-                status : "操作"
+                status : "操作",
+                searform:{
+                    address:null,
+                    shopName:null,
+                    logo:null,
+                    phone:null,
+                    startTime:null,
+                    endTime:null,
+                    createdTime:null
+                }
             }
         },
+        created () {
+            this.arhives();
+            this.orderAll();
+        },
         methods : {
+            orderAll() {
+                this.$api('orderAll',{params:{pageNum:"1",pageSize:"12",type:"5"}}).then((res)=>{
+                    console.log(res);
+                })
+                // this.$api('orderAll',{params:{pageNum:"1",pageSize:"12",type:"5"}}).then((res)=>{
+                //     console.log(res);
+                // })
+            },
             handler(option) {
                 switch(option) {
                     case "loginout" : this.loginout(); break;
@@ -59,8 +74,14 @@
                 console.log(res)
             })
             },
+            arhives () {
+                this.$api("archivesAll",{params:{pageNum:"1",pageSize:"1000"}}).then((res)=>{
+                    console.log(res);
+                })
+            },
             modifyPassword() {
                 this.dialogVisible= true;
+                this.$api("updataByMer",{})
             }
         }
     }

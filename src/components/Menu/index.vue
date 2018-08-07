@@ -1,8 +1,7 @@
 <template>
     <div class="menu">
-        <div class="log">
-            <!-- <img :src="image" alt="" style="height: 50px"> -->
-            尚洁科技logo
+        <div class="log"> 
+            <img :src="img" alt="">  
         </div>
         <div class="menu-list">
             <el-menu
@@ -43,12 +42,12 @@
 </template>
 <script>
     import list from './list';
-    import Img from '~/static/images/logo.png'
+    import img from './images/logo.png'
     export default {
         data() {
             return {
                 list: list,
-                image:Img
+                img:img
             }
         },
         created() {
@@ -69,10 +68,18 @@
 <style lang="less" scoped>
     .log {
         width: 100%;
-        height: 50px;
+        height: 60px;
         color: white;
         text-align:center;
-        line-height: 50px;
+        line-height: 60px;
+        background-color:#494f60;
+
+    }
+    .log>img{
+        width: 100%;
+        height: auto;
+        max-width:100%;
+        // padding: 5px 0;
     }
     .menu{
         position: absolute;

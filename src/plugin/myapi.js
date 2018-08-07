@@ -76,9 +76,15 @@ const post = (url) => {
 
 // 接口map 表
 const apis = {
+    //订单查询
+    orderAll: get("/merchant/order/all"),
     //商户后台登录的接口
     login: post('/merchant/login'),
     cancellation: get('/merchant/cancellation'),
+    //商家认证信息
+    archivesAll: get("/archives/all"),
+    //修改商家个人信息
+    updataByMer: post("/archives/updateByMerchantid"),
     //商品接口
     myshop: get('/commodity/all'), //查询所有商品
     addshop: post('/commodity/addCommodity'), //添加商品

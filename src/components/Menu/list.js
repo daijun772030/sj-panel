@@ -12,27 +12,27 @@ export default [{
             {
                 id: 2,
                 name: "待收货",
-                path: "accomplish",
+                path: "send",
                 icon: "resource"
             },
             {
                 id: 3,
                 name: "待发货",
-                path: "evaluate",
+                path: "make",
                 icon: "resource"
             },
             {
                 id: 4,
                 name: "待评价",
-                path: "make",
+                path: "evaluate",
                 icon: "resource"
             },
             {
                 id: 5,
-                name: "已完成",
-                path: "send",
+                name: "完成订单",
+                path: "accomplish",
                 icon: "resource"
-            },
+            }
         ]
     },
     {

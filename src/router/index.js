@@ -73,27 +73,16 @@ const router = new Router({
                 name: 'manager',
                 path: 'manager',
                 component: Manager,
-                children: [{
-                        name: 'order',
-                        path: 'order',
-                        component: Index,
-                        childrens: [
-                            { name: "order-index", path: 'index', component: Index },
-                            { name: "order-accomplish", path: 'accomplish', component: Accomplish },
-                            { name: "order-evaluate", path: 'evaluate', component: Evaluate },
-                            { name: "order-make", path: 'make', component: Make },
-                            { name: "order-send", path: 'send', component: Send },
-                        ]
-                    },
-                    {
-                        name: 'business',
-                        path: 'business',
-                        component: BusinessList,
-                        children: [
-                            { name: 'business-list', path: 'list', component: BusinessList },
-                            { name: 'business-order', path: 'order', component: BusinessOrder }
-                        ]
-                    },
+                children: [
+                    { name: "order", path: 'order', component: Index },
+                    { name: "order-index", path: 'index', component: Index },
+                    { name: "order-accomplish", path: 'accomplish', component: Accomplish },
+                    { name: "order-evaluate", path: 'evaluate', component: Evaluate },
+                    { name: "order-make", path: 'make', component: Make },
+                    { name: "order-send", path: 'send', component: Send },
+                    { name: 'business', path: 'business', component: BusinessList },
+                    { name: 'business-list', path: 'list', component: BusinessList },
+                    { name: 'business-order', path: 'order', component: BusinessOrder },
                     { name: 'goods', path: 'goods', component: Goods },
                     { name: 'activity', path: 'activity', component: Activity },
                     { name: 'finance', path: 'finance', component: Finance },
@@ -111,6 +100,7 @@ const router = new Router({
  * next 必须执行才能路由过去
  */
 router.beforeEach((to, from, next) => {
+    // debugger;
     // if (to.path === '/login') {
     //     next();
     // } else {

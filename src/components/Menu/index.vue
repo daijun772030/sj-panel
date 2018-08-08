@@ -60,6 +60,7 @@
             },
             // 选中事件,根据indexPath的路径匹配路由
             select(index, indexPath) {
+                // debugger;
                 this.$router.push({ name: indexPath.join('-') });
             }
         }

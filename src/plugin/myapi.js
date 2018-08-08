@@ -78,6 +78,8 @@ const post = (url) => {
 const apis = {
     //订单查询
     orderAll: get("/merchant/order/all"),
+    //修改订单
+    orderType: get("/merchant/order/updateByOrderType"),
     //商户后台登录的接口
     login: post('/merchant/login'),
     cancellation: get('/merchant/cancellation'),

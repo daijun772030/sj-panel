@@ -7,9 +7,9 @@ import App from '@/App';
 const Manager = () =>
     import ('@/pages/manager' /* webpackChunkName: "pages/manager" */ ).then(m => m.default || m)
 const Login = () =>
-        import ('@/pages/login' /* webpackChunkName: "pages/login" */ ).then(m => m.default || m)
-const Order = () =>
-    import ('@/pages/order' /* webpackChunkName: "pages/order" */ ).then(m => m.default || m)
+    import ('@/pages/login' /* webpackChunkName: "pages/login" */ ).then(m => m.default || m)
+    // const Order = () =>
+    //     import ('@/pages/order' /* webpackChunkName: "pages/order" */ ).then(m => m.default || m)
 const BusinessList = () =>
     import ('@/pages/business/list' /* webpackChunkName: "pages/business/list" */ ).then(m => m.default || m)
 const BusinessOrder = () =>
@@ -20,9 +20,18 @@ const Activity = () =>
     import ('@/pages/activity/activity' /* webpackChunkName: "pages/activity" */ ).then(m => m.default || m)
 const Finance = () =>
     import ('@/pages/finance/finance' /* webpackChunkName: "pages/finance" */ ).then(m => m.default || m)
+const Index = () =>
+    import ('@/pages/order/index' /* webpackChunkName: "pages/order/index" */ ).then(m => m.default || m)
 const Generalize = () =>
     import ('@/pages/generalize/generalize' /* webpackChunkName: "pages/generalize" */ ).then(m => m.default || m)
-
+const Accomplish = () =>
+    import ('@/pages/order/Accomplish' /* webpackChunkName: "/pages/order/Accomplish" */ ).then(m => m.default || m)
+const Evaluate = () =>
+    import ('@/pages/order/evaluate' /* webpackChunkName: "/pages/order/evaluate" */ ).then(m => m.default || m)
+const Make = () =>
+    import ('@/pages/order/make' /* webpackChunkName: "/pages/order/make" */ ).then(m => m.default || m)
+const Send = () =>
+    import ('@/pages/order/send' /* webpackChunkName: "/pages/order/send" */ ).then(m => m.default || m)
 Vue.use(Router);
 
 // 路由后记住滚动条的位置
@@ -54,12 +63,28 @@ const router = new Router({
     linkActiveClass: 'b-link-active',
     linkExactActiveClass: 'b-c-link-active',
     scrollBehavior,
-    routes: [
-        { name: '/', path: '/', component: App, children: [
+    routes: [{
+        name: '/',
+        path: '/',
+        component: App,
+        children: [
             { name: 'login', path: 'login', component: Login },
-            {name:'manager',path:'manager',component:Manager, 
-                children: [
-                    { name: 'order', path: 'order', component: Order },
+            {
+                name: 'manager',
+                path: 'manager',
+                component: Manager,
+                children: [{
+                        name: 'order',
+                        path: 'order',
+                        component: Index,
+                        childrens: [
+                            { name: "order-index", path: 'index', component: Index },
+                            { name: "order-accomplish", path: 'accomplish', component: Accomplish },
+                            { name: "order-evaluate", path: 'evaluate', component: Evaluate },
+                            { name: "order-make", path: 'make', component: Make },
+                            { name: "order-send", path: 'send', component: Send },
+                        ]
+                    },
                     {
                         name: 'business',
                         path: 'business',
@@ -75,8 +100,8 @@ const router = new Router({
                     { name: 'generalize', path: 'generalize', component: Generalize }
                 ]
             }
-        ]}
-    ]
+        ]
+    }]
 });
 
 /**

@@ -33,6 +33,7 @@
                     if(res.errcode == 0) this.$router.push({ name : "login" });
                     this.$store.dispatch("UPDATE_LOGIN_STATE", false);
                 });
+                
             },
             modifyPassword() {
                 this.$router.push({ name : "reset" });

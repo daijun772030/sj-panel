@@ -6,7 +6,7 @@
             <p style="text-aligin: center">营业状态：</p>
         <el-form class="earchForm">
             <el-form-item  prop="region">
-                <el-select v-model="object.region" placeholder="营业状态">
+                <el-select v-model="object.region"  command="updata" placeholder="营业状态">
                 <el-option label="营业中" value="shanghai"></el-option>
                 <el-option label="休息中" value="beijing"></el-option>
                 </el-select>
@@ -35,30 +35,66 @@
                 },
                 activeIndex : "1",
                 status : "操作",
-                searform:{
-                    address:null,
-                    shopName:null,
-                    logo:null,
-                    phone:null,
-                    startTime:null,
-                    endTime:null,
-                    createdTime:null
+                changeShop:{
+                    id:null,//商家id
+                    address:null,//地址
+                    phone:null,//商家联系方式
+                    endTime:null,//结束配送时间
+                    startTime:null,//开始配送时间
+                    takeoff:null,//取送费
+                    riseoff:null,//起送价格
+                    shopName:null,//商户名称
+                    status:1,//营业状态
+                    notice:null,//商家公告
                 }
             }
         },
         created () {
-            this.arhives();
-            this.orderAll();
+            // this.arhives();
+            // this.orderAll();
+            this.archivesAll();
+            this.change();
         },
         methods : {
-            orderAll() {
-                this.$api('orderAll',{params:{pageNum:"1",pageSize:"12",type:"5"}}).then((res)=>{
-                    console.log(res);
+            archivesAll() {//查询商家信息
+                this.$api("archivesAll",{params:{pageNum:"1",pageSize:"20"}}).then((res)=>{
+                    console.log(res)
+                    this.changeShop.id=res.data.data.id;
+                    this.changeShop.address = res.data.data.address;
+                    this.changeShop.phone = res.data.data.contactPhone;
+                    this.changeShop.shopName = res.data.data.shopName;
                 })
-                // this.$api('orderAll',{params:{pageNum:"1",pageSize:"12",type:"5"}}).then((res)=>{
-                //     console.log(res);
-                // })
             },
+            change () {
+                this.$api("updataByMer",{
+                    id:this.changeShop.id,
+                    address:this.address,
+                    phone:this.changeShop.phone,
+                    endTime:"2018-08-03 15:48:39",
+                    startTime:"2018-08-03 15:48:39",
+                    takeoff:"3",
+                    riseoff:"15",
+                    shopName:this.changeShop.shopName,
+                    status:this.changeShop.status,
+                    notice:"这家店有点牛皮。赶快进店消费哦"
+                    }).then((res)=>{
+                        console.log(res)
+                    })
+            },
+            updata () {//营业中函数
+                console.log(this.object.region)
+            },
+            download () {//休息中函数
+                console.log(this.object.region)
+            },
+            // orderAll() {
+            //     this.$api('orderAll',{params:{pageNum:"1",pageSize:"12",type:"5"}}).then((res)=>{
+            //         console.log(res);
+            //     })
+            //     // this.$api('orderAll',{params:{pageNum:"1",pageSize:"12",type:"5"}}).then((res)=>{
+            //     //     console.log(res);
+            //     // })
+            // },
             handler(option) {
                 switch(option) {
                     case "loginout" : this.loginout(); break;
@@ -74,11 +110,11 @@
                 console.log(res)
             })
             },
-            arhives () {
-                this.$api("archivesAll",{params:{pageNum:"1",pageSize:"1000"}}).then((res)=>{
-                    console.log(res);
-                })
-            },
+            // arhives () {
+            //     this.$api("archivesAll",{params:{pageNum:"1",pageSize:"1000"}}).then((res)=>{
+            //         console.log(res);
+            //     })
+            // },
             modifyPassword() {
                 this.dialogVisible= true;
                 this.$api("updataByMer",{})

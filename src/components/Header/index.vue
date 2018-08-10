@@ -22,19 +22,48 @@
             </el-dropdown-menu>
         </el-dropdown>
         <audio v-if="true" src=""></audio>
-
+         <el-dialog :modal-append-to-body="false" @close="close(changeShop)" :title="title" center :visible.sync="dialogVisible" :show-close="false" width="900px">
+      <el-form :inline="false" :model='changeShop' ref="changeShop" label-width="100px" class="searchForm" rule='rules'>
+        <el-form-item label="商家地址：" prop="address" class="uniq">
+        </el-form-item>
+        <el-form-item label="商家联系方式：" prop="phone" class="uniq">
+        </el-form-item>
+        <el-form-item prop="shopName" label="商铺名称" class="uniq">
+        </el-form-item>
+        <el-form-item prop="startTime" label="开始配送时间：" class="uniq">
+        </el-form-item>
+        <el-form-item prop="endTime" label="结束配送时间：" class="uniq">
+        </el-form-item>
+        <el-form-item prop="takeoff" label="取送费：" class="uniq">
+        </el-form-item>
+        <el-form-item prop="riseoff" label="起送价格" class="uniq">
+        </el-form-item>
+        <el-form-item prop="status" label="营业状态" class="uniq">
+        </el-form-item>
+        <el-form-item prop="notice" label="商家公告" class="uniq">
+        </el-form-item>
+      </el-form>
+      <!-- <span slot="footer" class="dialog-footer">
+        <el-button @click="cancel" type="primary">取消</el-button>
+        <el-button @click="save" type="primary">保存</el-button>
+      </span> -->
+    </el-dialog>
     </div>
 </template>
 <script>
+
+import {pca,pcaa} from 'area-data';
     export default {
         data() {
             return {
-                dialogVisible:false,
-                object: {
-                    region: ""
-                },
-                activeIndex : "1",
-                status : "操作",
+                placeholders:['省','市','区'],
+                pcaa:pcaa,
+                pca:pca,
+                selected:["510000","510100","510104"],
+                formObj:[
+                    {id:'1',
+                    name:"dadadada"}
+                    ],
                 changeShop:{
                     id:null,//商家id
                     address:null,//地址
@@ -46,7 +75,14 @@
                     shopName:null,//商户名称
                     status:1,//营业状态
                     notice:null,//商家公告
-                }
+                },
+                title:"修改商家信息",
+                dialogVisible:false,
+                object: {
+                    region: ""
+                },
+                activeIndex : "1",
+                status : "操作",  
             }
         },
         created () {
@@ -56,28 +92,39 @@
             this.change();
         },
         methods : {
+            //弹窗消失函数
+            close(changeShop){
+                console.log(changeShop)
+            },
             archivesAll() {//查询商家信息
-                this.$api("archivesAll",{params:{pageNum:"1",pageSize:"20"}}).then((res)=>{
-                    console.log(res)
+                this.$api("merchantChange").then((res)=>{
+                    // debugger;
+                    console.log(res.data.data)
                     this.changeShop.id=res.data.data.id;
                     this.changeShop.address = res.data.data.address;
-                    this.changeShop.phone = res.data.data.contactPhone;
+                    this.changeShop.phone = res.data.data.phone;
                     this.changeShop.shopName = res.data.data.shopName;
+                    this.changeShop.takeoff = res.data.data.takeoff;
+                    this.changeShop.riseoff = res.data.data.riseoff;
+                    this.changeShop.riseoff = res.data.data.status
+                    console.log(this.changeShop)
                 })
             },
             change () {
+                // debugger;
                 this.$api("updataByMer",{
-                    id:this.changeShop.id,
-                    address:this.address,
-                    phone:this.changeShop.phone,
+                    id:"11",
+                    address:"daddadadd",
+                    phone:"1858158693",
                     endTime:"2018-08-03 15:48:39",
                     startTime:"2018-08-03 15:48:39",
-                    takeoff:"3",
-                    riseoff:"15",
-                    shopName:this.changeShop.shopName,
-                    status:this.changeShop.status,
+                    takeoff:"2",
+                    riseoff:"3",
+                    shopName:"厉害了我的哥",
+                    status:"1",
                     notice:"这家店有点牛皮。赶快进店消费哦"
                     }).then((res)=>{
+                         console.log(this.changeShop)
                         console.log(res)
                     })
             },
@@ -87,14 +134,14 @@
             download () {//休息中函数
                 console.log(this.object.region)
             },
-            // orderAll() {
-            //     this.$api('orderAll',{params:{pageNum:"1",pageSize:"12",type:"5"}}).then((res)=>{
-            //         console.log(res);
-            //     })
-            //     // this.$api('orderAll',{params:{pageNum:"1",pageSize:"12",type:"5"}}).then((res)=>{
-            //     //     console.log(res);
-            //     // })
-            // },
+            orderAll() {
+                this.$api('orderAll',{params:{pageNum:"1",pageSize:"12",type:"5"}}).then((res)=>{
+                    console.log(res);
+                })
+                // this.$api('orderAll',{params:{pageNum:"1",pageSize:"12",type:"5"}}).then((res)=>{
+                //     console.log(res);
+                // })
+            },
             handler(option) {
                 switch(option) {
                     case "loginout" : this.loginout(); break;
@@ -117,7 +164,7 @@
             // },
             modifyPassword() {
                 this.dialogVisible= true;
-                this.$api("updataByMer",{})
+                // this.$api("updataByMer",{})
             }
         }
     }
@@ -143,8 +190,7 @@
     }
     .el-form-item,.el-form-item--mini{
         margin: 0 50px 0 5px ;
-    }
-    
+    } 
 }
 </style>
 

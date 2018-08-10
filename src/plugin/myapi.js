@@ -85,6 +85,8 @@ const apis = {
     cancellation: get('/merchant/cancellation'),
     //商家认证信息
     archivesAll: get("/archives/all"),
+    //查询商家个人基本信息
+    merchantChange: get("/merchant/order/findByMerchantidDetail"),
     //修改商家个人信息
     updataByMer: post("/archives/updateByMerchantid"),
     //商品接口

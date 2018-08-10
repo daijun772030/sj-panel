@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import '~/static/reset.less'
 import '~/static/style.less'
+import VueAreaLinkage from 'vue-area-linkage'
 import Vue from 'vue'
 import App from './App'
 import router from './router'
@@ -10,6 +11,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import create from '../src/plugin/myapi'
 import VueCookies from 'vue-cookies'
 Vue.use(ElementUI, { size: 'mini', zIndex: 3000 });
+Vue.use(VueAreaLinkage);
 Vue.config.productionTip = false
 Vue.prototype.$api = create
 Vue.prototype.$cookies = VueCookies

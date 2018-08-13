@@ -38,23 +38,23 @@
         </el-table-column>
       </el-table>
       <el-dialog :modal-append-to-body="false" :title="title" center @close="close(addform)" :visible.sync="dialogVisible" :show-close="false" width="900px">
-        <el-form :inline="false" :model="addform" ref="addform" label-width="100px" class="searchFrom" >
-          <el-form-item label="商品类型" prop="upName" class="uniq" >
+        <el-form :inline="true" :model="addform" ref="addform" label-width="150px" class="searchFrom demo-form-inline" >
+          <el-form-item label="商品类型" prop="upName" class="myitem" >
             <el-select v-model="addform.type" clearable placeholder="请选择商品类型" @change="getShop" :disabled='typeId'>
               <el-option v-for="item in this.shopType" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="商品名称" prop="name" class="uniq">
+          <el-form-item label="商品名称" prop="name" class="myitem">
             <el-select v-model="addform.id" clearable placeholder="请选择商品名称" :disabled="typeId">
-              <el-option v-for="item in this.classShop" :key="item.id" :label="item.name" :value="item.id"></el-option>
+              <el-option v-for="item in this.classShop" :key="item.id" :label="item.name" :value="item.id" :disabled="item.type"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="商品价格" prop="price" class="uniq">
-            <el-input type="text" placeholder="请输入金额" v-model="addform.price">
+          <el-form-item label="商品价格" prop="price" class="myitem">
+            <el-input type="text" placeholder="请输入金额" v-model="addform.price" >
               <template slot="append">元</template>
             </el-input> 
           </el-form-item>
-          <el-form-item label="编辑时间" class="uniq">
+          <el-form-item label="编辑时间" class="myitem">
             <el-date-picker
           :disabled="true"
             v-model="addform.id"
@@ -91,6 +91,7 @@
         typeId:false,
         disable:false,//是否禁用select框
         dialogVisible: false,
+        dis:false,
         title: null,
         searchObj: {
           createDay: null,
@@ -132,6 +133,13 @@
       // this.clasShop();
     },
     methods: {
+      // proving1() {//对输入金额做正则判断
+      //   this.addform.price = this.addform.price.replace(/[^\.\d]/g,'');
+      //   this.addform.price = this.addform.price.replace(".","")
+      // },
+      stop() {
+        this.dis = true;
+      },
       getShop(){//这里是点击商品类型获取相应商品
         this.clasShop()
       },
@@ -205,9 +213,19 @@
         })
       },
       clasShop () {//这里根据商品类型查询相应的商品集
+      // debugger;
         this.$api('typeFind',{params:{id:this.addform.type}}).then((res)=>{
           console.log(res);
           this.classShop = res.data.data;
+          for(var i=0;i<this.classShop.length;i++) {
+            if(this.classShop[i].type) {
+              // console.log(this.classShop[i].type)
+              this.classShop[i].type = true;
+              console.log(this.dis)
+            }else{
+              this.classShop[i].type = false;
+            }
+          }
         })
       },
      
@@ -245,19 +263,6 @@
           console.log(res)
         })
       },
-      // addshop () {        //添加商品
-      //   // debugger;
-      //   this.$api('addshop',{typeid:'7',price:'36'}).then((res)=>{
-      //     console.log( res)
-      //   })
-      // },
-      // delshop () {       //删除商品
-      //   this.$api('delshop',{id:'1'}).then((res)=>{
-      //     console.log(res)
-      //   })
-      // },
-      
-     
       add () {       //添加商品函数
       this.actionType =1;
       this.disable = false
@@ -280,31 +285,9 @@
   }
 </script>
 <style long="less">
-
-  .uniq {
-    width: 50%;
-    float: left !important;
-    .el-form-item__label {
-      float: none;
-      width: 300px !important;
-    }
-    .el-form-item__content {
-      margin-left: 0 !important;
-      .el-input {
-        width: 90% !important;
-      }
-      .el-select {
-        width: 90% !important;
-        .el-input {
-          width: 100% !important;
-        }
-      }
-      .radio {
-        width: 90% !important;
-      }
-    }
-}
-
+  .myitem{
+    padding: 30px 0;
+  }
   .goods{
         width: 100%;
         height:100%;
@@ -315,28 +298,6 @@
     .searchForm{
         padding: 10px;
     }
-  /* .uniq {
-    width: 50%;
-    float: left !important;
-    }
-  .el-form-item__label {
-    float: none;
-    width: 300px !important;
-  }
-  .el-form-item__content {
-    margin-left: 0 !important;
-  }
-    .el-input {
-      width: 90% !important;
-    }
-    .el-select {
-      width: 90% !important;
-    }
-      .el-input {
-        width: 100% !important;
-      }
-    .radio {
-      width: 90% !important;
-    } */
+  
 </style>
 

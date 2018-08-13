@@ -25,64 +25,20 @@
         </el-form>
 
     <!-- table列表展示页 -->
-
-    <el-table
-            element-loading-text="加载中..."
-            style="height: calc(100% -50px)"
-            class="list-table">
-
-            <el-table-column
-            align="center"
-            label="订单编号"
-            >
-            <template slot-scope="scope">
-                <i class="el-icon-time"></i>
-                <span style="margin-left: 10px"></span>
-            </template>
-            </el-table-column>
-            <el-table-column
-            align="center"
-            label="订单类型"
-            >
-            <template slot-scope="scope">
-                <p style="color: red"></p>
-            </template>
-            </el-table-column>
-            <el-table-column
-            label="下单情况"
-            align="center">
-                <template slot-scope="scope">
-                    <el-popover trigger="hover" placement="top">
-                        <p>中心城市: </p>
-                        <p>省份: </p>
-                        <div slot="reference" class="name-wrapper">
-                        <el-tag size="medium"></el-tag>
-                        </div>
-                </el-popover>
-                </template>
-            </el-table-column>
-            <el-table-column
-             align="center"
-            label="是否接单"
-           >
-            <template slot-scope="scope">
-                <p>{{scope.row.name}}</p>
-            </template>
-            </el-table-column>
-            <el-table-column
-             align="center"
-             label="操作">
-            <template slot-scope="scope">
-                <el-button
-                size="mini"
-                @click="handleEdit(scope.$index, scope.row)">查看</el-button>
-                <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-            </template>
-            </el-table-column>
+        <el-table class="list-table" height="calc(100%-150px)" border :data="list">
+            <el-table-column  label="订单号" align="center"></el-table-column>
+            <el-table-column  label="商品名称" align="center"></el-table-column>
+            <el-table-column  label="收货时间" align="center"></el-table-column>
+            <el-table-column  label="应收金额" align="center"></el-table-column>
+            <el-table-column  label="商家优惠券" align="center"></el-table-column>
+            <el-table-column  label="商家满减" align="center"></el-table-column>
+            <el-table-column  label="实收金额" align="center"></el-table-column>
+            <el-table-column  label="平台提成" align="center"></el-table-column>
+            <el-table-column  label="实到" align="center"></el-table-column>
         </el-table>
+        <!-- <el-table class="list-tableTwo">
+            <el-table-column label="实到合计"></el-table-column>
+        </el-table> -->
         <div class="block">
             <el-pagination
             @size-change="handleSizeChange"
@@ -111,6 +67,7 @@
             pageNum: {
 
             },
+            list:[],
             dataNum:[],//需要渲染的条数
             pagingnum: '',//一共有多少条
             tableData: []
@@ -132,8 +89,12 @@
             }
             })
             this.loading = false
-
-            
+        },
+        handleSizeChange(val) {
+            console.log(val)
+        },
+        handleCurrentChange (val) {
+            console.log(val)
         },
         getconfig () {
             this.dataNum = [1, 2, 3, 4, 5]
@@ -145,7 +106,7 @@
     .business{
         height: 100%;
         width: 100%;
-        border:1px solid red;
+        // border:1px solid red;
         overflow: hidden;
     }
 </style>
@@ -161,6 +122,11 @@
         margin-top: 10px;
         // background-color: red;
     }
+    // .list-tableTwo{
+    //     width:20%;
+    //     // float: right;
+    //     height:calc(~"100% - 200px");
+    // }
     .list{
         background-color: red;
     }

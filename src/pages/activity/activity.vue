@@ -54,14 +54,14 @@
     <!-- 这里是弹窗的内容 -->
 
     <el-dialog :modal-append-to-body="false" @close="close(addForm)" :title="title" center :visible.sync="dialogVisible" :show-close="false" width="900px">
-      <el-form :inline="false" :model='addForm' ref="addForm" label-width="100px" class="searchForm" rule='rules'>
-        <el-form-item label="优惠种类：" prop="type" class="uniq">
-          <el-select v-model="addForm.type" clearable placeholder="请选择优惠的类型" :disabled="true">
+      <el-form :inline="true" :model='addForm'  ref="addForm" label-width="150px" class="searchForm demo-form-inline" rule='rules' size="small">
+        <el-form-item label="优惠种类：" prop="type" class="myitem" width="50%">
+          <el-select v-model="addForm.type" clearable placeholder="请选择优惠的类型" :disabled="true" >
             <el-option v-for="item in this.discount" :key="item.type" :label="item.typeName" :value="item.type"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="折扣范围：" prop="type" class="uniq">
-          <el-select v-model="addForm.dis" clearable placeholder="请选择折扣点" :disabled="addtype">
+        <el-form-item label="折扣范围：" prop="type" class="myitem" width="50%">
+          <el-select v-model="addForm.dis" clearable placeholder="请选择折扣点" :disabled="addtype" >
             <el-option label="0.1" :value="'0.1'"></el-option>
             <el-option label="0.2" :value="'0.2'"></el-option>
             <el-option label="0.3" :value="'0.3'"></el-option>
@@ -74,22 +74,22 @@
             <el-option label="1" :value="'1'"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item prop="full" label="（满减优惠）满：" class="uniq">
-          <el-input type="text" placeholder="请输入金额" v-model="addForm.full" :disabled="addtypeT">
+        <el-form-item prop="full" label="(满减优惠)满：" class="myitem" >
+          <el-input type="text" placeholder="请输入金额" v-model="addForm.full" :disabled="addtypeT" width="45%">
             <template slot="append">元</template>
           </el-input>
         </el-form-item>
-        <el-form-item prop="reduce" label="（满减优惠）减：" class="uniq">
-          <el-input type="text" placeholder="请输入金额" v-model="addForm.reduce" :disabled="addtypeT" >
-            <template slot="append">元</template>
-          </el-input>
-        </el-form-item>
-        <el-form-item prop="name" label="优惠商品名字：" class="uniq">
+        <el-form-item prop="name" label="优惠商品名字：" class="myitem">
           <el-select v-model="addForm.shopId" clearable placeholder="请选择需要折扣的商品" :disabled="myshop">
             <el-option v-for="item in this.shopList" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item prop="createName" label="创建的时间" class="uniq">
+        <el-form-item prop="reduce" label="(满减优惠)减：" class="myitem">
+          <el-input type="text" placeholder="请输入金额" v-model="addForm.reduce" :disabled="addtypeT" width="50%" >
+            <template slot="append">元</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="createName" label="创建的时间：" class="myitem">
           <el-date-picker
           :disabled="false"
             v-model="addForm.createdTime"
@@ -292,29 +292,13 @@
   }
 </script>
 <style lang="less">
-  .uniq {
-  width: 50%;
-  float: left !important;
-  .el-form-item__label {
-    float: none;
-    width: 300px !important;
-  }
-  .el-form-item__content {
-    margin-left: 0 !important;
-    .el-input {
-      width: 90% !important;
-    }
-    .el-select {
-      width: 90% !important;
-      .el-input {
-        width: 100% !important;
-      }
+    .myitem{
+      padding:30px 0 ;
+      // width: 45%;
     }
     .radio {
       width: 90% !important;
     }
-  }
-}
 </style>
 <style>
   .activity{

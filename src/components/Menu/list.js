@@ -42,14 +42,14 @@ export default [{
         icon: "resource",
         children: [{
                 id: 1,
-                name: "商家订单管理",
+                name: "商家财务详情",
                 path: "list",
                 icon: "resource",
                 children: []
             },
             {
                 id: 2,
-                name: "商家消息",
+                name: "其它",
                 path: "order",
                 icon: "resource",
                 children: []

@@ -50,7 +50,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="商品价格" prop="price" class="myitem">
-            <el-input type="text" placeholder="请输入金额" v-model="addform.price" >
+            <el-input type="text" placeholder="请输入大于十五的金额" @blur="input1" v-model="addform.price" >
               <template slot="append">元</template>
             </el-input> 
           </el-form-item>
@@ -133,10 +133,18 @@
       // this.clasShop();
     },
     methods: {
-      // proving1() {//对输入金额做正则判断
-      //   this.addform.price = this.addform.price.replace(/[^\.\d]/g,'');
-      //   this.addform.price = this.addform.price.replace(".","")
-      // },
+      input1 () {//输入的金额判断
+      var reg = /^1[6-9]$|^[2-9]\d$|^1\d{2}$/;
+      if(reg.test(this.addform.price)){
+         this.addform.pice = reg.test(this.addform.price);
+      }else if (/[^\d]/.test(this.addform.price)) {
+        this.addform.price=this.addform.price.replace(/[^\d]/g,'')
+      }
+      else{
+        this.$message("请正确输入大于十五的金额");
+        this.addform.price = null;
+      }
+      },
       stop() {
         this.dis = true;
       },
@@ -180,12 +188,24 @@
         if(this.actionType==1){
           this.$api("addshop",{typeid:this.addform.id,price:this.addform.price}).then((res)=>{
             console.log(res)
+            if(res.data.retCode!==200) {
+              this.$message('添加失败')
+            }else{
+              this.$message('添加成功')
+            }
           })
+          this.ces()
         }
         if(this.actionType==2) {
           this.$api('upshop',{id:this.addform.id,price:this.addform.price}).then((res)=>{
             console.log(res)
+            if(res.data.retCode!==200) {
+              this.$message('修改失败')
+            }else{
+              this.$message('修改成功')
+            }
           })
+          this.ces()
         }
       },
       close (addform) {//取消的时候数据消失
@@ -196,7 +216,6 @@
           addform[i] = null;
         }
       },
-
       changeValue (value) {//这里获取搜索框的id
         var obj={};
         obj = this.productTypes.find((item)=>{
@@ -272,6 +291,7 @@
       edit (myCode) {
         // debugger;        //编辑商品
         this.typeId =true;
+        console.log(myCode.row)
         this.dialogVisible = true;
         this.actionType=2;
         this.addform = myCode.row;

@@ -66,7 +66,7 @@
             <template slot-scope="scope" width="80%">
                 <el-button
                 size="mini"
-                @click="handleEdit(scope)">已发货</el-button>
+                @click="handleEdit(scope)">发货</el-button>
             </template>
             </el-table-column>
         </el-table>

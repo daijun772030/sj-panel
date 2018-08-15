@@ -2,7 +2,6 @@
     <div class="home">
         <!-- 搜索框的展示  -->
 
-        
     <!-- 表格的展示 -->
         <el-table
             :data="list"
@@ -50,6 +49,8 @@
                 :total="searchObj.totalCount">
             </el-pagination>
         </div>
+        <!-- <audio src="../../../static/audio/keke-1.m4a" controls='controls' preload id="music" hidden></audio>
+        <button @click="play()">{{playFlay? '暂停': "播放" }}</button> -->
     </div>
 </template>
 <script>
@@ -57,6 +58,7 @@
     export default {
     data(){
         return {
+            playFlay:false,
             loading:false,
             list:null,
             searchObj:{
@@ -76,7 +78,18 @@
     methods: {
 
         //这里做列表的轮询。。查看是不是有新订单
-
+            play() {
+               var audio = document.getElementById('music');
+                if(audio !==null) {
+                    if(this.playFlay) {
+                        this.playFlay = false;
+                    }else {
+                        audio.currentTime = 0
+                        audio.play()
+                        this.playFlay  = true
+                    }
+                }
+            },
         //点击接单以后前往待发货状态
         handleEdit(scope) {
             console.log(scope)

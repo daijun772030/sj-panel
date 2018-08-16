@@ -49,8 +49,9 @@
                 :total="searchObj.totalCount">
             </el-pagination>
         </div>
-        <!-- <audio src="../../../static/audio/keke-1.m4a" controls='controls' preload id="music" hidden></audio>
-        <button @click="play()">{{playFlay? '暂停': "播放" }}</button> -->
+        <audio src="../../../static/audio/newgoods.mp3"  :autoplay="this.autoplay" id="music" hidden></audio>
+        <!-- controls='controls' -->
+        <!-- <button @click="play()">{{playFlay? '暂停': "播放" }}</button> -->
     </div>
 </template>
 <script>
@@ -59,8 +60,10 @@
     data(){
         return {
             playFlay:false,
+            autoplay:null,
             loading:false,
             list:null,
+            arrObj:[],
             searchObj:{
             pageSize:10,
             pageNum:1,
@@ -71,6 +74,25 @@
     created () {
         // this.getList()
         this.orderAll();
+        this.timer = setInterval(() =>{
+            this.orderAll();
+            this.arrObj.push(this.searchObj.totalCount)
+            var a = this.arrObj;
+            if(a.length>=3){
+                a.shift();
+                this.arrObj = a;
+            }
+            if(this.arrObj.length==2) {
+                var length = this.arrObj.length;
+                if(this.arrObj[length-1] - this.arrObj[length-2] ==0) {
+                    this.autoplay = " "
+                    console.log('不改变')
+                }else{
+                    console.log('改变')
+                    this.autoplay = "autoplay"
+                }
+            }
+        },200000)
     },
     computed: {
 

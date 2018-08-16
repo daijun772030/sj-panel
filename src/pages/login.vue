@@ -54,8 +54,8 @@ import Hashes from 'jshashes'
         
       login () {
           var MD5 = new Hashes.MD5;
-          console.log(MD5.hex('shan5201314000'))
-          console.log(MD5.hex('qweasd'))
+        //   console.log(MD5.hex('shan5201314000'))
+        //   console.log(MD5.hex('qweasd'))
         // debugger;
         if (!this.login1.phone) {
           this.$message.error("请填写用户名");
@@ -67,7 +67,7 @@ import Hashes from 'jshashes'
         }
         // let loginParams = {name:vm.username,password:vm.password};
         this.$api("login",{phone:this.login1.phone,password: MD5.hex(this.login1.password)}).then((res)=>{
-            console.log(res)
+            // console.log(res)
             var message = res.data.message
           if(res.data.retCode==200) {
               this.$router.replace({ path : this.manager });

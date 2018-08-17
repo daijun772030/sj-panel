@@ -3,7 +3,7 @@
       <el-form :inline="true" :model="searchObj" label-width="5px" size="mini"  class="searchForm">
         <el-form-item class="float_left">
           <el-select v-model="searchObj.productType" placeholder="商品类型" @change="changeValue" clearable>
-            <el-option v-for="channel in productTypes" :key="channel.id" :label="channel.name" :value="channel.id">
+            <el-option v-for="channel in shopType" :key="channel.id" :label="channel.name" :value="channel.id">
             </el-option>
           </el-select>
         </el-form-item>
@@ -249,7 +249,8 @@
       },
      
       earchForm () {       //搜索框搜索内容的
-         this.$api("myshop",{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,higherup:this.higherup}}).then((res)=>{
+         this.$api("myshop",{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,higherup:this.searchObj.productType}}).then((res)=>{
+           console.log(res)
            var list = res.data.data.list;
           this.searchObj.pageNum = res.data.data.pageNum || 1;  
           this.searchObj.pageSize = res.data.data.pageSize;

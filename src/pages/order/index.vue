@@ -1,7 +1,14 @@
 <template>
     <div class="home">
-        <!-- 搜索框的展示  -->
-
+    <!-- 搜索框的展示  -->
+        <el-form :inline="true" :model="formObj" label-width="5px" size="mini"  class="searchForm">
+            <el-form-item class="float_left">
+                <el-input placeholder="请输入订单手机号" v-model="formObj.val" clearable></el-input>
+            </el-form-item>
+            <el-form-item class="float_left">
+                <el-button @click="earchForm" type="primary">确定</el-button>
+            </el-form-item>
+      </el-form>
     <!-- 表格的展示 -->
         <el-table
             :data="list"
@@ -10,7 +17,7 @@
             :default-sort = "{prop: 'condition', order: 'descending'}"
             element-loading-text="加载中..."
             style="
-            height: calc(100% -105px)"
+            height: calc(100% -130px)"
             class="home-table">
             <el-table-column prop="orderNum" align="center" label="订单号"></el-table-column>
             <el-table-column prop="commodityName"  align="center" label="商品名称"></el-table-column>
@@ -59,6 +66,9 @@
     export default {
     data(){
         return {
+            formObj:{//搜索框值
+                val:null
+            },
             playFlay:false,
             autoplay:null,
             loading:false,
@@ -74,31 +84,41 @@
     created () {
         // this.getList()
         this.orderAll();
-        this.timer = setInterval(() =>{
-            this.orderAll();
-            this.arrObj.push(this.searchObj.totalCount)
-            var a = this.arrObj;
-            if(a.length>=3){
-                a.shift();
-                this.arrObj = a;
-            }
-            if(this.arrObj.length==2) {
-                var length = this.arrObj.length;
-                if(this.arrObj[length-1] - this.arrObj[length-2] ==0) {
-                    this.autoplay = " "
-                    console.log('不改变')
-                }else{
-                    console.log('改变')
-                    this.autoplay = "autoplay"
-                }
-            }
-        },200000)
+        // this.timer = setInterval(() =>{
+        //     this.orderAll();
+        //     this.arrObj.push(this.searchObj.totalCount)
+        //     var a = this.arrObj;
+        //     if(a.length>=3){
+        //         a.shift();
+        //         this.arrObj = a;
+        //     }
+        //     if(this.arrObj.length==2) {
+        //         var length = this.arrObj.length;
+        //         if(this.arrObj[length-1] - this.arrObj[length-2] ==0) {
+        //             this.autoplay = " "
+        //             console.log('不改变')
+        //         }else{
+        //             console.log('改变')
+        //             this.autoplay = "autoplay"
+        //         }
+        //     }
+        // },200000)
     },
     computed: {
 
     },
     methods: {
-
+        earchForm() {//搜索函数
+            // console.log('搜索按钮')
+            this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,type:"0"}}).then((res)=>{
+                 var list = res.data.data.list;
+                this.list = list;
+                this.searchObj.pageSize = res.data.data.pageSize;
+                this.searchObj.pageNum = res.data.data.pageNum;
+                this.searchObj.totalCount = res.data.data.total;
+                console.log(res);
+            })
+        },
         //这里做列表的轮询。。查看是不是有新订单
             play() {
                var audio = document.getElementById('music');
@@ -126,7 +146,7 @@
         },
         //查询所有订单
         orderAll () {
-            this.$api('orderAll',{params:{pageNum:"1",pageSize:"10",type:"0"}}).then((res)=>{
+            this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,type:"0"}}).then((res)=>{
                 console.log(res)
                 var list = res.data.data.list;
                 this.list = list;
@@ -166,11 +186,14 @@
         justify-content:center;
         align-items: center;
     }
+    .pageination{
+        margin-top:10px;
+    }
 </style>
 <style lang="less">
     .home-table{
         width: 100%;
-        height: calc(100% - 60px);
+        height: calc(100% - 130px);
         // border:1px solid blue;
     }
     .block{

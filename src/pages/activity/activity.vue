@@ -251,18 +251,18 @@
               this.$message(res.data.message)
             }else{
               this.$message("添加成功")
+              this.discountAll()
             }
           })
-          this.discountAll()
         }else if(this.addForm.type==1 && this.title=="编辑满减优惠活动") {
           this.$api('updateDiscount',{id:this.addForm.id,type:this.addForm.type,full:this.addForm.full,reduce:this.addForm.reduce}).then((res)=>{//修改优惠活动（满减优惠活动）
             if(res.data.retCode!==200) {
               this.$message(res.data.message)
             }else{
-              this.$message("修改成功")
+              this.$message("修改成功");
+              this.discountAll()
             }
           })
-          this.discountAll()
         }else if(this.addForm.type==0 && this.title=="添加打折优惠活动"){
           // this.$api('updateDiscount',{id:this.addForm.id,type:this.addForm.type})
           this.$api("discountAddDis",{type:this.addForm.type,commodityid:this.addForm.shopId,dis:this.addForm.dis}).then((res)=>{//新增打折优惠活动
@@ -271,18 +271,18 @@
               this.$message(res.data.message)
             }else{
               this.$message("添加成功")
+              this.discountAll()
             }
           })
-          this.discountAll()
         }else if (this.addForm.type==0 && this.title=="编辑打折优惠活动") {
           this.$api('updateDiscount',{id:this.addForm.id,type:this.addForm.type,commodityid:this.addForm.shopId,dis:this.addForm.dis}).then((res)=>{//修改优惠活动（打折优惠活动
             if(res.data.retCode!==200) {
               this.$message(res.data.message)
             }else{
               this.$message("编辑成功")
+              this.discountAll()
             }
           })
-          this.discountAll()
         }
         
           this.dialogVisible = false

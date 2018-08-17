@@ -24,14 +24,14 @@ const Index = () =>
     import ('@/pages/order/index' /* webpackChunkName: "pages/order/index" */ ).then(m => m.default || m)
 const Generalize = () =>
     import ('@/pages/generalize/generalize' /* webpackChunkName: "pages/generalize" */ ).then(m => m.default || m)
-const Accomplish = () =>
-    import ('@/pages/order/Accomplish' /* webpackChunkName: "/pages/order/Accomplish" */ ).then(m => m.default || m)
-const Evaluate = () =>
-    import ('@/pages/order/evaluate' /* webpackChunkName: "/pages/order/evaluate" */ ).then(m => m.default || m)
+    // const Accomplish = () =>
+    //     import ('@/pages/order/Accomplish' /* webpackChunkName: "/pages/order/Accomplish" */ ).then(m => m.default || m)
+    // const Evaluate = () =>
+    //     import ('@/pages/order/evaluate' /* webpackChunkName: "/pages/order/evaluate" */ ).then(m => m.default || m)
 const Make = () =>
     import ('@/pages/order/make' /* webpackChunkName: "/pages/order/make" */ ).then(m => m.default || m)
-const Send = () =>
-    import ('@/pages/order/send' /* webpackChunkName: "/pages/order/send" */ ).then(m => m.default || m)
+    // const Send = () =>
+    //     import ('@/pages/order/send' /* webpackChunkName: "/pages/order/send" */ ).then(m => m.default || m)
 Vue.use(Router);
 
 // 路由后记住滚动条的位置
@@ -76,10 +76,10 @@ const router = new Router({
                 children: [
                     { name: "order", path: 'order', component: Index },
                     { name: "order-index", path: 'index', component: Index },
-                    { name: "order-accomplish", path: 'accomplish', component: Accomplish },
-                    { name: "order-evaluate", path: 'evaluate', component: Evaluate },
+                    // { name: "order-accomplish", path: 'accomplish', component: Accomplish },
+                    // { name: "order-evaluate", path: 'evaluate', component: Evaluate },
                     { name: "order-make", path: 'make', component: Make },
-                    { name: "order-send", path: 'send', component: Send },
+                    // { name: "order-send", path: 'send', component: Send },
                     { name: 'business', path: 'business', component: BusinessList },
                     { name: 'business-list', path: 'list', component: BusinessList },
                     { name: 'business-order', path: 'order', component: BusinessOrder },

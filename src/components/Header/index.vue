@@ -130,7 +130,6 @@ import {pca,pcaa} from 'area-data';
                 var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
                 var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
                 // 拼接
-                
                  time = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
                 //    console.log(time)
                 this.value2 = time
@@ -144,13 +143,11 @@ import {pca,pcaa} from 'area-data';
                 var minutes=date.getMinutes()<10 ? "0"+date.getMinutes() : date.getMinutes();
                 var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
                 // 拼接
-                
                    time = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
                 //    console.log(time)
                 this.value1 = time
                 console.log(this.changeShop.startTime)
-            },
-                
+            }, 
             //保存商家信息的函数
             save(){
                 this.change();
@@ -211,9 +208,6 @@ import {pca,pcaa} from 'area-data';
                 this.$api('orderAll',{params:{pageNum:"1",pageSize:"12",type:"5"}}).then((res)=>{
                     console.log(res);
                 })
-                // this.$api('orderAll',{params:{pageNum:"1",pageSize:"12",type:"5"}}).then((res)=>{
-                //     console.log(res);
-                // })
             },
             handler(option) {
                 switch(option) {
@@ -224,20 +218,14 @@ import {pca,pcaa} from 'area-data';
             loginout() {
                 // debugger;
             this.$api('cancellation').then((res)=>{
-                if(res.data.retCode==-200){
-                    this.$router.replace({ path : '/login' });
-                }
                 console.log(res)
-            })
+                if(res.data.retCode==200){
+                    this.$router.replace({ path: 'login' });
+                }
+            });
             },
-            // arhives () {
-            //     this.$api("archivesAll",{params:{pageNum:"1",pageSize:"1000"}}).then((res)=>{
-            //         console.log(res);
-            //     })
-            // },
             modifyPassword() {
                 this.dialogVisible= true;
-                // this.$api("updataByMer",{})
             }
         }
     }

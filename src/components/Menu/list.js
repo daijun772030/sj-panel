@@ -9,30 +9,30 @@ export default [{
                 path: "index",
                 icon: "resource"
             },
-            {
-                id: 2,
-                name: "待收货",
-                path: "send",
-                icon: "resource"
-            },
+            // {
+            //     id: 2,
+            //     name: "待收货",
+            //     path: "send",
+            //     icon: "resource"
+            // },
             {
                 id: 3,
                 name: "待发货",
                 path: "make",
                 icon: "resource"
-            },
-            {
-                id: 4,
-                name: "待评价",
-                path: "evaluate",
-                icon: "resource"
-            },
-            {
-                id: 5,
-                name: "完成订单",
-                path: "accomplish",
-                icon: "resource"
             }
+            // {
+            //     id: 4,
+            //     name: "待评价",
+            //     path: "evaluate",
+            //     icon: "resource"
+            // },
+            // {
+            //     id: 5,
+            //     name: "完成订单",
+            //     path: "accomplish",
+            //     icon: "resource"
+            // }
         ]
     },
     {

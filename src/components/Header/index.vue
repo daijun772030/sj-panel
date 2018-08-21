@@ -3,10 +3,10 @@
             <!-- <div>
                 <img src="~/static/images/logo.png" alt="">
             </div> -->
-            <p style="text-aligin: center">营业状态：</p>
-        <el-form class="earchForm">
-            <el-form-item  prop="region">
-                <el-select v-model="object.region"  command="updata" placeholder="营业状态">
+            <!-- <p style="text-aligin: center">营业状态：</p> -->
+        <el-form :inline="true" :model="object" label-width="5px" size="small" class="earchForm">
+            <el-form-item class="float_left">
+                <el-select v-model="object.id" clearable  command="updata" placeholder="营业状态">
                 <el-option label="营业中" value="shanghai"></el-option>
                 <el-option label="休息中" value="beijing"></el-option>
                 </el-select>
@@ -108,7 +108,7 @@ import {pca,pcaa} from 'area-data';
                 title:"修改商家信息",
                 dialogVisible:false,
                 object: {
-                    region: ""
+                    id:null
                 },
                 activeIndex : "1",
                 status : "操作",  
@@ -262,7 +262,7 @@ import {pca,pcaa} from 'area-data';
         overflow: hidden;
     }
     el-form-item{
-        padding:20px 0;
+        /* padding:20px 0; */
     }
 </style>
 

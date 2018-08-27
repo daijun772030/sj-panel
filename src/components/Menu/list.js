@@ -20,19 +20,19 @@ export default [{
                 name: "待发货",
                 path: "make",
                 icon: "resource"
-            }
+            },
             // {
             //     id: 4,
             //     name: "待评价",
             //     path: "evaluate",
             //     icon: "resource"
             // },
-            // {
-            //     id: 5,
-            //     name: "完成订单",
-            //     path: "accomplish",
-            //     icon: "resource"
-            // }
+            {
+                id: 4,
+                name: "完成订单",
+                path: "accomplish",
+                icon: "resource"
+            }
         ]
     },
     {

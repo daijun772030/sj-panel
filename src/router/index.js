@@ -24,8 +24,8 @@ const Index = () =>
     import ('@/pages/order/index' /* webpackChunkName: "pages/order/index" */ ).then(m => m.default || m)
 const Generalize = () =>
     import ('@/pages/generalize/generalize' /* webpackChunkName: "pages/generalize" */ ).then(m => m.default || m)
-    // const Accomplish = () =>
-    //     import ('@/pages/order/Accomplish' /* webpackChunkName: "/pages/order/Accomplish" */ ).then(m => m.default || m)
+const Accomplish = () =>
+    import ('@/pages/order/Accomplish' /* webpackChunkName: "/pages/order/Accomplish" */ ).then(m => m.default || m)
     // const Evaluate = () =>
     //     import ('@/pages/order/evaluate' /* webpackChunkName: "/pages/order/evaluate" */ ).then(m => m.default || m)
 const Make = () =>
@@ -76,7 +76,7 @@ const router = new Router({
                 children: [
                     { name: "order", path: 'order', component: Index },
                     { name: "order-index", path: 'index', component: Index },
-                    // { name: "order-accomplish", path: 'accomplish', component: Accomplish },
+                    { name: "order-accomplish", path: 'accomplish', component: Accomplish },
                     // { name: "order-evaluate", path: 'evaluate', component: Evaluate },
                     { name: "order-make", path: 'make', component: Make },
                     // { name: "order-send", path: 'send', component: Send },

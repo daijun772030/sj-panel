@@ -33,6 +33,20 @@
                 <el-form-item prop="shopName" label="商铺名称" class="uniq">
                     <el-input type="text" placeholder="请输入店铺名称" v-model="changeShop.shopName"></el-input>
                 </el-form-item>
+                <el-form-item label="上传产品图片：" class="uniq">
+                    <el-upload
+                    name="img"
+                    :data="imgData"
+                    class="avatar-uploader"
+                    action="/api/archives/updateByMerchantAndLogo"
+                    :show-file-list="true"
+                    :on-success="handleAvatarSuccess"
+                    :before-upload="beforeAvatarUpload">
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i><br>
+                    <small class="uploadSmall">建议使用750*750，10M以内的jpg、png图片</small>
+                    </el-upload>
+                </el-form-item>
                 <el-form-item prop="startTime" label="配送开始时间：" class="uniq">
                     <el-date-picker @change="changeStart"  type="datetime"  placeholder="选择取货时间" v-model="value1"></el-date-picker>
                 </el-form-item>
@@ -73,6 +87,10 @@ import {pca,pcaa} from 'area-data';
     export default {
         data() {
             return {
+                imgData:{
+                    id:null
+                },
+                imageUrl:"",
                 value1:null,
                 value2:null,
                 mystatus:[
@@ -121,6 +139,21 @@ import {pca,pcaa} from 'area-data';
             // this.change();
         },
         methods : {
+            handleAvatarSuccess(res, file) {//图片上传函数
+                this.imageUrl = URL.createObjectURL(file.raw);
+            },
+            beforeAvatarUpload(file) {//图片上传函数
+                const isJPG = file.type === 'image/jpeg';
+                const isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG) {
+                this.$message.error('上传头像图片只能是 JPG 格式!');
+                }
+                if (!isLt2M) {
+                this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
+            }, 
             changEndTime(time) {
                 var date = new Date(time);
                 var year = date.getFullYear();
@@ -166,6 +199,7 @@ import {pca,pcaa} from 'area-data';
                     // debugger;
                     console.log(res.data)
                     this.changeShop.id = res.data.data.id;
+                    this.imgData.id = res.data.data.id;
                     this.changeShop.address = res.data.data.address;
                     this.changeShop.phone  = res.data.data.phone;
                     this.changeShop.shopName = res.data.data.shopName;

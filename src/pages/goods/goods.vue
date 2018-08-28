@@ -40,12 +40,12 @@
       <el-dialog :modal-append-to-body="false" :title="title" center @close="close(addform)" :visible.sync="dialogVisible" :show-close="false" width="900px">
         <el-form :inline="true" :model="addform" ref="addform" label-width="150px" class="searchFrom demo-form-inline" >
           <el-form-item label="商品类型" prop="upName" class="myitem" >
-            <el-select v-model="addform.type" clearable placeholder="请选择商品类型" @change="getShop" :disabled='typeId'>
+            <el-select v-model="addform.type" clearable placeholder="请选择商品类型" @change="getShop" :disabled='typeId' value-key="id">
               <el-option v-for="item in this.shopType" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label="商品名称" prop="name" class="myitem">
-            <el-select v-model="addform.id" clearable placeholder="请选择商品名称" :disabled="typeId">
+            <el-select v-model="addform.id" clearable placeholder="请选择商品名称" :disabled="typeId" value-key="id">
               <el-option v-for="item in this.classShop" :key="item.id" :label="item.name" :value="item.id" :disabled="item.type"></el-option>
             </el-select>
           </el-form-item>

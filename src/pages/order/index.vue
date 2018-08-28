@@ -78,35 +78,25 @@
             pageSize:10,
             pageNum:1,
             totalCount:0
-        }
+            },
+            newTotalCount:null
         }
     },
     created () {
         // this.getList()
         this.orderAll();
-        // this.timer = setInterval(() =>{
-        //     this.orderAll();
-        //     this.arrObj.push(this.searchObj.totalCount)
-        //     var a = this.arrObj;
-        //     if(a.length>=3){
-        //         a.shift();
-        //         this.arrObj = a;
-        //     }
-        //     if(this.arrObj.length==2) {
-        //         var length = this.arrObj.length;
-        //         if(this.arrObj[length-1] - this.arrObj[length-2] ==0) {
-        //             this.autoplay = " "
-        //             console.log('不改变')
-        //         }else{
-        //             console.log('改变')
-        //             this.autoplay = "autoplay"
-        //         }
-        //     }
-        // },200000)
+        this.timer = setInterval(() =>{
+            this.orderAll();
+        },200000)
     },
-    computed: {
-
-    },
+    beforeUpdate () {
+    this.$watch("newTotalCount",function(val) {
+      this.$nextTick(function(){
+        var audio = document.getElementById('music');
+        audio.play();
+      })
+    })
+  },
     methods: {
         earchForm() {//搜索函数
             // console.log('搜索按钮')

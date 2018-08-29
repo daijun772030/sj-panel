@@ -100,7 +100,7 @@ const router = new Router({
  * next 必须执行才能路由过去
  */
 router.beforeEach((to, from, next) => {
-    // debugger;
+    debugger;
     // if (to.path === '/login') {
     //     next();
     // } else {

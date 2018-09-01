@@ -5,10 +5,10 @@
             </div> -->
             <!-- <p style="text-aligin: center">营业状态：</p> -->
         <el-form :inline="true" :model="object" label-width="5px" size="small" class="earchForm">
-            <el-form-item class="float_left">
-                <el-select v-model="object.id" clearable  command="updata" placeholder="营业状态">
-                <el-option label="营业中" value="shanghai"></el-option>
-                <el-option label="休息中" value="beijing"></el-option>
+            <el-form-item class="float_right">
+                <el-select v-model="object.id" clearable  @change="updata" placeholder="营业状态">
+                <el-option label="营业中" value="0"></el-option>
+                <el-option label="休息中" value="1"></el-option>
                 </el-select>
             </el-form-item>
         </el-form>
@@ -18,60 +18,67 @@
             </span>
             <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item command="loginout">注销</el-dropdown-item>
-                <el-dropdown-item command="modifyPassword">修改个人信息</el-dropdown-item>
+                <el-dropdown-item command="modifyPassword">修改商户信息</el-dropdown-item>
             </el-dropdown-menu>
         </el-dropdown>
         <!-- <audio v-if="true" src=""></audio> -->
          <el-dialog :modal-append-to-body="false" @close="close(changeShop)" :title="title" center :visible.sync="dialogVisible" :show-close="false" width="900px">
-            <el-form :inline="true" :model='changeShop' ref="changeShop" label-width="150px" class="demo-form-inline"  size="small" >
-                <el-form-item label="地址：" prop="address">
-                    <el-input type="text" placeholder="店铺地址" v-model="this.changeShop.address"></el-input>
+            <el-form :inline="false" :model='changeShop' ref="changeShop" label-width="150px" class="demo-form-inline"  size="small" >
+                 <el-form-item label="地区：">
+                        <v-distpicker clearable :province="select.province" :city="select.city" :area="select.area" @selected="onSeleted" ></v-distpicker>
+                </el-form-item>
+                <el-form-item label="详细地址：">
+                    <el-input clearable autosize type="textarea" placeholder= "店铺详细地址" v-model="detAdress" size="medium" class="myInput"></el-input>
                 </el-form-item>
                 <el-form-item label="联系方式：" prop="phone" class="uniq">
-                    <el-input type="text" placeholder="请输入联系电话" v-model="changeShop.phone"></el-input>
+                    <el-input type="text" placeholder="请输入联系电话" v-model="changeShop.phone" clearable class="myInput"></el-input>
                 </el-form-item>
-                <el-form-item prop="shopName" label="商铺名称" class="uniq">
-                    <el-input type="text" placeholder="请输入店铺名称" v-model="changeShop.shopName"></el-input>
+                <el-form-item prop="shopName" label="商铺名称：" class="uniq">
+                    <el-input clearable type="text" placeholder="请输入店铺名称" v-model="changeShop.shopName" class="myInput"></el-input>
                 </el-form-item>
                 <el-form-item label="上传产品图片：" class="uniq">
                     <el-upload
                     name="img"
                     :data="imgData"
-                    class="avatar-uploader"
+                     class="avatar-uploader"
                     action="/api/archives/updateByMerchantAndLogo"
                     :show-file-list="true"
                     :on-success="handleAvatarSuccess"
                     :before-upload="beforeAvatarUpload">
-                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i><br>
-                    <small class="uploadSmall">建议使用750*750，10M以内的jpg、png图片</small>
+                    <img v-if="imageUrl" :src="imageUrl" class="logoImage">
+                        <i v-else class="uploadImage"></i>
+                        <small class="uploadSmall">建议使用750*750，10M以内的jpg、png图片</small>
                     </el-upload>
                 </el-form-item>
                 <el-form-item prop="startTime" label="配送开始时间：" class="uniq">
-                    <el-date-picker @change="changeStart"  type="datetime"  placeholder="选择取货时间" v-model="value1"></el-date-picker>
+                    <template>
+                        <el-time-picker clearable v-model="changeShop.startTime" value-format="HH:mm" format = "HH:mm"  placeholder="开始配送时间"></el-time-picker>    
+                    </template>
                 </el-form-item>
                 <el-form-item prop="endTime" label="配送结束时间：" class="uniq">
-                    <el-date-picker  @change="changEndTime" type="datetime"  placeholder="选择配送结束时间" v-model="value2"></el-date-picker>
+                    <template>
+                        <el-time-picker clearable v-model="changeShop.endTime" value-format="HH:mm" format = "HH:mm" placeholder="结束配送时间"></el-time-picker>
+                    </template>
                 </el-form-item>
                 <el-form-item prop="takeoff" label="取送费：" class="uniq">
-                    <el-input type="text" placeholder="请输入取送费" v-model="changeShop.takeoff"></el-input>
+                    <el-input clearable type="text" placeholder="请输入取送费" v-model="changeShop.takeoff" class="myInput"></el-input>
                     <template slot="append">
                         元                        
                     </template>
                 </el-form-item>
                 <el-form-item prop="riseoff" label="起送价格：" class="uniq">
-                    <el-input type="text" placeholder="请输入起送价格" v-model="changeShop.riseoff"></el-input>
+                    <el-input clearable type="text" placeholder="请输入起送价格" v-model="changeShop.riseoff" class="myInput"></el-input>
                     <template slot="append">
                         元                        
                     </template>
                 </el-form-item>
                 <el-form-item prop="status" label="营业状态：" class="uniq">
-                    <el-select v-model="changeShop.status" clearable placeholder="请选择营业状态">
+                    <el-select  v-model="changeShop.status" clearable placeholder="请选择营业状态">
                          <el-option v-for="item in this.mystatus" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item prop="notice" label="商家公告：" class="uniq">
-                    <el-input autosize type="textarea" placeholder= "输入公告信息" v-model="changeShop.notice" size="large"></el-input>
+                    <el-input clearable autosize type="textarea" placeholder= "输入公告信息" v-model="changeShop.notice" size="large" class="myInput"></el-input>
                 </el-form-item>
             </el-form>
       <span slot="footer" class="dialog-footer">
@@ -83,10 +90,13 @@
 </template>
 <script>
 
-import {pca,pcaa} from 'area-data';
+import VDistpicker from 'v-distpicker'
     export default {
+        components: { VDistpicker },
         data() {
             return {
+                detAdress:null,
+                select: { province: null, city: null, area: null },
                 imgData:{
                     id:null
                 },
@@ -115,10 +125,6 @@ import {pca,pcaa} from 'area-data';
                     status:null,
                     notice:null
                 },
-                placeholders:['省','市','区'],
-                pcaa:pcaa,
-                pca:pca,
-                selected:["510000","510100","510104"],
                 formObj:[
                     {id:'1',
                     name:"dadadada"}
@@ -139,20 +145,24 @@ import {pca,pcaa} from 'area-data';
             // this.change();
         },
         methods : {
+            onSeleted (data) {//地址输入框的成功
+                this.select.province = data.province.value;
+                this.select.city = data.city.value;
+                this.select.area = data.area.value;
+            },
             handleAvatarSuccess(res, file) {//图片上传函数
                 this.imageUrl = URL.createObjectURL(file.raw);
             },
             beforeAvatarUpload(file) {//图片上传函数
-                const isJPG = file.type === 'image/jpeg';
-                const isLt2M = file.size / 1024 / 1024 < 2;
-
+                const isJPG = /image\/[jpeg|jpg|png]/.test(file.type);
+                const isLt1M = file.size / 1024 / 1024 < 10;
                 if (!isJPG) {
-                this.$message.error('上传头像图片只能是 JPG 格式!');
+                this.$message.error("上传LOGO图片格式应为jpeg|jpg|png!");
                 }
-                if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!');
+                if (!isLt1M) {
+                this.$message.error("上传LOGO图片大小不能超过 10MB!");
                 }
-                return isJPG && isLt2M;
+                return isJPG && isLt1M;
             }, 
             changEndTime(time) {
                 var date = new Date(time);
@@ -183,8 +193,9 @@ import {pca,pcaa} from 'area-data';
             }, 
             //保存商家信息的函数
             save(){
-                this.change();
                 this.dialogVisible= false;
+                this.change();
+                
             },
             //取消修改商家信息函数
             cancel () {
@@ -209,18 +220,38 @@ import {pca,pcaa} from 'area-data';
                     this.changeShop.riseoff = res.data.data.riseoff;
                     this.changeShop.status = res.data.data.status;
                     this.changeShop.notice = res.data.data.notice;
-                    // this.changeShop.id = res.data.data.id
+                    console.log(res.data.data.address)
+                    var Myaddress = res.data.data.address;
+                    var a = Myaddress.split(',')
+                    var b = a[0];
+                    this.detAdress = a[1];
+                    var newB =  b.split(" ");
+                    this.select.province = newB[0];
+                    this.select.city = newB[1];
+                    this.select.area = newB[2];
+                    // for (let i =0;i<this.select.area.length;i++) {
+                    //     if(this.select.area[i] == "("){
+                    //         this.select.area[i] == "("
+                    //     }else{
+                    //         this.select.area = newB[2]
+                    //     }
+                    // }
                     console.log(this.changeShop)
                 })
             },
             change () {//这里是修改数据的函数
                 // debugger;
+                console.log(this.changeShop.address)
+                var NewAddress = this.select.province + " " + this.select.city + " " + this.select.area + " , " + this.detAdress;
+                console.log(NewAddress)
+                this.changeShop.address = NewAddress; 
+                console.log(this.changeShop.startTime)
                 this.$api("updataByMer",{
                     id:this.changeShop.id,
                     address:this.changeShop.address,
                     phone:this.changeShop.phone,
-                    endTime:this.value2,
-                    startTime:this.value1,
+                    endTime:this.changeShop.endTime,
+                    startTime:this.changeShop.startTime,
                     takeoff:this.changeShop.takeoff,
                     riseoff:this.changeShop.riseoff,
                     shopName:this.changeShop.shopName,
@@ -228,15 +259,19 @@ import {pca,pcaa} from 'area-data';
                     notice:this.changeShop.notice
 
                 }).then((res)=>{
-    
-                        console.log(res)
+                    console.log(res);
+                        if(res.data.retCode == 200) {
+                            this.$message('修改成功')
+                        }else {
+                            this.$message(res.data.message)
+                        }
                     })
             },
             updata () {//营业中函数
-                console.log(this.object.region)
-            },
-            download () {//休息中函数
-                console.log(this.object.region)
+            // debugger;
+                console.log(this.object.id)
+                this.changeShop.status = this.object.id;
+                this.change();
             },
             orderAll() {
                 this.$api('orderAll',{params:{pageNum:"1",pageSize:"12",type:"5"}}).then((res)=>{
@@ -254,7 +289,7 @@ import {pca,pcaa} from 'area-data';
             this.$api('cancellation').then((res)=>{
                 console.log(res)
                 if(res.data.retCode==200){
-                    this.$router.replace({ path: 'login' });
+                    this.$router.replace({ path: '/login' });
                 }
             });
             },
@@ -281,11 +316,43 @@ import {pca,pcaa} from 'area-data';
         cursor: pointer;
     }
     .earchForm {
-        margin-bottom: 0;
+        margin-bottom: 20px;
     }
     .el-form-item,.el-form-item--mini{
         margin: 20px 50px 0 5px ;
     } 
+    .logoImage {
+    height: 48px;
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+  .myInput{
+      width: 50%;
+      height: 40px;
+    }
 }
 </style>
 <style lang  = "less">

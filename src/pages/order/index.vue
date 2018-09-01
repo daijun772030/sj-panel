@@ -64,54 +64,54 @@
 <script>
     // import DjObject from './object.js';
     export default {
-    data(){
-        return {
-            formObj:{//搜索框值
-                val:null
-            },
-            playFlay:false,
-            autoplay:null,
-            loading:false,
-            list:null,
-            arrObj:[],
-            searchObj:{
-            pageSize:10,
-            pageNum:1,
-            totalCount:0
-            },
-            newTotalCount:null
-        }
-    },
-    created () {
-        // this.getList()
-        this.orderAll();
-        this.timer = setInterval(() =>{
+        data(){
+            return {
+                formObj:{//搜索框值
+                    val:null
+                },
+                playFlay:false,
+                autoplay:null,
+                loading:false,
+                list:null,
+                arrObj:[],
+                searchObj:{
+                pageSize:10,
+                pageNum:1,
+                totalCount:0
+                },
+                newTotalCount:null
+            }
+        },
+        created () {
+            // this.getList()
             this.orderAll();
-        },200000)
-    },
-    beforeUpdate () {
-    this.$watch("newTotalCount",function(val) {
-      this.$nextTick(function(){
-        var audio = document.getElementById('music');
-        audio.play();
-      })
-    })
-  },
-    methods: {
-        earchForm() {//搜索函数
-            // console.log('搜索按钮')
-            this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,type:"0"}}).then((res)=>{
-                 var list = res.data.data.list;
-                this.list = list;
-                this.searchObj.pageSize = res.data.data.pageSize;
-                this.searchObj.pageNum = res.data.data.pageNum;
-                this.searchObj.totalCount = res.data.data.total;
-                console.log(res);
+            this.timer = setInterval(() =>{
+                this.orderAll();
+            },200000)
+        },
+        beforeUpdate () {
+            this.$watch("newTotalCount",function(val) {
+                this.$nextTick(function(){
+                var audio = document.getElementById('music');
+                audio.play();
+                })
             })
         },
-        //这里做列表的轮询。。查看是不是有新订单
+        methods: {
+            earchForm() {//搜索函数
+                // console.log('搜索按钮')
+                this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,type:"0"}}).then((res)=>{
+                    var list = res.data.data.list;
+                    this.list = list;
+                    this.searchObj.pageSize = res.data.data.pageSize;
+                    this.searchObj.pageNum = res.data.data.pageNum;
+                    this.searchObj.totalCount = res.data.data.total;
+                    console.log(res);
+                })
+            },
+            //这里做列表的轮询。。查看是不是有新订单
             play() {
-               var audio = document.getElementById('music');
+                var audio = document.getElementById('music');
                 if(audio !==null) {
                     if(this.playFlay) {
                         this.playFlay = false;
@@ -122,38 +122,38 @@
                     }
                 }
             },
-        //点击接单以后前往待发货状态
-        handleEdit(scope) {
-            console.log(scope)
-            this.$api("orderType",{params:{type:"1",orderId:scope.row.id,outTradeNo:scope.row.orderNum}}).then((res)=>{
-                // debugger;
-                console.log(res)
-                var num = scope.$index
-                console.log(num)
-                this.list[num] = null;
-                this.orderAll();
-            })
-        },
-        //查询所有订单
-        orderAll () {
-            this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,type:"0"}}).then((res)=>{
-                console.log(res)
-                var list = res.data.data.list;
-                this.list = list;
-                this.searchObj.pageSize = res.data.data.pageSize;
-                this.searchObj.pageNum = res.data.data.pageNum;
-                this.searchObj.totalCount = res.data.data.total;
+            //点击接单以后前往待发货状态
+            handleEdit(scope) {
+                console.log(scope)
+                this.$api("orderType",{params:{type:"1",orderId:scope.row.id,outTradeNo:scope.row.orderNum}}).then((res)=>{
+                    // debugger;
+                    console.log(res)
+                    var num = scope.$index
+                    console.log(num)
+                    this.list[num] = null;
+                    this.orderAll();
+                })
+            },
+            //查询所有订单
+            orderAll () {
+                this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,type:"0"}}).then((res)=>{
+                    console.log(res)
+                    var list = res.data.data.list;
+                    this.list = list;
+                    this.searchObj.pageSize = res.data.data.pageSize;
+                    this.searchObj.pageNum = res.data.data.pageNum;
+                    this.searchObj.totalCount = res.data.data.total;
 
-            })
-        },
-        handleSizeChange (val) {//改变每页显示多少条
-        this.searchObj.pageSize = val;
-        this.orderAll()
-      },
-      handleCurrentChange (val) { //改变前往多少页
-        this.searchObj.pageNum = val;
-        this.orderAll()
-      }
+                })
+            },
+            handleSizeChange (val) {//改变每页显示多少条
+                this.searchObj.pageSize = val;
+                this.orderAll()
+            },
+            handleCurrentChange (val) { //改变前往多少页
+                this.searchObj.pageNum = val;
+                this.orderAll()
+            }
         }
     }
 </script>

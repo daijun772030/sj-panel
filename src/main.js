@@ -8,10 +8,13 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-import create from '../src/plugin/myapi'
-import VueCookies from 'vue-cookies'
+import create from '../src/plugin/myapi';
+import VueCookies from 'vue-cookies';
+import VDistpicker from 'v-distpicker'
+// import VueAreaLinkage from 'vue-area-linkage';
 Vue.use(ElementUI, { size: 'mini', zIndex: 3000 });
 Vue.use(VueAreaLinkage);
+Vue.use(VDistpicker)
 Vue.config.productionTip = false
 Vue.prototype.$api = create
 Vue.prototype.$cookies = VueCookies

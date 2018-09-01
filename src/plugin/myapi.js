@@ -88,7 +88,7 @@ const apis = {
     //查询商家个人基本信息
     merchantChange: get("/merchant/order/findByMerchantidDetail"),
     //修改商家个人信息
-    updataByMer: post("/archives/updateByMerchantid"),
+    updataByMer: post("/archives/updateByMerchant"),
     //商品接口
     myshop: get('/commodity/all'), //查询所有商品
     addshop: post('/commodity/addCommodity'), //添加商品

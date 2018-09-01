@@ -134,16 +134,16 @@
     },
     methods: {
       input1 () {//输入的金额判断
-      var reg = /^1[6-9]$|^[2-9]\d$|^1\d{2}$/;
-      if(reg.test(this.addform.price)){
-         this.addform.pice = reg.test(this.addform.price);
-      }else if (/[^\d]/.test(this.addform.price)) {
-        this.addform.price=this.addform.price.replace(/[^\d]/g,'')
-      }
-      else{
-        this.$message("请正确输入大于十五的金额");
-        this.addform.price = null;
-      }
+        var reg = /^1[6-9]$|^[2-9]\d$|^1\d{2}$/;
+        if(reg.test(this.addform.price)){
+          this.addform.pice = reg.test(this.addform.price);
+        }else if (/[^\d]/.test(this.addform.price)) {
+          this.addform.price=this.addform.price.replace(/[^\d]/g,'')
+        }
+        else{
+          this.$message("请正确输入大于十五的金额");
+          this.addform.price = null;
+        }
       },
       stop() {
         this.dis = true;
@@ -182,11 +182,11 @@
 
         // })
       },
-       save () {//保存
+      save () {//保存
         this.dialogVisible = false
-       console.log(this.addform)
+        console.log(this.addform)
         if(this.actionType==1){
-          this.$api("addshop",{typeid:this.addform.id,price:this.addform.price}).then((res)=>{
+          this.$api("addshop",{typeid:this.addform.id,price:this.addform.price,remark:""}).then((res)=>{
             console.log(res)
             if(res.data.retCode!==200) {
               this.$message('添加失败')

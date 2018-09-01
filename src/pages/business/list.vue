@@ -30,7 +30,7 @@
             <el-table-column prop="actualMoney" label="应收金额" align="center"></el-table-column>
             <el-table-column prop="phone" label="客户电话" align="center"></el-table-column>
             <el-table-column prop="discountMoney" label="商家满减" align="center"></el-table-column>
-            <el-table-column prop="actualMoney"  label="实收金额" align="center"></el-table-column>
+            <el-table-column prop="money"  label="实收金额" align="center"></el-table-column>
             <el-table-column prop="extract" label="平台提成" align="center"></el-table-column>
             <el-table-column prop="account" label="实到金额" align="center"></el-table-column>
         </el-table>
@@ -103,30 +103,30 @@
             },
             getList () {
             //这里用来组件一进来渲染的数据
-            this.loading = true 
-            this.$api('mock').then((data)=>{
-                console.log(data)
-            this.tableData = data.data.data.projects
-            for(let i = 0; i<this.paginObj.pageSize&&i<this.tableData.length;i++) {
-                this.dataNum.push(this.tableData[i])   
+                this.loading = true 
+                this.$api('mock').then((data)=>{
+                    console.log(data)
+                this.tableData = data.data.data.projects
+                for(let i = 0; i<this.paginObj.pageSize&&i<this.tableData.length;i++) {
+                    this.dataNum.push(this.tableData[i])   
+                }
+                })
+                this.loading = false
+            },
+            handleSizeChange(val) {
+                this.paginObj.pageSize = val;
+                this.getObj();
+                console.log(val)
+            },
+            handleCurrentChange (val) {
+                this.paginObj.pagnum = val;
+                this.getObj();
+                console.log(val)
+            },
+            getconfig () {
+                this.dataNum = [1, 2, 3, 4, 5]
             }
-            })
-            this.loading = false
-        },
-        handleSizeChange(val) {
-            this.paginObj.pageSize = val;
-            this.getObj();
-            console.log(val)
-        },
-        handleCurrentChange (val) {
-            this.paginObj.pagnum = val;
-            this.getObj();
-            console.log(val)
-        },
-        getconfig () {
-            this.dataNum = [1, 2, 3, 4, 5]
         }
-    }
     }
 </script>
 <style lang="less" scoped>

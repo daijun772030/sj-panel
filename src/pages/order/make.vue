@@ -86,98 +86,98 @@
 <script>
     import DjObject from './object.js';
     export default {
-    data(){
-        return {
-            list:null,
-            right:null,//订单是否接单
-            searchObj:{
-            pageSize:10,
-            pageNum:1,
-            totalCount:0
-            },
-            seachObject:{
-                input:'',
-                starDate: '',
-                endDate: '',
-                money: '',
-                state: '',
-                region: ''
-            },
-            scopeIndex:"",
-            myObject:{},
-            centerDialogVis: false,
-            tableData:DjObject.tableData,
-            loading: false,
-            input1: '',
-            formInline: {
-                user: '',
-                region: ''
-            },
-            paginObj: {
-                pagnum:0,
-                pageSize:3,
-                currentPages: 1,
-                currentPage: 1
-            },
-            addForm: {
+        data(){
+            return {
+                list:null,
+                right:null,//订单是否接单
+                searchObj:{
+                pageSize:10,
+                pageNum:1,
+                totalCount:0
+                },
+                seachObject:{
+                    input:'',
+                    starDate: '',
+                    endDate: '',
+                    money: '',
+                    state: '',
+                    region: ''
+                },
+                scopeIndex:"",
+                myObject:{},
+                centerDialogVis: false,
+                tableData:DjObject.tableData,
+                loading: false,
+                input1: '',
+                formInline: {
+                    user: '',
+                    region: ''
+                },
+                paginObj: {
+                    pagnum:0,
+                    pageSize:3,
+                    currentPages: 1,
+                    currentPage: 1
+                },
+                addForm: {
 
-            },
-            dataNum:[],//需要渲染的条数
-            pagingnum: '',//一共有多少条
-        }
-    },
-    created () {
-        // this.getList()
-        this.orderAll();
-    },
-    computed: {
-
-    },
-    methods: {
-        //这里做列表的轮询。。查看是不是有新订单
-        //点击接单以后前往待发货状态
-        handleEdit(scope) {
-            console.log(scope)
-            this.$api("orderType",{params:{type:"3", orderId:scope.row.id, outTradeNo:scope.row.orderNum}}).then((res)=>{
-                // debugger;
-                console.log(res)
-                var num = scope.$index
-                console.log(num)
-                this.list[num] = null;
-                this.orderAll();
-            })
-        },
-        //查询所有订单
-        orderAll () {
-            this.$api('orderAll',{params:{pageNum:"1",pageSize:"10",type:"1"}}).then((res)=>{
-                console.log(res)
-                var list = res.data.data.list;
-                this.list = list;
-                this.searchObj.pageSize = res.data.data.pageSize;
-                this.searchObj.pageNum = res.data.data.pageNum;
-                this.searchObj.totalCount = res.data.data.total
-            })
-        },
-        earchForm () {//这里请求接口进行搜索然后渲染
-            console.log(this.seachObject)
-        },
-        seach () {
-            //在这里用来分页查询
-            for(var i=( this.paginObj.currentPage-1)*this.paginObj.pageSize;i< this.paginObj.currentPage*this.paginObj.pageSize&&i<this.tableData.length;i++){
-            /*&&i<this.tableData.length*/
-                if(i<this.tableData.length){
-                    this.dataNum.push(this.tableData[i])
-                }
+                },
+                dataNum:[],//需要渲染的条数
+                pagingnum: '',//一共有多少条
             }
         },
-        handleSizeChange (val) {//改变每页显示多少条
-        this.searchObj.pageSize = val;
-        this.orderAll()
-      },
-      handleCurrentChange (val) { //改变前往多少页
-        this.searchObj.pageNum = val;
-        this.orderAll()
-      }
+        created () {
+            // this.getList()
+            this.orderAll();
+        },
+        computed: {
+
+        },
+        methods: {
+            //这里做列表的轮询。。查看是不是有新订单
+            //点击接单以后前往待发货状态
+            handleEdit(scope) {
+                console.log(scope)
+                this.$api("orderType",{params:{type:"3", orderId:scope.row.id, outTradeNo:scope.row.orderNum}}).then((res)=>{
+                    // debugger;
+                    console.log(res)
+                    var num = scope.$index
+                    console.log(num)
+                    this.list[num] = null;
+                    this.orderAll();
+                })
+            },
+            //查询所有订单
+            orderAll () {
+                this.$api('orderAll',{params:{pageNum:"1",pageSize:"10",type:"1"}}).then((res)=>{
+                    console.log(res)
+                    var list = res.data.data.list;
+                    this.list = list;
+                    this.searchObj.pageSize = res.data.data.pageSize;
+                    this.searchObj.pageNum = res.data.data.pageNum;
+                    this.searchObj.totalCount = res.data.data.total
+                })
+            },
+            earchForm () {//这里请求接口进行搜索然后渲染
+                console.log(this.seachObject)
+            },
+            seach () {
+                //在这里用来分页查询
+                for(var i=( this.paginObj.currentPage-1)*this.paginObj.pageSize;i< this.paginObj.currentPage*this.paginObj.pageSize&&i<this.tableData.length;i++){
+                /*&&i<this.tableData.length*/
+                    if(i<this.tableData.length){
+                        this.dataNum.push(this.tableData[i])
+                    }
+                }
+            },
+            handleSizeChange (val) {//改变每页显示多少条
+                this.searchObj.pageSize = val;
+                this.orderAll()
+            },
+            handleCurrentChange (val) { //改变前往多少页
+                this.searchObj.pageNum = val;
+                this.orderAll()
+            }
         }
     }
 </script>

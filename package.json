@@ -17,6 +17,7 @@
     "area-data": "^5.0.6",
     "axios": "^0.18.0",
     "element-ui": "^2.4.3",
+    "v-distpicker": "^1.0.17",
     "vue": "^2.5.2",
     "vue-area-linkage": "^5.0.0",
     "vue-cookies": "^1.5.6",

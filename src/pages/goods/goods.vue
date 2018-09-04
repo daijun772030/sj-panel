@@ -50,7 +50,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="商品价格" prop="price" class="myitem">
-            <el-input type="text" placeholder="请输入大于十五的金额" @blur="input1" v-model="addform.price" >
+            <el-input type="text" placeholder="请输入大于十五的金额"  v-model="addform.price" >
               <template slot="append">元</template>
             </el-input> 
           </el-form-item>
@@ -84,7 +84,6 @@
     </div>
 </template>
 <script>
-  // import GoodsObj from './goods1.js'
   export default {
     data () {
       return {

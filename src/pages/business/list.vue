@@ -26,7 +26,7 @@
             <el-table-column prop="orderNum"  width="200px"  label="订单号" align="center"></el-table-column>
             <el-table-column prop="commodityName"  label="商品名称" align="center"></el-table-column>
             <!-- <el-table-column prop="" label="商品类型" align="center"></el-table-column> -->
-            <el-table-column prop="endTime" width="200px"  label="确认时间" align="center"></el-table-column>
+            <el-table-column prop="createTime" width="200px"  label="订单生成时间" align="center"></el-table-column>
             <el-table-column prop="actualMoney" label="应收金额" align="center"></el-table-column>
             <el-table-column prop="phone" label="客户电话" align="center"></el-table-column>
             <el-table-column prop="discountMoney" label="商家满减" align="center"></el-table-column>

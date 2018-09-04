@@ -138,7 +138,7 @@
             //点击接单以后前往待发货状态
             handleEdit(scope) {
                 console.log(scope)
-                this.$api("orderType",{params:{type:"3", orderId:scope.row.id, outTradeNo:scope.row.orderNum}}).then((res)=>{
+                this.$api("orderType",{params:{type:"2", orderId:scope.row.id, outTradeNo:scope.row.orderNum}}).then((res)=>{
                     // debugger;
                     console.log(res)
                     var num = scope.$index

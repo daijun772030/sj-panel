@@ -1,12 +1,12 @@
 export default [{
         id: "0",
         name: "订单管理",
-        path: "order",
+        path: "/manager/order",
         icon: "order",
         children: [{
                 id: 1,
                 name: "待接订单",
-                path: "index",
+                path: "/manager/index",
                 icon: "resource"
             },
             // {
@@ -18,7 +18,7 @@ export default [{
             {
                 id: 3,
                 name: "待发货",
-                path: "make",
+                path: "/manager/make",
                 icon: "resource"
             },
             // {
@@ -30,7 +30,7 @@ export default [{
             {
                 id: 4,
                 name: "完成订单",
-                path: "accomplish",
+                path: "/manager/accomplish",
                 icon: "resource"
             }
         ]
@@ -38,19 +38,19 @@ export default [{
     {
         id: "1",
         name: "财务管理",
-        path: "business",
+        path: "/manager/business",
         icon: "resource",
         children: [{
                 id: 1,
                 name: "商家财务详情",
-                path: "list",
+                path: "/manager/list",
                 icon: "resource",
                 children: []
             },
             {
                 id: 2,
                 name: "其它",
-                path: "order",
+                path: "/manager/business-order",
                 icon: "resource",
                 children: []
             },
@@ -60,21 +60,21 @@ export default [{
     {
         id: '2',
         name: '商品管理',
-        path: 'goods',
+        path: '/manager/goods',
         icon: "resource",
         children: []
     },
     {
         id: "3",
         name: "活动管理",
-        path: "activity",
+        path: "/manager/activity",
         icon: "resource",
         children: []
     },
     {
         id: "4",
         name: "推广",
-        path: "generalize",
+        path: "/manager/generalize",
         icon: "resource",
         children: []
     }

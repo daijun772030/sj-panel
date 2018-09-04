@@ -5,11 +5,11 @@
         </div>
         <div class="menu-list">
             <el-menu
-                default-active="index"
+                :default-active="currentPath"
+                :router="true"
                 class="menu-list-el"
                 text-color="#fff"
                 :unique-opened="true"
-                @select="select"
             >
                 <el-submenu
                     class="sub"
@@ -47,21 +47,18 @@
         data() {
             return {
                 list: list,
-                img:img
+                img:img,
+                currentPath: 'index'
             }
         },
         created() {
+            this.currentPath = this.$route.path;
             this.getList();
         },
         methods: {
             // 获取导航列表
             getList() {
                 // this.$api('get_menu');
-            },
-            // 选中事件,根据indexPath的路径匹配路由
-            select(index, indexPath) {
-                // debugger;
-                this.$router.push({ name: indexPath.join('-') });
             }
         }
     }

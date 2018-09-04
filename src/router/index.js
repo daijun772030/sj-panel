@@ -32,6 +32,8 @@ const Make = () =>
     import ('@/pages/order/make' /* webpackChunkName: "/pages/order/make" */ ).then(m => m.default || m)
     // const Send = () =>
     //     import ('@/pages/order/send' /* webpackChunkName: "/pages/order/send" */ ).then(m => m.default || m)
+const page404 = () =>
+    import ('@/pages/error/404' /* webpackChunkName: "/pages/error/404" */ ).then(m => m.default || m)
 Vue.use(Router);
 
 // 路由后记住滚动条的位置
@@ -63,34 +65,36 @@ const router = new Router({
     linkActiveClass: 'b-link-active',
     linkExactActiveClass: 'b-c-link-active',
     scrollBehavior,
-    routes: [{
-        name: '/',
-        path: '/',
-        component: App,
-        children: [
-            { name: 'login', path: 'login', component: Login },
-            {
-                name: 'manager',
-                path: 'manager',
-                component: Manager,
-                children: [
-                    { name: "order", path: 'order', component: Index },
-                    { name: "order-index", path: 'index', component: Index },
-                    { name: "order-accomplish", path: 'accomplish', component: Accomplish },
-                    // { name: "order-evaluate", path: 'evaluate', component: Evaluate },
-                    { name: "order-make", path: 'make', component: Make },
-                    // { name: "order-send", path: 'send', component: Send },
-                    { name: 'business', path: 'business', component: BusinessList },
-                    { name: 'business-list', path: 'list', component: BusinessList },
-                    { name: 'business-order', path: 'order', component: BusinessOrder },
-                    { name: 'goods', path: 'goods', component: Goods },
-                    { name: 'activity', path: 'activity', component: Activity },
-                    { name: 'finance', path: 'finance', component: Finance },
-                    { name: 'generalize', path: 'generalize', component: Generalize }
-                ]
-            }
-        ]
-    }]
+    routes: [
+        {
+            name: '/',
+            path: '/',
+            component: App
+        },
+        { name: 'login', path: '/login', component: Login },
+        {
+            name: 'manager',
+            path: '/manager',
+            component: Manager,
+            children: [
+                { name: "manager", path: '/manager', component: Index },
+                { name: "order", path: '/manager/order', component: Index },
+                { name: "order-index", path: '/manager/index', component: Index },
+                { name: "order-accomplish", path: '/manager/accomplish', component: Accomplish },
+                // { name: "order-evaluate", path: 'evaluate', component: Evaluate },
+                { name: "order-make", path: '/manager/make', component: Make },
+                // { name: "order-send", path: 'send', component: Send },
+                { name: 'business', path: '/manager/business', component: BusinessList },
+                { name: 'business-list', path: '/manager/list', component: BusinessList },
+                { name: 'business-order', path: '/manager/business-order', component: BusinessOrder },
+                { name: 'goods', path: '/manager/goods', component: Goods },
+                { name: 'activity', path: '/manager/activity', component: Activity },
+                { name: 'finance', path: '/manager/finance', component: Finance },
+                { name: 'generalize', path: '/manager/generalize', component: Generalize }
+            ]
+        },
+        { name: '404', path: '/*', component: page404 },
+    ]
 });
 
 /**

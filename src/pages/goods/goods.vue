@@ -20,20 +20,10 @@
         <el-table-column prop="upName" label="商品类型" align="center"></el-table-column>
         <el-table-column prop="img" label="商品logo" align="center"></el-table-column>
         <el-table-column prop="price" label="商品价格" align="center"></el-table-column>
-        <!-- <el-table-column prop="putawayState" label="是否上架" align="center">
-          <template slot-scope="scope">
-            <span v-if="scope.row.putawayState === '1'">已上架</span>
-            <span v-else>未上架</span>
-          </template>
-        </el-table-column> -->
-        <!-- <el-table-column prop="upData" label="上传时间" align="center"></el-table-column>
-        <el-table-column prop="endData" label="最后编辑时间" align="center"></el-table-column> -->
         <el-table-column label="操作" align="center" width="200">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="edit(scope)">编辑</el-button>
             <el-button @click="deleShop(scope.row)" type="text" size="mini">删除</el-button>
-            <el-button v-if="scope.row.putawayState === '1' " type="text" size="mini" @click="status(scope.row)">上架</el-button>
-            <el-button v-if="scope.row.putawayState === '0' " type="text" size="mini" @click="status(scope.row)">下架</el-button>
           </template>  
         </el-table-column>
       </el-table>
@@ -108,7 +98,7 @@
         actionType:null,//操作类型
         higherup:null, //搜索框需要传递的参数(这是商品类型)
         shopId:null,
-        addform: {
+        addform: {//弹出框对象
           id:null,
           merchantid:null,
           name:null,

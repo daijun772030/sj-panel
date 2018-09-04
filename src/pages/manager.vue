@@ -33,9 +33,6 @@ export default {
       Paging,
       Croumbs,
     //   login
-    },
-    created() {
-        this.$router.replace({ path: '/manager/order' });
     }
 }
 </script>

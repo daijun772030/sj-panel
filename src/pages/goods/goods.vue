@@ -12,6 +12,7 @@
         </el-form-item>
         <el-form-item class="float_right">
           <el-button type="primary" @click="add">添加商品</el-button>
+          <el-button type="primary" @click="addtype">添加商品类型</el-button>
         </el-form-item>
       </el-form>
 
@@ -58,6 +59,38 @@
           <el-button type="primary" @click="save">保存</el-button>
         </span>
       </el-dialog>
+
+      <el-dialog :modal-append-to-body="false" :title="title" center @close="close(addform)" :visible.sync="myDisable" :show-close="false" width="900px">
+        <el-form :inline="true" :model="tableData" ref="imgType" label-width="150px" class="searchFrom demo-form-inline" >
+          <el-form-item label="产品类型：" prop="higherup" class="myitem">
+            <el-select v-model="tableData.higherup" clearable placeholder="请选择产品的类型" @change="getShop" :disabled='typeId'>
+              <el-option v-for="item in this.shopType" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            </el-select> 
+          </el-form-item>
+          <el-form-item label="产品名称：" prop="name" class="myitem">
+            <el-input type="text" placeholder="输入产品名称" v-model="tableData.name" ></el-input> 
+          </el-form-item>
+          <el-form-item label="上传产品图片：">
+            <el-upload
+              name="img"
+              :data="tableData"
+              class="avatar-uploader"
+              action="/api/type/addByType"
+              :show-file-list="true"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload">
+              <img v-if="imageUrl" :src="imageUrl" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i><br>
+              <small class="uploadSmall">建议使用750*750，10M以内的jpg、png图片</small>
+            </el-upload>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="ImgClose(tableData)">取消</el-button>
+          <el-button type="primary" @click="ImgSave(tableData)">保存</el-button>
+        </span>
+      </el-dialog>
+      
       <!-- 这里是分页功能 -->
       <div class="pageination">
         <el-pagination
@@ -70,13 +103,19 @@
           :total="searchObj.totalCount">
         </el-pagination>
       </div>
-
     </div>
 </template>
 <script>
   export default {
     data () {
       return {
+        imageUrl:null,
+        myDisable:false,
+        tableData:{
+          name:null,
+          higherup:null,
+          status:"4"
+        },
         typeId:false,
         disable:false,//是否禁用select框
         dialogVisible: false,
@@ -107,6 +146,7 @@
           upName:null,
           price:null,
         },
+        type3:null,
         shopType:[],//商品类型
         classShop:[],//根据商品类型获得相应的商品
         addShop:[],
@@ -122,6 +162,37 @@
       // this.clasShop();
     },
     methods: {
+      handleAvatarSuccess(res, file) {//图片上传函数
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload(file) {//图片上传函数
+        const isJPG = /image\/[jpeg|jpg|png]/.test(file.type);
+          const isLt1M = file.size / 1024 / 1024 < 10;
+
+          if (!isJPG) {
+          this.$message.error("上传LOGO图片格式应为jpeg|jpg|png!");
+          }
+          if (!isLt1M) {
+          this.$message.error("上传LOGO图片大小不能超过 10MB!");
+          }
+          return isJPG && isLt1M;
+      }, 
+       
+      ImgClose (tableData) {//添加商品类型的函数取消函数
+        this.myDisable = false;
+        // console.log(tableData)
+        for(var i = 0;i<tableData.length;i++) {
+          tableData[i].name = null;
+          tableData[i].higherup = null;
+        }
+      },
+      ImgSave (tableData) {//
+      },
+      addtype () {//添加商品类型
+        this.myDisable = true;
+        this.actionType = 3;
+        this.title = "添加商品类型"
+      },
       input1 () {//输入的金额判断
         var reg = /^1[6-9]$|^[2-9]\d$|^1\d{2}$/;
         if(reg.test(this.addform.price)){

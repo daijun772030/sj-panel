@@ -69,7 +69,7 @@ import Hashes from 'jshashes'
         this.$api("login",{phone:this.login1.phone,password: MD5.hex(this.login1.password)}).then((res)=>{
             // console.log(res)
             var message = res.data.message
-          if(res.data.retCode==200) {
+          if(res.data.retCode==200&&res.data.data.type==0) {
               this.$router.replace({ path : this.manager });
           }else if (res.data.retCode==500102) {
               this.$message.error(message)

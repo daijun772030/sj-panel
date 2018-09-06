@@ -60,7 +60,7 @@
         </span>
       </el-dialog>
 
-      <el-dialog :modal-append-to-body="false" :title="title" center @close="close(addform)" :visible.sync="myDisable" :show-close="false" width="900px">
+      <el-dialog :modal-append-to-body="false" :title="title" center @close="close(tableData)" :visible.sync="myDisable" :show-close="false" width="900px">
         <el-form :inline="true" :model="tableData" ref="imgType" label-width="150px" class="searchFrom demo-form-inline" >
           <el-form-item label="产品类型：" prop="higherup" class="myitem">
             <el-select v-model="tableData.higherup" clearable placeholder="请选择产品的类型" @change="getShop" :disabled='typeId'>
@@ -109,6 +109,7 @@
   export default {
     data () {
       return {
+        shopNameId:null,//编辑商品时候商品的id
         imageUrl:null,
         myDisable:false,
         tableData:{
@@ -257,7 +258,7 @@
           this.ces()
         }
         if(this.actionType==2) {
-          this.$api('upshop',{id:this.addform.id,price:this.addform.price}).then((res)=>{
+          this.$api('upshop',{id:this.shopNameId,price:this.addform.price}).then((res)=>{
             console.log(res)
             if(res.data.retCode!==200) {
               this.$message('修改失败')
@@ -338,11 +339,11 @@
         this.searchObj.pageNum = val;
         this.ces();
       },
-      upshop () { //修改商品
-        this.$api('upshop',{id:'2',price:'34'}).then((res)=>{
-          console.log(res)
-        })
-      },
+      // upshop () { //修改商品
+      //   this.$api('upshop',{id:'2',price:'34'}).then((res)=>{
+      //     console.log(res)
+      //   })
+      // },
       add () {       //添加商品函数
       this.actionType =1;
       this.disable = false
@@ -355,7 +356,10 @@
         console.log(myCode.row)
         this.dialogVisible = true;
         this.actionType=2;
+        this.shopNameId = myCode.row.id;
         this.addform = myCode.row;
+        this.addform.type = myCode.row.upName;
+        this.addform.id = myCode.row.name;
         console.log(myCode.row)
         this.title = '编辑商品';
         

@@ -127,7 +127,7 @@
         },
         //查询所有订单
         orderAll () {
-            this.$api('orderAll',{params:{pageNum:"1",pageSize:"10",type:"3"}}).then((res)=>{
+            this.$api('orderAll',{params:{pageNum:"1",pageSize:"10",type:"4"}}).then((res)=>{
         
                 var list = res.data.data.list;
                 this.list = list;

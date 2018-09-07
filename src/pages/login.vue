@@ -89,7 +89,7 @@ import Hashes from 'jshashes'
         right: 0;
         bottom: 0;
         overflow: hidden;
-        background: url("~/static/images/login_bg.png") top center;
+        background: url("~/static/images/index1.png") top center;
         background-size: cover;
         display: flex;
         justify-content: center;

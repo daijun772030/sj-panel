@@ -75,7 +75,7 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="full" label="(满减优惠)满：" class="myitem" >
-          <el-input type="text" placeholder="请输入金额" v-model="addForm.full" :disabled="addtypeT" width="45%">
+          <el-input type="text" placeholder="请输入金额" v-model="addForm.full"  :disabled="addtypeT" width="45%">
             <template slot="append">元</template>
           </el-input>
         </el-form-item>
@@ -85,13 +85,13 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="reduce" label="(满减优惠)减：" class="myitem">
-          <el-input type="text" placeholder="请输入金额" v-model="addForm.reduce" :disabled="addtypeT" width="50%" >
+          <el-input type="text" placeholder="请输入金额" @blur="input1" v-model="addForm.reduce" :disabled="addtypeT" width="50%" >
             <template slot="append">元</template>
           </el-input>
         </el-form-item>
         <el-form-item prop="createName" label="创建的时间：" class="myitem">
           <el-date-picker
-          :disabled="false"
+          :disabled="true"
             v-model="addForm.createdTime"
             type="date"
             placeholder="创建时间">
@@ -155,6 +155,9 @@
       // this.addByFull()
     },
     methods: {
+      input1 () {//判断输入得金额是不是符合标准
+        console.log('这是判断是不是')
+      },
       cose () {
          this.$api("myshop",{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize}}).then((res)=>{
           console.log(res.data.data.list)

@@ -10,12 +10,6 @@
             <el-form-item class="float_left">
                 <el-date-picker type="date" clearable placeholder="选择最后编辑"  class="wd"></el-date-picker>
             </el-form-item>
-            <!-- <el-form-item class="float_left">
-                <el-select  placeholder="商品类型" clearable>
-                    <el-option >
-                    </el-option>
-                </el-select>
-            </el-form-item > -->
             <el-form-item class="float_left">
                 <el-button type="primary" @click="search">确定</el-button>
             </el-form-item> 
@@ -34,11 +28,11 @@
             <el-table-column prop="extract" label="平台提成" align="center"></el-table-column>
             <el-table-column prop="account" label="实到金额" align="center"></el-table-column>
         </el-table>
-        <el-table :data="list" class="list-tableTwo">
-            <el-table-column prop="countMoney" label="实到金额合计(元)" align="center">
-                <template slot-scope="scope">
-                    <span v-if="scope.row.countMoney==null">0</span>
-                    <span v-if="scope.row.countMoney>0">{{scope.row.countMoney}}</span>
+        <el-table  class="list-tableTwo">
+            <el-table-column  label="实到金额合计(元)" align="center">
+                <template >
+                    <span v-if="countMoney==null">0</span>
+                    <span v-if="countMoney">{{countMoney}}</span>
                 </template>
             </el-table-column>
             <div>dadadd</div>
@@ -71,6 +65,7 @@
             formObj:{
                 phone:null
             },
+            countMoney:null,
             list:[],
             dataNum:[],//需要渲染的条数
             pagingnum: '',//一共有多少条
@@ -85,20 +80,20 @@
         methods: {
             search () {
                 this.$api('orderAll',{params:{pageNum:this.paginObj.pagnum,phone:this.formObj.phone,pageSize:this.paginObj.pageSize,type:'10'}}).then((res)=> {
-                    this.paginObj.pagnum = res.data.data.pageNum;
-                    this.paginObj.pageSize = res.data.data.pageSize;
-                    this.paginObj.total = res.data.data.total;
-                    this.list = res.data.data.list;
+                    this.paginObj.pagnum = res.data.data.list.pageNum;
+                    this.paginObj.pageSize = res.data.data.list.pageSize;
+                    this.paginObj.total = res.data.data.list.total;
+                    this.list = res.data.data.list.list;
                     console.log(res);
                 })
             },
             getObj () {//查询所有财务
                 this.$api('orderAll',{params:{pageNum:this.paginObj.pagnum,pageSize:this.paginObj.pageSize,type:'10'}}).then((res)=> {
-                    this.paginObj.pagnum = res.data.data.pageNum;
-                    this.paginObj.pageSize = res.data.data.pageSize;
-                    this.paginObj.total = res.data.data.total;
-                    this.list = res.data.data.list;
-                    console.log(res);
+                    this.paginObj.pagnum = res.data.data.list.pageNum;
+                    this.paginObj.pageSize = res.data.data.list.pageSize;
+                    this.paginObj.total = res.data.data.list.total;
+                    this.list = res.data.data.list.list;
+                    this.countMoney = res.data.data.countMoney;
                 })
             },
             getList () {

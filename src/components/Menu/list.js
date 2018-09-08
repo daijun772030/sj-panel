@@ -46,14 +46,14 @@ export default [{
                 path: "/manager/list",
                 icon: "resource",
                 children: []
-            },
-            {
-                id: 2,
-                name: "其它",
-                path: "/manager/business-order",
-                icon: "resource",
-                children: []
-            },
+            }
+            // {
+            //     id: 2,
+            //     name: "其它",
+            //     path: "/manager/business-order",
+            //     icon: "resource",
+            //     children: []
+            // },
 
         ]
     },
@@ -70,13 +70,13 @@ export default [{
         path: "/manager/activity",
         icon: "resource",
         children: []
-    },
-    {
-        id: "4",
-        name: "推广",
-        path: "/manager/generalize",
-        icon: "resource",
-        children: []
     }
+    // {
+    //     id: "4",
+    //     name: "推广",
+    //     path: "/manager/generalize",
+    //     icon: "resource",
+    //     children: []
+    // }
 
 ];

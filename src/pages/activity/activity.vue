@@ -71,7 +71,6 @@
             <el-option label="0.7" :value="'0.7'"></el-option>
             <el-option label="0.8" :value="'0.8'"></el-option>
             <el-option label="0.9" :value="'0.9'"></el-option>
-            <el-option label="1" :value="'1'"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item prop="full" label="(满减优惠)满：" class="myitem" >
@@ -85,7 +84,7 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="reduce" label="(满减优惠)减：" class="myitem">
-          <el-input type="text" placeholder="请输入金额" @blur="input1" v-model="addForm.reduce" :disabled="addtypeT" width="50%" >
+          <el-input type="text" placeholder="请输入金额" @blur="regular" v-model="addForm.reduce" :disabled="addtypeT" width="50%" >
             <template slot="append">元</template>
           </el-input>
         </el-form-item>
@@ -155,8 +154,23 @@
       // this.addByFull()
     },
     methods: {
-      input1 () {//判断输入得金额是不是符合标准
-        console.log('这是判断是不是')
+      regular () {//对输入得优惠活动坐正则判断
+        var regu = "^[0-9]+$";
+        var re = new RegExp(regu);
+        if(this.addForm.reduce) {
+          if(this.addForm.reduce.search(re)==-1) {
+            this.$message('请输入正整数');
+            return false;
+          }else {
+            var reduce = Number(this.addForm.reduce);
+            var full = Number(this.addForm.full);
+            if(reduce>=full || reduce<=0) {
+              this.$message('输入金额有误');
+              this.addForm.reduce=null;
+              return false;
+            }
+          }
+        }
       },
       cose () {
          this.$api("myshop",{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize}}).then((res)=>{

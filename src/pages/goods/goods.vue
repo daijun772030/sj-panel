@@ -163,6 +163,9 @@
       // this.clasShop();
     },
     methods: {
+      getLogin () {
+        this.$api('merchantChange')
+      },
       handleAvatarSuccess(res, file) {//图片上传函数
         this.imageUrl = URL.createObjectURL(file.raw);
       },

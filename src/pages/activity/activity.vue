@@ -155,16 +155,18 @@
     },
     methods: {
       regular () {//对输入得优惠活动坐正则判断
+      // debugger;
         var regu = "^[0-9]+$";
         var re = new RegExp(regu);
         if(this.addForm.reduce) {
           if(this.addForm.reduce.search(re)==-1) {
             this.$message('请输入正整数');
+            // this.reduce=null;
             return false;
           }else {
             var reduce = Number(this.addForm.reduce);
             var full = Number(this.addForm.full);
-            if(reduce>=full || reduce<=0) {
+            if(reduce>=full || reduce<=0 ) {
               this.$message('输入金额有误');
               this.addForm.reduce=null;
               return false;

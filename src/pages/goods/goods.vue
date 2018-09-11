@@ -19,7 +19,11 @@
       <el-table class="goods-table" height="calc(100% - 105px)" border :data="list1">
         <el-table-column prop="name" label="商品名称" align="center" ></el-table-column>
         <el-table-column prop="upName" label="商品类型" align="center"></el-table-column>
-        <el-table-column prop="img" label="商品logo" align="center"></el-table-column>
+        <el-table-column prop="img" label="商品logo" align="center">
+          <template slot-scope="scope">
+            <img :src="'/test'+scope.row.img" alt="商品logo" class="itemImage">
+          </template>
+        </el-table-column>
         <el-table-column prop="price" label="商品价格" align="center"></el-table-column>
         <el-table-column label="操作" align="center" width="200">
           <template slot-scope="scope">
@@ -41,7 +45,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label="商品价格" prop="price" class="myitem">
-            <el-input type="text" placeholder="请输入大于十五的金额" @blur='input1' v-model="addform.price" >
+            <el-input type="text" placeholder="请输入商品金额" @blur='input1' v-model="addform.price" >
               <template slot="append">元</template>
             </el-input> 
           </el-form-item>
@@ -198,16 +202,10 @@
         this.title = "添加商品类型"
       },
       input1 () {//输入的金额判断
-        var reg = /^1[6-9]$|^[2-9]\d$|^1\d{2}$/;
-        if(reg.test(this.addform.price)){
-          this.addform.pice = reg.test(this.addform.price);
-        }else if (/[^\d]/.test(this.addform.price)) {
-          this.addform.price=this.addform.price.replace(/[^\d]/g,'')
-        }
-        else{
-          this.$message("请正确输入大于十五的金额");
-          this.addform.price = null;
-        }
+        var num = this.addform.price;
+        var re = /([0-9]+\.[0-9]{2})[0-9]*/;
+        var aNew = num.replace(re,"$1");
+        this.addform.price = aNew;
       },
       stop() {
         this.dis = true;
@@ -386,6 +384,10 @@
     .searchForm{
         padding: 10px;
     }
+    .itemImage{
+    height: 50px;
+    vertical-align: middle;
+  }
   
 </style>
 

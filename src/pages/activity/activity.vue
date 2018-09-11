@@ -155,7 +155,7 @@
     },
     methods: {
       regular () {//对输入得优惠活动坐正则判断
-      // debugger;
+        // debugger;
         var regu = "^[0-9]+$";
         var re = new RegExp(regu);
         if(this.addForm.reduce) {
@@ -164,9 +164,11 @@
             // this.reduce=null;
             return false;
           }else {
+            debugger;
             var reduce = Number(this.addForm.reduce);
             var full = Number(this.addForm.full);
-            if(reduce>=full || reduce<=0 ) {
+            // var re = full*0.2;
+            if(reduce>=full || reduce<=0 || reduce>full*0.2) {
               this.$message('输入金额有误');
               this.addForm.reduce=null;
               return false;
@@ -178,7 +180,6 @@
          this.$api("myshop",{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize}}).then((res)=>{
           console.log(res.data.data.list)
           this.shopList = res.data.data.list
-          // console.log(this.shopList[0].id)
          })
       },
       close (form) {

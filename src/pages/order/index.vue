@@ -8,7 +8,7 @@
             <el-form-item class="float_left">
                 <el-button @click="earchForm" type="primary">确定</el-button>
             </el-form-item>
-      </el-form>
+        </el-form>
     <!-- 表格的展示 -->
         <el-table
             :data="list"
@@ -87,7 +87,7 @@
             this.orderAll();
             this.timer = setInterval(() =>{
                 this.orderAll();
-            },10000)
+            },1000000)
         },
         beforeUpdate () {
             this.$watch("newTotalCount",function(val) {

@@ -36,7 +36,7 @@
                 <el-form-item prop="shopName" label="商铺名称：" class="uniq">
                     <el-input clearable type="text" placeholder="请输入店铺名称" v-model="changeShop.shopName" class="myInput"></el-input>
                 </el-form-item>
-                <el-form-item label="上传产品图片：" class="uniq">
+                <el-form-item label="修改门店图片：" class="uniq">
                     <el-upload
                     name="img"
                     :data="imgData"
@@ -222,13 +222,18 @@ import VDistpicker from 'v-distpicker'
                     this.changeShop.notice = res.data.data.notice;
                     console.log(res.data.data.address)
                     var Myaddress = res.data.data.address;
-                    var a = Myaddress.split(',')
-                    var b = a[0];
-                    this.detAdress = a[1];
-                    var newB =  b.split(" ");
-                    this.select.province = newB[0];
-                    this.select.city = newB[1];
-                    this.select.area = newB[2];
+                    var a = Myaddress.split(' ')
+                    console.log(a)
+                    this.select.province = a[0];
+                    this.select.city = a[1];
+                    this.select.area =a[2];
+                    this.detAdress = a[4];
+                    // var b = a[0];
+                    // this.detAdress = a[1];
+                    // var newB =  b.split(" ");
+                    // this.select.province = newB[0];
+                    // this.select.city = newB[1];
+                    // this.select.area = newB[2];
                     // for (let i =0;i<this.select.area.length;i++) {
                     //     if(this.select.area[i] == "("){
                     //         this.select.area[i] == "("

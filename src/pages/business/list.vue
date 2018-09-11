@@ -4,14 +4,17 @@
             <el-form-item class="float_left">
                 <el-input  placeholder="电话号码搜索" v-model="formObj.phone" clearable prefix-icon="el-icon-search" style="width:217px"></el-input>
             </el-form-item>
-            <el-form-item class="float_left">
+            <!-- <el-form-item class="float_left">
                 <el-date-picker type="date" clearable placeholder="选择上传时间"  class="wd"></el-date-picker>
             </el-form-item>
             <el-form-item class="float_left">
                 <el-date-picker type="date" clearable placeholder="选择最后编辑"  class="wd"></el-date-picker>
-            </el-form-item>
+            </el-form-item> -->
             <el-form-item class="float_left">
                 <el-button type="primary" @click="search">确定</el-button>
+            </el-form-item> 
+            <el-form-item class="float_right">
+                <p>实到金额合计：{{countMoney}} 元</p>
             </el-form-item> 
         </el-form>
 
@@ -27,15 +30,6 @@
             <el-table-column prop="money"  label="实收金额" align="center"></el-table-column>
             <el-table-column prop="extract" label="平台提成" align="center"></el-table-column>
             <el-table-column prop="account" label="实到金额" align="center"></el-table-column>
-        </el-table>
-        <el-table  class="list-tableTwo">
-            <el-table-column  label="实到金额合计(元)" align="center">
-                <template >
-                    <span v-if="countMoney==null">0</span>
-                    <span v-if="countMoney">{{countMoney}}</span>
-                </template>
-            </el-table-column>
-            <div>dadadd</div>
         </el-table>
         <div class="block">
             <el-pagination
@@ -94,6 +88,7 @@
                     this.paginObj.total = res.data.data.list.total;
                     this.list = res.data.data.list.list;
                     this.countMoney = res.data.data.countMoney;
+                    console.log(res)
                 })
             },
             getList () {

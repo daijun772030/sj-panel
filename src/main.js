@@ -10,10 +10,12 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import create from '../src/plugin/myapi';
 import VueCookies from 'vue-cookies';
+import jq from 'jquery'
 Vue.use(ElementUI, { size: 'mini', zIndex: 3000 });
 Vue.use(VueAreaLinkage);
 Vue.config.productionTip = false
 Vue.prototype.$api = create
+Vue.prototype.$jq = jq
 Vue.prototype.$cookies = VueCookies
 new Vue({
     el: '#app',

@@ -5,7 +5,7 @@
         <el-form-item>
           <el-input
           :autofocus="true"
-          placeholder="请输入密码"
+          placeholder="请输入登录账号"
           v-model="login1.phone">
           <template slot="prepend"><i class="el-icon-mobile-phone"></i></template>
           </el-input>
@@ -14,7 +14,7 @@
           <el-input
             placeholder="请输入密码"
             type="password"
-            v-model="login1.password">
+            v-model="login1.password" @keyup.enter.native="login">
             <template slot="prepend"><i class="el-icon-info"></i></template>
           </el-input>
         </el-form-item>
@@ -48,10 +48,15 @@ import Hashes from 'jshashes'
       }
     },
     created () {
-
     },
     methods: {
-        
+    keyCOde () {
+        this.$jq('body').keydowm(function (){
+            if(event.keyCOde == "13") {
+            this.login();
+            }
+        })   
+    },
       login () {
           var MD5 = new Hashes.MD5;
         //   console.log(MD5.hex('shan5201314000'))
@@ -65,6 +70,7 @@ import Hashes from 'jshashes'
           this.$message.error("请填写密码");
           return;
         }
+        this.isBtnLoading = true;
         // let loginParams = {name:vm.username,password:vm.password};
         this.$api("login",{phone:this.login1.phone,password: MD5.hex(this.login1.password)}).then((res)=>{
             // console.log(res)
@@ -72,6 +78,7 @@ import Hashes from 'jshashes'
 
           if(res.data.retCode==200&&res.data.data.type==0) {
               this.$router.replace({ path : this.manager });
+              this.isBtnLoading = false;
           }else {
               this.$message.error(message)
           }

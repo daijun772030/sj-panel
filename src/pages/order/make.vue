@@ -2,37 +2,13 @@
     <div class="home">
         <!-- 搜索框的展示  -->
 
-        <el-form :inline="true" :model="seachObject" label-width="5px" size="mini"  class="searchForm">
+        <el-form :inline="true" :model="formObj" label-width="5px" size="mini"  class="searchForm">
             <el-form-item class="float_left">
-                <el-input v-model="seachObject.input" placeholder="搜索" clearable prefix-icon="el-icon-search" style="width:217px"></el-input>
-            </el-form-item>
-            <el-form-item class="float_left">
-                <el-date-picker v-model="seachObject.starDate" type="date" clearable placeholder="起始日期"  class="wd"></el-date-picker>
-            </el-form-item>
-            <el-form-item class="float_left">
-                <el-date-picker v-model="seachObject.endDate" type="date" clearable placeholder="结束日期"  class="wd"></el-date-picker>
-            </el-form-item>
-            <el-form-item class="float_left">
-                <el-select v-model="seachObject.money" placeholder="金额区间" clearable>
-                    <!-- <el-option >
-                    </el-option> -->
-                </el-select>
-            </el-form-item >
-            <el-form-item class="float_left">
-                <el-select v-model="seachObject.state" placeholder="状态" clearable>
-                    <!-- <el-option >
-                    </el-option> -->
-                </el-select>
+                <el-input placeholder="请输入订单手机号" v-model="formObj.val" clearable></el-input>
             </el-form-item>
             <el-form-item class="float_left">
                 <el-button @click="earchForm" type="primary">确定</el-button>
             </el-form-item>
-            <!-- <el-form-item  class="float_right" prop="region">
-                <el-select v-model="seachObject.region" placeholder="营业状态">
-                <el-option label="营业中" value="shanghai"></el-option>
-                <el-option label="休息中" value="beijing"></el-option>
-                </el-select>
-            </el-form-item> -->
         </el-form>
     <!-- 表格的展示 -->
         <el-table
@@ -94,6 +70,9 @@
                 pageSize:10,
                 pageNum:1,
                 totalCount:0
+                },
+                formObj:{//搜索框值
+                    val:null
                 },
                 seachObject:{
                     input:'',
@@ -158,8 +137,16 @@
                     this.searchObj.totalCount = res.data.data.total
                 })
             },
-            earchForm () {//这里请求接口进行搜索然后渲染
-                console.log(this.seachObject)
+            earchForm() {//搜索函数
+                // console.log('搜索按钮')
+                this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,type:"0"}}).then((res)=>{
+                    var list = res.data.data.list;
+                    this.list = list;
+                    this.searchObj.pageSize = res.data.data.pageSize;
+                    this.searchObj.pageNum = res.data.data.pageNum;
+                    this.searchObj.totalCount = res.data.data.total;
+                    console.log(res);
+                })
             },
             seach () {
                 //在这里用来分页查询

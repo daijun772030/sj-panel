@@ -14,7 +14,7 @@ var app = express();
 app.use(history());
 
 // 设置静态文件路径
-app.use(serveStatic(path.resolve('./dist'), {'index': ['index.html', 'index.htm']}));
+app.use(serveStatic(path.resolve('./dist'), { 'index': ['index.html', 'index.htm'] }));
 
 app.use('/api', proxy({
     target: 'http://www.pigcome.com:8082',
@@ -24,14 +24,13 @@ app.use('/api', proxy({
     changeOrigin: true
 }));
 app.use('/test', proxy({
-    target: 'http://www.pigcome.com:81',
+    target: 'http://www.pigcome.com:8081',
     pathRewrite: {
         '^/test': ''
     },
     changeOrigin: true
 }));
 
-app.listen(8086, '0.0.0.0',function() {
+app.listen(8086, '0.0.0.0', function() {
     console.log('启动成功！');
 });
-

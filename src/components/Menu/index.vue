@@ -42,7 +42,7 @@
 </template>
 <script>
     import list from './list';
-    import img from './images/logo.png'
+    import img from './images/houtai_logo.png'
     export default {
         data() {
             return {
@@ -71,10 +71,14 @@
         text-align:center;
         line-height: 60px;
         background-color:#494f60;
+        display: flex;
+        flex-direction:column;
+        justify-content: space-around;
+        align-items: center;
 
     }
     .log>img{
-        width: 100%;
+        width:80%;
         height: auto;
         max-width:100%;
         // padding: 5px 0;

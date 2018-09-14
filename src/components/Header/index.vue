@@ -228,19 +228,6 @@ import VDistpicker from 'v-distpicker'
                     this.select.city = a[1];
                     this.select.area =a[2];
                     this.detAdress = a[4];
-                    // var b = a[0];
-                    // this.detAdress = a[1];
-                    // var newB =  b.split(" ");
-                    // this.select.province = newB[0];
-                    // this.select.city = newB[1];
-                    // this.select.area = newB[2];
-                    // for (let i =0;i<this.select.area.length;i++) {
-                    //     if(this.select.area[i] == "("){
-                    //         this.select.area[i] == "("
-                    //     }else{
-                    //         this.select.area = newB[2]
-                    //     }
-                    // }
                     console.log(this.changeShop)
                 })
             },

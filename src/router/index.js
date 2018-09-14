@@ -65,8 +65,7 @@ const router = new Router({
     linkActiveClass: 'b-link-active',
     linkExactActiveClass: 'b-c-link-active',
     scrollBehavior,
-    routes: [
-        {
+    routes: [{
             name: '/',
             path: '/',
             component: App

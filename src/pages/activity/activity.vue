@@ -164,7 +164,7 @@
             // this.reduce=null;
             return false;
           }else {
-            debugger;
+            // debugger;
             var reduce = Number(this.addForm.reduce);
             var full = Number(this.addForm.full);
             // var re = full*0.2;

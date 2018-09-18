@@ -79,8 +79,12 @@ import Hashes from 'jshashes'
           if(res.data.retCode==200&&res.data.data.type==0) {
               this.$router.replace({ path : this.manager });
               this.isBtnLoading = false;
-          }else {
-              this.$message.error(message)
+          }else if(message){
+            this.$message.error(message);
+            this.isBtnLoading = false;
+          }else{
+            this.$message.error("网络出错请重试...");
+            this.isBtnLoading = false;
           }
         })
       }

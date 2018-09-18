@@ -46,7 +46,7 @@
                     :on-success="handleAvatarSuccess"
                     :before-upload="beforeAvatarUpload">
                     <img v-if="imageUrl" :src="imageUrl" class="logoImage">
-                        <i v-else class="uploadImage"></i>
+                        <i v-else class="el-icon-plus"></i>
                         <small class="uploadSmall">建议使用750*750，10M以内的jpg、png图片</small>
                     </el-upload>
                 </el-form-item>
@@ -61,7 +61,7 @@
                     </template>
                 </el-form-item>
                 <el-form-item prop="takeoff" label="取送费：" class="uniq">
-                    <el-input clearable type="text" placeholder="请输入取送费" v-model="changeShop.takeoff" class="myInput"></el-input>
+                    <el-input clearable type="text" placeholder="请输入取送费" @blur="changeInput" disabled="true"  v-model="changeShop.takeoff" class="myInput"></el-input>
                     <template slot="append">
                         元                        
                     </template>
@@ -120,7 +120,7 @@ import VDistpicker from 'v-distpicker'
                     shopName:null,
                     startTime:null,
                     endTime:null,
-                    takeoff:null,
+                    takeoff:3,
                     riseoff:null,
                     status:null,
                     notice:null
@@ -143,8 +143,15 @@ import VDistpicker from 'v-distpicker'
             // this.orderAll();
             this.archivesAll();
             // this.change();
+            this.changeShop.takeoff = 3;
         },
         methods : {
+            changeInput() {
+                var takeoff = this.changeShop.takeoff;
+                if(takeoff !== 3) {
+                    this.takeoff = 3;
+                }
+            },
             onSeleted (data) {//地址输入框的成功
                 this.select.province = data.province.value;
                 this.select.city = data.city.value;
@@ -216,11 +223,10 @@ import VDistpicker from 'v-distpicker'
                     this.changeShop.shopName = res.data.data.shopName;
                     this.changeShop.startTime = res.data.data.startTime;
                     this.changeShop.endTime = res.data.data.endTime;
-                    this.changeShop.takeoff = res.data.data.takeoff;
+                    this.changeShop.takeoff = '3';
                     this.changeShop.riseoff = res.data.data.riseoff;
                     this.changeShop.status = res.data.data.status;
                     this.changeShop.notice = res.data.data.notice;
-                    console.log(res.data.data.address)
                     var Myaddress = res.data.data.address;
                     var a = Myaddress.split(' ')
                     console.log(a)

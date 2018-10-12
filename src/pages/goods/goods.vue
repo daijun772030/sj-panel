@@ -21,7 +21,7 @@
         <el-table-column prop="upName" label="商品类型" align="center"></el-table-column>
         <el-table-column prop="img" label="商品logo" align="center">
           <template slot-scope="scope">
-            <img :src="'http://www.pigcome.com:81' + scope.row.img" alt="商品logo" class="itemImage">
+            <img :src="'http://www.pigcome.com:81/' + scope.row.img" alt="商品logo" class="itemImage">
           </template>
         </el-table-column>
         <el-table-column prop="price" label="商品价格" align="center"></el-table-column>

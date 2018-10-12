@@ -37,7 +37,7 @@
             @current-change="handleCurrentChange"
             :current-page="paginObj.pageNum"
             background
-            :page-sizes="[3, 5, 6, 8]"
+            :page-sizes="[10, 15, 20, 25]"
             :page-size="paginObj.pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="paginObj.total">
@@ -53,7 +53,7 @@
             return {
             paginObj: {
                 pagnum:1,
-                pageSize:3,
+                pageSize:10,
                 total:0
             },
             formObj:{

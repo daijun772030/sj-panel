@@ -43,6 +43,7 @@
                      class="avatar-uploader"
                     action="/api/archives/updateByMerchantAndLogo"
                     :show-file-list="true"
+                    :on-progress="handleAvatarProgress"
                     :on-success="handleAvatarSuccess"
                     :before-upload="beforeAvatarUpload">
                     <img v-if="imageUrl" :src="imageUrl" class="logoImage">
@@ -61,7 +62,7 @@
                     </template>
                 </el-form-item>
                 <el-form-item prop="takeoff" label="取送费：" class="uniq">
-                    <el-input clearable type="text" placeholder="请输入取送费" @blur="changeInput" disabled="true"  v-model="changeShop.takeoff" class="myInput"></el-input>
+                    <el-input clearable type="text" placeholder="请输入取送费" @blur="changeInput" :disabled="true"  v-model="changeShop.takeoff" class="myInput"></el-input>
                     <template slot="append">
                         元                        
                     </template>
@@ -156,6 +157,11 @@ import VDistpicker from 'v-distpicker'
                 this.select.province = data.province.value;
                 this.select.city = data.city.value;
                 this.select.area = data.area.value;
+            },
+            handleAvatarProgress(event,file,fileList) {
+                // console.log(event);
+                // console.log(file);
+                // console.log(fileList);
             },
             handleAvatarSuccess(res, file) {//图片上传函数
                 this.imageUrl = URL.createObjectURL(file.raw);

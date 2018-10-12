@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import '~/static/reset.less'
 import '~/static/style.less'
+import 'babel-polyfill'
 import VueAreaLinkage from 'vue-area-linkage'
 import Vue from 'vue'
 import App from './App'

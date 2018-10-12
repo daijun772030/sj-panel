@@ -79,9 +79,11 @@
           </el-input>
         </el-form-item>
         <el-form-item prop="name" label="优惠商品名字：" class="myitem">
-          <el-select v-model="addForm.shopId" clearable placeholder="请选择需要折扣的商品" :disabled="myshop">
-            <el-option v-for="item in this.shopList" :key="item.id" :label="item.name" :value="item.id"></el-option>
-          </el-select>
+          <el-cascader
+            :options="options"
+            @active-item-change="handleItemChange"
+            :show-all-levels="false"
+          ></el-cascader>
         </el-form-item>
         <el-form-item prop="reduce" label="(满减优惠)减：" class="myitem">
           <el-input type="text" placeholder="请输入金额" @blur="regular" v-model="addForm.reduce" :disabled="addtypeT" width="50%" >
@@ -123,6 +125,13 @@
           name:null,//优惠的商品
           createdTime:null//创建时间
         },
+        shopType:[],//查询商品的类型
+        options:[],//展示的数组
+        arrSh:[],
+        props:{
+          value:"value",
+          children:"children"
+        },
         myshop:false,
         addtype:false,
         addtypeT:false,
@@ -150,6 +159,7 @@
     created () {
       this.discountAll();
       this.cose();
+      this.status();
       // this.addDiscount()
       // this.addByFull()
     },
@@ -176,6 +186,49 @@
           }
         }
       },
+      handleItemChange (val) {
+        // debugger;
+        console.log(val);
+        this.$api('typeFind',{params:{id:val[0]}}).then((res)=>{
+          for(let i = 0;i<res.data.data.length;i++) {
+            var strTw = {
+              value:null,
+              label:null
+            };
+            strTw.value = res.data.data[i].id;
+            strTw.label = res.data.data[i].name;
+            this.arrSh.push(strTw);
+            console.log(this.arrSh)
+            for (let i = 0;i<this.options.length;i++) {
+              if(this.options[i].id == val) {
+                this.options[i].children = this.arrSh;
+              }
+            }
+          }
+        })
+        
+      },
+      status () {//查询我们的所有商品的类型
+        this.$api('typeStatus',{params:{status:"1"}}).then((res)=>{
+          // debugger;
+          console.log(res.data.data);
+          this.shopType = res.data.data
+          for (let i = 0;i<this.shopType.length;i++) {
+            // debugger;
+            var str = {
+              value:null,
+              label:null,
+              children:null
+            };
+            str.value = this.shopType[i].id;
+            str.label = this.shopType[i].name;
+            this.options.push(str);
+            this.options[i].children = this.children;
+            console.log(this.options)
+            this.options[i].children = this.arrSh;
+          }
+        })
+      },
       cose () {
          this.$api("myshop",{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize}}).then((res)=>{
           console.log(res.data.data.list)
@@ -195,7 +248,6 @@
       // 添加活动
       addCountDZ () {//新增打折优惠
         this.addForm.type = 0
-        console.log(this.addForm.type)
         this.addtypeT = true
         this.dialogVisible = true;
         this.title = '添加打折优惠活动'

@@ -81,9 +81,9 @@
         <el-form-item prop="name" label="优惠商品名字：" class="myitem">
           <el-cascader
             :options="options"
-            @active-item-change="handleItemChange"
-            :show-all-levels="false"
-          ></el-cascader>
+            v-model="selectedOptions"
+            @blur="handleChange">
+          </el-cascader>
         </el-form-item>
         <el-form-item prop="reduce" label="(满减优惠)减：" class="myitem">
           <el-input type="text" placeholder="请输入金额" @blur="regular" v-model="addForm.reduce" :disabled="addtypeT" width="50%" >
@@ -127,11 +127,13 @@
         },
         shopType:[],//查询商品的类型
         options:[],//展示的数组
-        arrSh:[],
-        props:{
-          value:"value",
-          children:"children"
-        },
+        // arrSh:[],
+        // props:{
+        //   value:"value",
+        //   children:"children"
+        // },
+        arrAll:[],
+        selectedOptions:[],
         myshop:false,
         addtype:false,
         addtypeT:false,
@@ -159,11 +161,49 @@
     created () {
       this.discountAll();
       this.cose();
-      this.status();
+      // this.status();
       // this.addDiscount()
       // this.addByFull()
+      this.changeYU();
     },
     methods: {
+      changeYU () {
+        // debugger;
+        this.$api('typeStatus',{params:{status:"1"}}).then((res)=>{
+          this.shopType = res.data.data;
+          for (var i = 0;i<this.shopType.length;i++) {
+            var arr = {
+              value:null,
+              label:null,
+              children:[]
+            };
+            arr.value = this.shopType[i].id;
+            arr.label = this.shopType[i].name;
+            this.arrAll.push(res.data.data[i].id);
+            this.options.push(arr);
+          }
+          console.log(this.options)
+          console.log(this.arrAll);
+        })
+      },
+      handleChange (val) {
+        // debugger;
+        console.log(val)
+        for(var i=0;i<this.arrAll.length;i++) {
+          this.$api('typeFind',{params:{id:this.arrAll[i]}}).then((res)=>{
+            console.log(res);
+            console.log(this.options)
+            // var arre = {
+            //   value:null,
+            //   label:null
+            // };
+            console.log(this.options[1])
+            // arre.value = res.data.data[i].id;
+            // arre.label = res.data.data[i].name;
+            // this.options[i].children = arre;
+          })
+        }
+      },
       regular () {//对输入得优惠活动坐正则判断
         // debugger;
         var regu = "^[0-9]+$";
@@ -186,49 +226,52 @@
           }
         }
       },
-      handleItemChange (val) {
-        // debugger;
-        console.log(val);
-        this.$api('typeFind',{params:{id:val[0]}}).then((res)=>{
-          for(let i = 0;i<res.data.data.length;i++) {
-            var strTw = {
-              value:null,
-              label:null
-            };
-            strTw.value = res.data.data[i].id;
-            strTw.label = res.data.data[i].name;
-            this.arrSh.push(strTw);
-            console.log(this.arrSh)
-            for (let i = 0;i<this.options.length;i++) {
-              if(this.options[i].id == val) {
-                this.options[i].children = this.arrSh;
-              }
-            }
-          }
-        })
+      // handleChange (val) {
+      //   console.log(val)
+      // },
+      // handleItemChange (val) {
+      //   // debugger;
+      //   console.log(val);
+      //   this.$api('typeFind',{params:{id:val[0]}}).then((res)=>{
+      //     for(let i = 0;i<res.data.data.length;i++) {
+      //       var strTw = {
+      //         value:null,
+      //         label:null
+      //       };
+      //       strTw.value = res.data.data[i].id;
+      //       strTw.label = res.data.data[i].name;
+      //       this.arrSh.push(strTw);
+      //       console.log(this.arrSh)
+      //       for (let i = 0;i<this.options.length;i++) {
+      //         if(this.options[i].id == val) {
+      //           this.options[i].children = this.arrSh;
+      //         }
+      //       }
+      //     }
+      //   })
         
-      },
-      status () {//查询我们的所有商品的类型
-        this.$api('typeStatus',{params:{status:"1"}}).then((res)=>{
-          // debugger;
-          console.log(res.data.data);
-          this.shopType = res.data.data
-          for (let i = 0;i<this.shopType.length;i++) {
-            // debugger;
-            var str = {
-              value:null,
-              label:null,
-              children:null
-            };
-            str.value = this.shopType[i].id;
-            str.label = this.shopType[i].name;
-            this.options.push(str);
-            this.options[i].children = this.children;
-            console.log(this.options)
-            this.options[i].children = this.arrSh;
-          }
-        })
-      },
+      // },
+      // status () {//查询我们的所有商品的类型
+      //   this.$api('typeStatus',{params:{status:"1"}}).then((res)=>{
+      //     // debugger;
+      //     console.log(res.data.data);
+      //     this.shopType = res.data.data
+      //     for (let i = 0;i<this.shopType.length;i++) {
+      //       // debugger;
+      //       var str = {
+      //         value:null,
+      //         label:null,
+      //         children:null
+      //       };
+      //       str.value = this.shopType[i].id;
+      //       str.label = this.shopType[i].name;
+      //       this.options.push(str);
+      //       this.options[i].children = this.children;
+      //       console.log(this.options)
+      //       this.options[i].children = this.arrSh;
+      //     }
+      //   })
+      // },
       cose () {
          this.$api("myshop",{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize}}).then((res)=>{
           console.log(res.data.data.list)

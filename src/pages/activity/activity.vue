@@ -78,25 +78,20 @@
             <template slot="append">元</template>
           </el-input>
         </el-form-item>
-        <el-form-item prop="name" label="优惠商品名字：" class="myitem">
-          <el-cascader
-            :options="options"
-            v-model="selectedOptions"
-            @blur="handleChange">
-          </el-cascader>
-        </el-form-item>
+        <el-form-item label="打折商品类型：" prop="upName" class="myitem" >
+          <el-select v-model="addForm.type" clearable placeholder="请选择商品类型" @change="getShop" :disabled='typeId' value-key="id">
+            <el-option v-for="item in this.shopType" :key="item.id" :label="item.name" :value="item.id"></el-option>
+          </el-select>
+          </el-form-item>
         <el-form-item prop="reduce" label="(满减优惠)减：" class="myitem">
           <el-input type="text" placeholder="请输入金额" @blur="regular" v-model="addForm.reduce" :disabled="addtypeT" width="50%" >
             <template slot="append">元</template>
           </el-input>
         </el-form-item>
-        <el-form-item prop="createName" label="创建的时间：" class="myitem">
-          <el-date-picker
-          :disabled="true"
-            v-model="addForm.createdTime"
-            type="date"
-            placeholder="创建时间">
-          </el-date-picker>
+        <el-form-item label="打折商品名称：" prop="name" class="myitem">
+          <el-select v-model="addForm.id" clearable placeholder="请选择商品名称" :disabled="typeId" value-key="id">
+            <el-option v-for="item in this.classShop" :key="item.id" :label="item.name" :value="item.id" :disabled="item.type"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -127,16 +122,14 @@
         },
         shopType:[],//查询商品的类型
         options:[],//展示的数组
-        // arrSh:[],
-        // props:{
-        //   value:"value",
-        //   children:"children"
-        // },
         arrAll:[],
         selectedOptions:[],
+        classShop:[],
+        comId:null,
         myshop:false,
         addtype:false,
         addtypeT:false,
+        typeId:false,
         dialogVisible:false, //弹窗显示与否
         title:null,//弹窗的名字
         list:[],
@@ -160,16 +153,56 @@
     },
     created () {
       this.discountAll();
-      this.cose();
+      this.status();
+       this.ces()
+      // this.cose();
       // this.status();
       // this.addDiscount()
       // this.addByFull()
-      this.changeYU();
+      // this.changeYU();
     },
     methods: {
+      getShop(){//这里是点击商品类型获取相应商品
+        this.clasShop()
+      },
+      status () {//查询我们的所有商品的类型
+        this.$api('typeStatus',{params:{status:"1"}}).then((res)=>{
+          console.log(res.data.data);
+          this.shopType = res.data.data
+        })
+      },
+      clasShop () {//这里根据商品类型查询相应的商品集
+      // debugger;
+        this.$api('typeFind',{params:{id:this.addForm.type}}).then((res)=>{
+          console.log(res);
+          this.classShop = res.data.data;
+          for(var i=0;i<this.classShop.length;i++) {
+            if(this.classShop[i].type) {
+              // console.log(this.classShop[i].type)
+              this.classShop[i].type = false;
+              console.log(this.dis)
+            }else{
+              this.classShop[i].type = true;
+            }
+          }
+        })
+      },
+      ces (){ //查询所有商品(模版)
+        // debugger;
+        this.$api("myshop",{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize}}).then((res)=>{
+          console.log(res.data)
+          var list = res.data.data.list;
+          this.searchObj.pageNum = res.data.data.pageNum || 1;  
+          this.searchObj.pageSize = res.data.data.pageSize;
+          this.searchObj.totalCount = res.data.data.total;
+          this.list1 = list;
+        })
+      },
+
       changeYU () {
         // debugger;
         this.$api('typeStatus',{params:{status:"1"}}).then((res)=>{
+          console.log(res)
           this.shopType = res.data.data;
           for (var i = 0;i<this.shopType.length;i++) {
             var arr = {
@@ -179,30 +212,39 @@
             };
             arr.value = this.shopType[i].id;
             arr.label = this.shopType[i].name;
-            this.arrAll.push(res.data.data[i].id);
+            this.arrAll.push(this.shopType[i].id);
             this.options.push(arr);
           }
+          this.handleChange()
           console.log(this.options)
           console.log(this.arrAll);
         })
       },
       handleChange (val) {
         // debugger;
-        console.log(val)
-        for(var i=0;i<this.arrAll.length;i++) {
+        console.log(this.arrAll)
+
+        for(let i=0;i<this.arrAll.length;i++) {
           this.$api('typeFind',{params:{id:this.arrAll[i]}}).then((res)=>{
             console.log(res);
             console.log(this.options)
-            // var arre = {
-            //   value:null,
-            //   label:null
-            // };
-            console.log(this.options[1])
-            // arre.value = res.data.data[i].id;
-            // arre.label = res.data.data[i].name;
-            // this.options[i].children = arre;
+            // console.log(this.options)
+            for(var j = 0;j<res.data.data.length;j++) {
+              var arre = {
+                value:null,
+                label:null
+              };
+              arre.value = res.data.data[j].id;
+              arre.label = res.data.data[j].name;
+              this.options[i].children.push(arre);
+            }
+            return
           })
         }
+      },
+      datauo(val) {
+        console.log(val)
+        this.comId = val[1];
       },
       regular () {//对输入得优惠活动坐正则判断
         // debugger;
@@ -226,63 +268,18 @@
           }
         }
       },
-      // handleChange (val) {
-      //   console.log(val)
-      // },
-      // handleItemChange (val) {
-      //   // debugger;
-      //   console.log(val);
-      //   this.$api('typeFind',{params:{id:val[0]}}).then((res)=>{
-      //     for(let i = 0;i<res.data.data.length;i++) {
-      //       var strTw = {
-      //         value:null,
-      //         label:null
-      //       };
-      //       strTw.value = res.data.data[i].id;
-      //       strTw.label = res.data.data[i].name;
-      //       this.arrSh.push(strTw);
-      //       console.log(this.arrSh)
-      //       for (let i = 0;i<this.options.length;i++) {
-      //         if(this.options[i].id == val) {
-      //           this.options[i].children = this.arrSh;
-      //         }
-      //       }
-      //     }
-      //   })
-        
-      // },
-      // status () {//查询我们的所有商品的类型
-      //   this.$api('typeStatus',{params:{status:"1"}}).then((res)=>{
-      //     // debugger;
-      //     console.log(res.data.data);
-      //     this.shopType = res.data.data
-      //     for (let i = 0;i<this.shopType.length;i++) {
-      //       // debugger;
-      //       var str = {
-      //         value:null,
-      //         label:null,
-      //         children:null
-      //       };
-      //       str.value = this.shopType[i].id;
-      //       str.label = this.shopType[i].name;
-      //       this.options.push(str);
-      //       this.options[i].children = this.children;
-      //       console.log(this.options)
-      //       this.options[i].children = this.arrSh;
-      //     }
-      //   })
-      // },
       cose () {
-         this.$api("myshop",{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize}}).then((res)=>{
+         this.$api("myshop",{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize}}).then((res)=>{//查询所有的优惠函数
           console.log(res.data.data.list)
           this.shopList = res.data.data.list
          })
       },
-      close (form) {
+      close (form) {//弹框清除函数
         // debugger;
         this.addtype = false;
         this.addtypeT = false;
         this.myshop = false;
+        this.typeId = false;
         for(var i in form){
           form[i] = null;
         }
@@ -290,10 +287,12 @@
       },
       // 添加活动
       addCountDZ () {//新增打折优惠
-        this.addForm.type = 0
-        this.addtypeT = true
+        this.addForm.type = 0;
+        this.addtypeT = true;
+        this.typeId = true;
         this.dialogVisible = true;
         this.title = '添加打折优惠活动'
+        this.handleChange();
       },
       addCountMJ () {//新增满减优惠
         this.dialogVisible = true;
@@ -363,7 +362,7 @@
         if(this.addForm.type==1 && this.title=="添加满减优惠活动"){
           this.$api("discountFull",{type:this.addForm.type,full:this.addForm.full,reduce:this.addForm.reduce}).then((res)=>{//新增满减优惠活动
             if(res.data.retCode!==200) {
-              this.$message(res.data.message)
+              this.$message("添加有误，请重试")
             }else{
               this.$message("添加成功")
               this.discountAll()
@@ -372,7 +371,7 @@
         }else if(this.addForm.type==1 && this.title=="编辑满减优惠活动") {
           this.$api('updateDiscount',{id:this.addForm.id,type:this.addForm.type,full:this.addForm.full,reduce:this.addForm.reduce}).then((res)=>{//修改优惠活动（满减优惠活动）
             if(res.data.retCode!==200) {
-              this.$message(res.data.message)
+              this.$message("编辑失败,请重试")
             }else{
               this.$message("修改成功");
               this.discountAll()
@@ -380,10 +379,10 @@
           })
         }else if(this.addForm.type==0 && this.title=="添加打折优惠活动"){
           // this.$api('updateDiscount',{id:this.addForm.id,type:this.addForm.type})
-          this.$api("discountAddDis",{type:this.addForm.type,commodityid:this.addForm.shopId,dis:this.addForm.dis}).then((res)=>{//新增打折优惠活动
+          this.$api("discountAddDis",{type:this.addForm.type,commodityid:this.comId,dis:this.addForm.dis}).then((res)=>{//新增打折优惠活动
             console.log(res)
             if(res.data.retCode!==200) {
-              this.$message(res.data.message)
+              this.$message("添加有误，请重试")
             }else{
               this.$message("添加成功")
               this.discountAll()
@@ -392,7 +391,7 @@
         }else if (this.addForm.type==0 && this.title=="编辑打折优惠活动") {
           this.$api('updateDiscount',{id:this.addForm.id,type:this.addForm.type,commodityid:this.addForm.shopId,dis:this.addForm.dis}).then((res)=>{//修改优惠活动（打折优惠活动
             if(res.data.retCode!==200) {
-              this.$message(res.data.message)
+              this.$message("编辑失败，请重试")
             }else{
               this.$message("编辑成功")
               this.discountAll()
@@ -405,6 +404,7 @@
       //页面初始查询数据
       discountAll () {//查询所有优惠
         this.$api('discountAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize}}).then((res)=>{
+          console.log(res)
           var data = res.data.data.list;
           this.list = data;
           this.searchObj.pageSize =res.data.data.pageSize;

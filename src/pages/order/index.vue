@@ -87,7 +87,7 @@
             this.orderAll();
             this.timer = setInterval(() =>{
                 this.orderAll();
-            },60000)
+            },600000)
         },
         beforeUpdate () {
             this.$watch("newTotalCount",function(val) {

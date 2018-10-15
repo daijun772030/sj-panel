@@ -6,10 +6,9 @@
             <!-- <p style="text-aligin: center">营业状态：</p> -->
         <el-form :inline="true" :model="object" label-width="5px" size="small" class="earchForm">
             <el-form-item class="float_right">
-                <el-select v-model="object.id" clearable  @change="updata" placeholder="营业状态">
-                <el-option label="营业中" value="0"></el-option>
-                <el-option label="休息中" value="1"></el-option>
-                </el-select>
+               <el-select  v-model="changeShop.status" @change="updata" clearable placeholder="请选择营业状态">
+                    <el-option v-for="item in this.mystatus" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                </el-select> 
             </el-form-item>
         </el-form>
         <el-dropdown class="head-option" @command="handler">
@@ -273,8 +272,6 @@ import VDistpicker from 'v-distpicker'
             },
             updata () {//营业中函数
             // debugger;
-                console.log(this.object.id)
-                this.changeShop.status = this.object.id;
                 this.change();
             },
             orderAll() {

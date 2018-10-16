@@ -33,6 +33,12 @@
                 <span v-if="scope.row.status==2">支付成功</span>
               </template>
             </el-table-column>
+            <el-table-column prop="payMethod" align="center" label="支付方式">
+                <template slot-scope="scope"> 
+                <span v-if="scope.row.payMethod==0">微信支付</span>
+                <span v-if="scope.row.payMethod==1">支付宝支付</span>
+              </template>
+            </el-table-column>
             <el-table-column prop="createTime" align="center" label="创建时间"></el-table-column>
             <el-table-column prop="remark" align="center" label="客户备注"></el-table-column>
             <el-table-column
@@ -87,7 +93,7 @@
             this.orderAll();
             this.timer = setInterval(() =>{
                 this.orderAll();
-            },600000)
+            },60000)
         },
         beforeUpdate () {
             this.$watch("newTotalCount",function(val) {

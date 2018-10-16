@@ -22,6 +22,7 @@
             class="home-table">
             <el-table-column prop="orderNum" align="center" label="订单号"></el-table-column>
             <el-table-column prop="commodityName"  align="center" label="商品名称"></el-table-column>
+            <el-table-column prop="shName" align="center" label="客户姓名"></el-table-column>
             <el-table-column prop="address" align="center" label="客户地址"></el-table-column>
             <el-table-column prop="phone" align="center" label="客户电话"></el-table-column>
             <el-table-column prop="startTime" align="center" label="取件时间"></el-table-column>
@@ -33,11 +34,17 @@
                 <span v-if="scope.row.status==2">支付成功</span>
               </template>
             </el-table-column>
+            <el-table-column prop="payMethod" align="center" label="支付方式">
+                <template slot-scope="scope"> 
+                <span v-if="scope.row.payMethod==0">微信支付</span>
+                <span v-if="scope.row.payMethod==1">支付宝支付</span>
+              </template>
+            </el-table-column>
             <el-table-column prop="createTime" align="center" label="创建时间"></el-table-column>
             <el-table-column prop="remark" align="center" label="客户备注"></el-table-column>
             <el-table-column
              align="center"
-             width="200px"
+             width="150px"
              label="操作">
             <template slot-scope="scope" width="80%">
                 <el-button

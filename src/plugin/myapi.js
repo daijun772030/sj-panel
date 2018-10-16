@@ -97,6 +97,7 @@ const apis = {
     //商品类型
     typeFind: get('/type/findByTypeHigherup'), //根据一级下单栏查询下级
     typeStatus: get('/type/findByTypeStatus'), //查询一级下单栏
+    commitFindMerId: get('/commodity/findByTypeIdAndMerId'), //根据快速下单栏查询商品接口
     //优惠活动
     discountAll: get('/discount/all'), //查询所有优惠
     discountAddDis: post('/discount/addDiscount'), //新增打折优惠

@@ -86,10 +86,10 @@ const router = new Router({
                 { name: 'business', path: '/manager/business', component: BusinessList },
                 { name: 'business-list', path: '/manager/list', component: BusinessList },
                 { name: 'business-order', path: '/manager/business-order', component: BusinessOrder },
-                { name: 'goods', path: '/manager/goods', component: Goods },
-                { name: 'activity', path: '/manager/activity', component: Activity },
-                { name: 'finance', path: '/manager/finance', component: Finance },
-                { name: 'generalize', path: '/manager/generalize', component: Generalize }
+                { name: 'goods-goods', path: '/manager/goods', component: Goods },
+                { name: 'activity-activity', path: '/manager/activity', component: Activity },
+                { name: 'finance-finance', path: '/manager/finance', component: Finance },
+                { name: 'generalize-generalize', path: '/manager/generalize', component: Generalize }
             ]
         },
         { name: '404', path: '/*', component: page404 },

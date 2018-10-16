@@ -33,6 +33,12 @@
                 <span v-if="scope.row.status==2">支付成功</span>
               </template>
             </el-table-column>
+            <el-table-column prop="payMethod" align="center" label="支付方式">
+                <template slot-scope="scope"> 
+                <span v-if="scope.row.payMethod==0">微信支付</span>
+                <span v-if="scope.row.payMethod==1">支付宝支付</span>
+              </template>
+            </el-table-column>
             <el-table-column prop="createTime" align="center" label="创建时间"></el-table-column>
             <el-table-column prop="remark" align="center" label="客户备注"></el-table-column>
         </el-table>
@@ -54,7 +60,7 @@
     export default {
     data(){
         return {
-            list:null,
+            list:[],
             right:null,//订单是否接单
             searchObj:{
             pageSize:10,
@@ -118,13 +124,20 @@
         },
         //查询所有订单
         orderAll () {
-            this.$api('orderAll',{params:{pageNum:"1",pageSize:"10",type:"3"}}).then((res)=>{
-        
+            this.$api('orderAll',{params:{pageNum:"1",pageSize:"10",type:"5"}}).then((res)=>{
                 var list = res.data.data.list;
-                this.list = list;
+                // this.list = list;
+                // console.log(this.list)
                 this.searchObj.pageSize = res.data.data.pageSize;
                 this.searchObj.pageNum = res.data.data.pageNum;
                 this.searchObj.totalCount = res.data.data.total;
+                for(var i = 0;i<list.length;i++) {
+                    console.log(list[i])
+                    if(list[i].type!==0 && list[i].type!==1 && list[i].type!==2) {
+                        this.list.push(list[i])
+                        console.log(this.list)
+                    }
+                }
             })
         },
         earchForm() {//搜索函数

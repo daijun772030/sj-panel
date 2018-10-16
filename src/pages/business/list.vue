@@ -24,8 +24,16 @@
             <el-table-column prop="commodityName"  label="商品名称" align="center"></el-table-column>
             <!-- <el-table-column prop="" label="商品类型" align="center"></el-table-column> -->
             <el-table-column prop="createTime" width="200px"  label="订单生成时间" align="center"></el-table-column>
-            <el-table-column prop="actualMoney" label="应收金额" align="center"></el-table-column>
+            <el-table-column prop="payMethod" align="center" label="支付方式">
+                <template slot-scope="scope"> 
+                    <span v-if="scope.row.payMethod==0">微信支付</span>
+                    <span v-if="scope.row.payMethod==1">支付宝支付</span>
+                </template>
+            </el-table-column>
+            <el-table-column prop="shName" label="客户姓名" align="center"></el-table-column>
             <el-table-column prop="phone" label="客户电话" align="center"></el-table-column>
+            <el-table-column prop="actualMoney" label="应收金额" align="center"></el-table-column>
+            <el-table-column prop="fee" label="取送费" align="center"></el-table-column>
             <el-table-column prop="discountMoney" label="商家满减" align="center"></el-table-column>
             <el-table-column prop="money"  label="实收金额" align="center"></el-table-column>
             <el-table-column prop="extract" label="平台提成" align="center"></el-table-column>

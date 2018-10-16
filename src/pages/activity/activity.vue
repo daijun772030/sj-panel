@@ -79,7 +79,7 @@
           </el-input>
         </el-form-item>
         <el-form-item label="打折商品类型：" prop="upName" class="myitem" >
-          <el-select v-model="addForm.type" clearable placeholder="请选择商品类型" @change="getShop" :disabled='typeId' value-key="id">
+          <el-select v-model="addForm.UpNameId" clearable placeholder="请选择商品类型" @change="getShop" :disabled='typeId' value-key="id">
             <el-option v-for="item in this.shopType" :key="item.id" :label="item.name" :value="item.id"></el-option>
           </el-select>
           </el-form-item>
@@ -89,7 +89,7 @@
           </el-input>
         </el-form-item>
         <el-form-item label="打折商品名称：" prop="name" class="myitem">
-          <el-select v-model="addForm.id" clearable placeholder="请选择商品名称" :disabled="typeId" value-key="id">
+          <el-select v-model="addForm.name" clearable placeholder="请选择商品名称" :disabled="typeId" value-key="id">
             <el-option v-for="item in this.classShop" :key="item.id" :label="item.name" :value="item.id" :disabled="item.type"></el-option>
           </el-select>
         </el-form-item>
@@ -118,8 +118,11 @@
           full:null,//满
           reduce:null,//减
           name:null,//优惠的商品
+          upName:null,//优惠商品类型
+          UpNameId:null,//优惠商品类型id
           createdTime:null//创建时间
         },
+        MerchantId:null,//商户id
         shopType:[],//查询商品的类型
         options:[],//展示的数组
         arrAll:[],
@@ -155,13 +158,16 @@
       this.discountAll();
       this.status();
        this.ces()
-      // this.cose();
-      // this.status();
-      // this.addDiscount()
-      // this.addByFull()
-      // this.changeYU();
+       this.MerchantsQuery();
     },
     methods: {
+      MerchantsQuery () {
+        this.$api("merchantChange").then((res)=>{
+          this.MerchantId = res.data.data.id;
+          console.log(this.MerchantId);
+
+        })
+      },
       getShop(){//这里是点击商品类型获取相应商品
         this.clasShop()
       },
@@ -173,16 +179,16 @@
       },
       clasShop () {//这里根据商品类型查询相应的商品集
       // debugger;
-        this.$api('typeFind',{params:{id:this.addForm.type}}).then((res)=>{
+        this.$api('commitFindMerId',{params:{merchantid:this.MerchantId,typeid:this.addForm.UpNameId}}).then((res)=>{
           console.log(res);
           this.classShop = res.data.data;
           for(var i=0;i<this.classShop.length;i++) {
             if(this.classShop[i].type) {
               // console.log(this.classShop[i].type)
-              this.classShop[i].type = false;
+              this.classShop[i].type = true;
               console.log(this.dis)
             }else{
-              this.classShop[i].type = true;
+              this.classShop[i].type = false;
             }
           }
         })
@@ -197,54 +203,6 @@
           this.searchObj.totalCount = res.data.data.total;
           this.list1 = list;
         })
-      },
-
-      changeYU () {
-        // debugger;
-        this.$api('typeStatus',{params:{status:"1"}}).then((res)=>{
-          console.log(res)
-          this.shopType = res.data.data;
-          for (var i = 0;i<this.shopType.length;i++) {
-            var arr = {
-              value:null,
-              label:null,
-              children:[]
-            };
-            arr.value = this.shopType[i].id;
-            arr.label = this.shopType[i].name;
-            this.arrAll.push(this.shopType[i].id);
-            this.options.push(arr);
-          }
-          this.handleChange()
-          console.log(this.options)
-          console.log(this.arrAll);
-        })
-      },
-      handleChange (val) {
-        // debugger;
-        console.log(this.arrAll)
-
-        for(let i=0;i<this.arrAll.length;i++) {
-          this.$api('typeFind',{params:{id:this.arrAll[i]}}).then((res)=>{
-            console.log(res);
-            console.log(this.options)
-            // console.log(this.options)
-            for(var j = 0;j<res.data.data.length;j++) {
-              var arre = {
-                value:null,
-                label:null
-              };
-              arre.value = res.data.data[j].id;
-              arre.label = res.data.data[j].name;
-              this.options[i].children.push(arre);
-            }
-            return
-          })
-        }
-      },
-      datauo(val) {
-        console.log(val)
-        this.comId = val[1];
       },
       regular () {//对输入得优惠活动坐正则判断
         // debugger;
@@ -289,14 +247,14 @@
       addCountDZ () {//新增打折优惠
         this.addForm.type = 0;
         this.addtypeT = true;
-        this.typeId = true;
+        this.typeId = false;
         this.dialogVisible = true;
         this.title = '添加打折优惠活动'
-        this.handleChange();
       },
       addCountMJ () {//新增满减优惠
         this.dialogVisible = true;
         this.addtype = true;
+        this.typeId = true;
         this.addForm.type = 1
         this.myshop = true
         this.title = '添加满减优惠活动'
@@ -316,11 +274,14 @@
           this.title = "编辑满减优惠活动"
           this.addtype = true;
         }else {
+          console.log(scope)
           this.addtypeT = true;
           this.title = "编辑打折优惠活动"
           console.log(scope.commodityid)
-          this.addForm.shopId = scope.commodityid
+          this.addForm.shopId = scope.commodityid;
+          this.addForm.name = scope.name;
           this.myshop = true
+          this.typeId = true;
         }
 
       },
@@ -379,7 +340,7 @@
           })
         }else if(this.addForm.type==0 && this.title=="添加打折优惠活动"){
           // this.$api('updateDiscount',{id:this.addForm.id,type:this.addForm.type})
-          this.$api("discountAddDis",{type:this.addForm.type,commodityid:this.comId,dis:this.addForm.dis}).then((res)=>{//新增打折优惠活动
+          this.$api("discountAddDis",{type:this.addForm.type,commodityid:this.addForm.name,dis:this.addForm.dis}).then((res)=>{//新增打折优惠活动
             console.log(res)
             if(res.data.retCode!==200) {
               this.$message("添加有误，请重试")

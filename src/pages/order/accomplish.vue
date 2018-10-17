@@ -142,9 +142,14 @@
         },
         earchForm() {//搜索函数
                 // console.log('搜索按钮')
-            this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,type:"0"}}).then((res)=>{
+            this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,type:"5"}}).then((res)=>{
                 var list = res.data.data.list;
-                this.list = list;
+                console.log(list)
+                for(var i = 0;i<list.length;i++) {
+                    if(list[i].type!== 0&&list[i].type!== 1&&list[i].type!== 2) {
+                        this.list.push(list[i])
+                    }
+                }
                 this.searchObj.pageSize = res.data.data.pageSize;
                 this.searchObj.pageNum = res.data.data.pageNum;
                 this.searchObj.totalCount = res.data.data.total;

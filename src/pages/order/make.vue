@@ -146,7 +146,7 @@
             },
             earchForm() {//搜索函数
                 // console.log('搜索按钮')
-                this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,type:"0"}}).then((res)=>{
+                this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,type:"1"}}).then((res)=>{
                     var list = res.data.data.list;
                     this.list = list;
                     this.searchObj.pageSize = res.data.data.pageSize;

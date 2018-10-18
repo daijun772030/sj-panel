@@ -4,34 +4,25 @@ export default [{
         path: "/manager/order",
         icon: "order",
         children: [{
-                id: 1,
+                id: 0,
                 name: "待接订单",
                 path: "/manager/index",
-                icon: "resource"
+                icon: "resource",
+                children: []
             },
-            // {
-            //     id: 2,
-            //     name: "待收货",
-            //     path: "send",
-            //     icon: "resource"
-            // },
             {
-                id: 3,
+                id: 1,
                 name: "待发货",
                 path: "/manager/make",
-                icon: "resource"
+                icon: "resource",
+                children: []
             },
-            // {
-            //     id: 4,
-            //     name: "待评价",
-            //     path: "evaluate",
-            //     icon: "resource"
-            // },
             {
-                id: 4,
+                id: 2,
                 name: "完成订单",
                 path: "/manager/accomplish",
-                icon: "resource"
+                icon: "resource",
+                children: []
             }
         ]
     },
@@ -70,13 +61,7 @@ export default [{
         path: "/manager/activity",
         icon: "resource",
         children: []
-    }
-    // {
-    //     id: "4",
-    //     name: "推广",
-    //     path: "/manager/generalize",
-    //     icon: "resource",
-    //     children: []
-    // }
+    },
+
 
 ];

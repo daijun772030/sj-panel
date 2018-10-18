@@ -1,6 +1,6 @@
 <template>
     <div class="goods">
-      <el-form :inline="true" :model="searchObj" label-width="5px" size="mini"  class="searchForm">
+      <el-form :inline="true" :model="searchObj" label-width="5px" size="mini" @submit.native.prevent  class="searchForm">
         <el-form-item class="float_left">
           <el-select v-model="searchObj.productType" placeholder="商品类型" @change="changeValue" clearable>
             <el-option v-for="channel in shopType" :key="channel.id" :label="channel.name" :value="channel.id">

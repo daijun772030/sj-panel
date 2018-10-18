@@ -15,17 +15,17 @@ const BusinessList = () =>
 const BusinessOrder = () =>
     import ('@/pages/business/order' /* webpackChunkName: "pages/business/order" */ ).then(m => m.default || m)
 const Goods = () =>
-    import ('@/pages/goods/goods' /* webpackChunkName: "pages/goods" */ ).then(m => m.default || m)
+    import ('@/pages/goods/goods' /* webpackChunkName: "pages/goods/goods" */ ).then(m => m.default || m)
 const Activity = () =>
-    import ('@/pages/activity/activity' /* webpackChunkName: "pages/activity" */ ).then(m => m.default || m)
+    import ('@/pages/activity/activity' /* webpackChunkName: "pages/activity/activity" */ ).then(m => m.default || m)
 const Finance = () =>
-    import ('@/pages/finance/finance' /* webpackChunkName: "pages/finance" */ ).then(m => m.default || m)
+    import ('@/pages/finance/finance' /* webpackChunkName: "pages/finance/finance" */ ).then(m => m.default || m)
 const Index = () =>
     import ('@/pages/order/index' /* webpackChunkName: "pages/order/index" */ ).then(m => m.default || m)
 const Generalize = () =>
-    import ('@/pages/generalize/generalize' /* webpackChunkName: "pages/generalize" */ ).then(m => m.default || m)
+    import ('@/pages/generalize/generalize' /* webpackChunkName: "pages/generalize/generalize" */ ).then(m => m.default || m)
 const Accomplish = () =>
-    import ('@/pages/order/Accomplish' /* webpackChunkName: "/pages/order/Accomplish" */ ).then(m => m.default || m)
+    import ('@/pages/order/accomplish' /* webpackChunkName: "/pages/order/accomplish" */ ).then(m => m.default || m)
     // const Evaluate = () =>
     //     import ('@/pages/order/evaluate' /* webpackChunkName: "/pages/order/evaluate" */ ).then(m => m.default || m)
 const Make = () =>
@@ -77,7 +77,7 @@ const router = new Router({
             component: Manager,
             children: [
                 { name: "manager", path: '/manager', component: Index },
-                { name: "order", path: '/manager/order', component: Index },
+                // { name: "order", path: '/manager/order', component: Index },
                 { name: "order-index", path: '/manager/index', component: Index },
                 { name: "order-accomplish", path: '/manager/accomplish', component: Accomplish },
                 // { name: "order-evaluate", path: 'evaluate', component: Evaluate },

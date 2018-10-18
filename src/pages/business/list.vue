@@ -1,8 +1,8 @@
 <template>
     <div class="business">
-       <el-form :inline="true" :model="formObj" label-width="5px" size="mini"  class="searchForm">
+       <el-form :inline="true" :model="formObj" label-width="5px" size="mini" @submit.native.prevent  class="searchForm">
             <el-form-item class="float_left">
-                <el-input  placeholder="电话号码搜索" v-model="formObj.phone" clearable prefix-icon="el-icon-search" style="width:217px"></el-input>
+                <el-input  placeholder="电话号码搜索" v-model="formObj.phone" @keyup.enter.native="search" clearable prefix-icon="el-icon-search" style="width:217px"></el-input>
             </el-form-item>
             <!-- <el-form-item class="float_left">
                 <el-date-picker type="date" clearable placeholder="选择上传时间"  class="wd"></el-date-picker>
@@ -12,6 +12,9 @@
             </el-form-item> -->
             <el-form-item class="float_left">
                 <el-button type="primary" @click="search">确定</el-button>
+            </el-form-item>
+            <el-form-item class="float_left">
+                <el-button @click="exportExcel" style="margin-top: 2px;" size="mini" type="primary">导出当前数据</el-button>
             </el-form-item> 
             <el-form-item class="float_right">
                 <p>实到金额合计：{{countMoney}} 元</p>
@@ -19,11 +22,11 @@
         </el-form>
 
     <!-- table列表展示页 -->
-        <el-table class="list-table"  height="calc(100%-160px)" border :data="list">
+        <el-table class="list-table"  height="calc(100%-160px)" :default-sort = "{prop: 'createTime', order: 'descending'}" border :data="list" id="rebateSetTable">
             <el-table-column prop="orderNum"  width="200px"  label="订单号" align="center"></el-table-column>
             <el-table-column prop="commodityName"  label="商品名称" align="center"></el-table-column>
             <!-- <el-table-column prop="" label="商品类型" align="center"></el-table-column> -->
-            <el-table-column prop="createTime" width="200px"  label="订单生成时间" align="center"></el-table-column>
+            <el-table-column prop="createTime" sortable width="200px"  label="订单生成时间" align="center"></el-table-column>
             <el-table-column prop="payMethod" align="center" label="支付方式">
                 <template slot-scope="scope"> 
                     <span v-if="scope.row.payMethod==0">微信支付</span>
@@ -45,7 +48,7 @@
             @current-change="handleCurrentChange"
             :current-page="paginObj.pageNum"
             background
-            :page-sizes="[10, 15, 20, 25]"
+            :page-sizes="[10, 15, 20, 25,100]"
             :page-size="paginObj.pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="paginObj.total">
@@ -55,6 +58,8 @@
     </div>
 </template>
 <script>
+    import FileSaver from 'file-saver';
+    import XLSX from 'xlsx';
     // 商家列表
     export default {
         data () {
@@ -80,6 +85,20 @@
             this.getObj();
         },
         methods: {
+            exportExcel () {//导出数据的函数
+                /* generate workbook object from table */
+                let wb = XLSX.utils.table_to_book(document.querySelector('#rebateSetTable'));
+                /* get binary string as output */
+                let wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' });
+                try {
+                    FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '财务详情数据表格.xlsx');
+                } catch (e)
+                {
+                    if (typeof console !== 'undefined')
+                        console.log(e, wbout)
+                }
+                return wbout
+            },
             search () {
                 this.$api('orderAll',{params:{pageNum:this.paginObj.pagnum,phone:this.formObj.phone,pageSize:this.paginObj.pageSize,type:'10'}}).then((res)=> {
                     this.paginObj.pagnum = res.data.data.list.pageNum;

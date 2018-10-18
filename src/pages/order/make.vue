@@ -2,12 +2,15 @@
     <div class="home">
         <!-- 搜索框的展示  -->
 
-        <el-form :inline="true" :model="formObj" label-width="5px" size="mini"  class="searchForm">
+        <el-form :inline="true" :model="formObj" label-width="5px" size="mini" @submit.native.prevent  class="searchForm">
             <el-form-item class="float_left">
-                <el-input placeholder="请输入订单手机号" v-model="formObj.val" clearable></el-input>
+                <el-input placeholder="请输入订单手机号" v-model="formObj.val" @keyup.enter.native="earchForm" clearable></el-input>
             </el-form-item>
             <el-form-item class="float_left">
                 <el-button @click="earchForm" type="primary">确定</el-button>
+            </el-form-item>
+            <el-form-item class="float_right">
+                <el-button @click="exportExcel" style="margin-top: 2px;" size="mini" type="primary">导出当前数据</el-button>
             </el-form-item>
         </el-form>
     <!-- 表格的展示 -->
@@ -15,12 +18,13 @@
             :data="list"
             empty-text="没有新东西"
             v-loading="loading" 
-            :default-sort = "{prop: 'condition', order: 'descending'}"
+            :default-sort = "{prop: 'createTime', order: 'descending'}"
             element-loading-text="加载中..."
             style="
             height: calc(100% -60px)"
-            class="home-table">
-            <el-table-column prop="orderNum" align="center" label="订单号"></el-table-column>
+            class="home-table"
+            id="rebateSetTable">
+            <el-table-column prop="orderNum" align="center" label="订单号" width="180px"></el-table-column>
             <el-table-column prop="commodityName"  align="center" label="商品名称"></el-table-column>
             <el-table-column prop="shName" align="center" label="客户姓名"></el-table-column>
             <el-table-column prop="address" align="center" label="客户地址"></el-table-column>
@@ -40,13 +44,13 @@
                 <span v-if="scope.row.payMethod==1">支付宝支付</span>
               </template>
             </el-table-column>
-            <el-table-column prop="createTime" align="center" label="创建时间"></el-table-column>
+            <el-table-column prop="createTime" sortable align="center" label="创建时间"></el-table-column>
             <el-table-column prop="remark" align="center" label="客户备注"></el-table-column>
             <el-table-column
              align="center"
              width="150px"
              label="操作">
-            <template slot-scope="scope" width="80%">
+            <template slot-scope="scope" >
                 <el-button
                 size="mini"
                 @click="handleEdit(scope)">发货</el-button>
@@ -58,7 +62,7 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="searchObj.pageNum"
-                :page-sizes="[10, 15, 20, 35]"
+                :page-sizes="[10, 15, 20, 35, 100]"
                 :page-size="searchObj.pageSize"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="searchObj.totalCount">
@@ -67,6 +71,8 @@
     </div>
 </template>
 <script>
+    import FileSaver from 'file-saver';
+    import XLSX from 'xlsx';
     import DjObject from './object.js';
     export default {
         data(){
@@ -120,6 +126,20 @@
 
         },
         methods: {
+            exportExcel () {//导出数据的函数
+                /* generate workbook object from table */
+                let wb = XLSX.utils.table_to_book(document.querySelector('#rebateSetTable'));
+                /* get binary string as output */
+                let wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' });
+                try {
+                    FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), '待发货数据表格.xlsx');
+                } catch (e)
+                {
+                    if (typeof console !== 'undefined')
+                        console.log(e, wbout)
+                }
+                return wbout
+            },
             //这里做列表的轮询。。查看是不是有新订单
             //点击接单以后前往待发货状态
             handleEdit(scope) {

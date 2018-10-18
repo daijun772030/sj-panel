@@ -57,7 +57,7 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="searchObj.pageNum"
-                :page-sizes="[10, 15, 20, 35]"
+                :page-sizes="[10, 15, 20, 35, 100]"
                 :page-size="searchObj.pageSize"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="searchObj.totalCount">

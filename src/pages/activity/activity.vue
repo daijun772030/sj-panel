@@ -1,6 +1,6 @@
 <template>
   <div class="activity">
-    <el-form :inline="true" :model="countForm" label-width="5px" size="mini" class="searchForm">
+    <el-form :inline="true" :model="countForm" label-width="5px" @submit.native.prevent size="mini" class="searchForm">
       <el-form-item class="float_left">
         <el-select v-model="countForm.id" placeholder="优惠活动类型" clearable>
           <!-- <el-option v-for="item in list" :label="item.type" :key="item.type"  :value="item.merchantid">

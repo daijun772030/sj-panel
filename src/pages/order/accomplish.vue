@@ -57,6 +57,7 @@
                 :total="searchObj.totalCount">
             </el-pagination>
         </div>
+        <audio src="/static/audio/newgoods.1.mp3"  id="music" hidden></audio>
     </div>
 </template>
 <script>
@@ -153,11 +154,12 @@
                 this.searchObj.totalCount = res.data.data.total;
                 for(var i = 0;i<list.length;i++) {
                     console.log(list[i])
-                    if(list[i].type!==0 && list[i].type!==1 && list[i].type!==2) {
+                    if(list[i].type!==0 && list[i].type!==1) {
                         this.list.push(list[i])
                         console.log(this.list)
                     }
                 }
+                this.searchObj.totalCount = this.list.length
             })
         },
         earchForm() {//搜索函数

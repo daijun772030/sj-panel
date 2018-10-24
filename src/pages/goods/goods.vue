@@ -107,6 +107,7 @@
           :total="searchObj.totalCount">
         </el-pagination>
       </div>
+      <audio src="/static/audio/newgoods.1.mp3"  id="music" hidden></audio>
     </div>
 </template>
 <script>

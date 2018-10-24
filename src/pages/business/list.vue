@@ -36,7 +36,11 @@
             <el-table-column prop="shName" label="客户姓名" align="center"></el-table-column>
             <el-table-column prop="phone" label="客户电话" align="center"></el-table-column>
             <el-table-column prop="actualMoney" label="应收金额" align="center"></el-table-column>
-            <el-table-column prop="fee" label="取送费" align="center"></el-table-column>
+            <el-table-column prop="fee" label="商家优惠卷" align="center">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.fee>=0">0</span>
+                </template>
+            </el-table-column>
             <el-table-column prop="discountMoney" label="商家满减" align="center"></el-table-column>
             <el-table-column prop="money"  label="实收金额" align="center"></el-table-column>
             <el-table-column prop="extract" label="平台提成" align="center"></el-table-column>
@@ -54,7 +58,7 @@
             :total="paginObj.total">
             </el-pagination>
         </div>
-
+        <audio src="/static/audio/newgoods.1.mp3"  id="music" hidden></audio>
     </div>
 </template>
 <script>

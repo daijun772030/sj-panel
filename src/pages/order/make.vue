@@ -31,6 +31,12 @@
             <el-table-column prop="phone" align="center" label="客户电话"></el-table-column>
             <el-table-column prop="startTime" align="center" label="取件时间"></el-table-column>
             <el-table-column prop="endTime" align="center" label="送件时间"></el-table-column>
+            <el-table-column prop="ifhave" align="center" label="取衣服状态">
+                <template slot-scope="scope">
+                    <span v-if='scope.row.ifhave==0'>未取衣服</span>
+                    <span v-if='scope.row.ifhave==1'>已取衣服</span>
+                </template>
+            </el-table-column>
             <el-table-column prop="status" align="center" label="支付状况">
                 <template slot-scope="scope"> 
                 <span v-if="scope.row.status==0">未支付</span>
@@ -68,6 +74,7 @@
                 :total="searchObj.totalCount">
             </el-pagination>
         </div>
+        <audio src="/static/audio/newgoods.1.mp3"  id="music" hidden></audio>
     </div>
 </template>
 <script>
@@ -77,7 +84,7 @@
     export default {
         data(){
             return {
-                list:null,
+                list:[],
                 right:null,//订单是否接单
                 searchObj:{
                 pageSize:10,
@@ -150,7 +157,9 @@
                     var num = scope.$index
                     console.log(num)
                     this.list[num] = null;
-                    this.orderAll();
+                    if(res.data.retCode==200) {
+                        this.orderAll();
+                    }
                 })
             },
             //查询所有订单
@@ -158,7 +167,13 @@
                 this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,type:"1"}}).then((res)=>{
                     console.log(res)
                     var list = res.data.data.list;
-                    this.list = list;
+                    // this.list = list;
+                    this.list = [];
+                    for (var i = 0;i<list.length;i++) {
+                        if(list[i].ifhave==1) {
+                            this.list.push(list[i]);
+                        }
+                    }
                     this.searchObj.pageSize = res.data.data.pageSize;
                     this.searchObj.pageNum = res.data.data.pageNum;
                     this.searchObj.totalCount = res.data.data.total
@@ -168,11 +183,16 @@
                 // console.log('搜索按钮')
                 this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,type:"1"}}).then((res)=>{
                     var list = res.data.data.list;
-                    this.list = list;
+                    // this.list = list;
+                    this.list = [];
+                    for (var i = 0;i<list.length;i++) {
+                        if(list[i].ifhave==1) {
+                            this.list.push(list[i]);
+                        }
+                    }
                     this.searchObj.pageSize = res.data.data.pageSize;
                     this.searchObj.pageNum = res.data.data.pageNum;
-                    this.searchObj.totalCount = res.data.data.total;
-                    console.log(res);
+                    this.searchObj.totalCount = res.data.data.total
                 })
             },
             seach () {
@@ -185,10 +205,12 @@
                 }
             },
             handleSizeChange (val) {//改变每页显示多少条
+            this.list = [];
                 this.searchObj.pageSize = val;
                 this.orderAll()
             },
             handleCurrentChange (val) { //改变前往多少页
+            this.list = [];
                 this.searchObj.pageNum = val;
                 this.orderAll()
             }

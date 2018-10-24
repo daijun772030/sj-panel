@@ -30,8 +30,8 @@ const Accomplish = () =>
     //     import ('@/pages/order/evaluate' /* webpackChunkName: "/pages/order/evaluate" */ ).then(m => m.default || m)
 const Make = () =>
     import ('@/pages/order/make' /* webpackChunkName: "/pages/order/make" */ ).then(m => m.default || m)
-    // const Send = () =>
-    //     import ('@/pages/order/send' /* webpackChunkName: "/pages/order/send" */ ).then(m => m.default || m)
+const NoTake = () =>
+    import ('@/pages/order/NoTake' /* webpackChunkName: "/pages/order/NoTake" */ ).then(m => m.default || m)
 const page404 = () =>
     import ('@/pages/error/404' /* webpackChunkName: "/pages/error/404" */ ).then(m => m.default || m)
 Vue.use(Router);
@@ -82,6 +82,7 @@ const router = new Router({
                 { name: "order-accomplish", path: '/manager/accomplish', component: Accomplish },
                 // { name: "order-evaluate", path: 'evaluate', component: Evaluate },
                 { name: "order-make", path: '/manager/make', component: Make },
+                { name: "order-NoTake", path: '/manager/NoTake', component: NoTake },
                 // { name: "order-send", path: 'send', component: Send },
                 { name: 'business', path: '/manager/business', component: BusinessList },
                 { name: 'business-list', path: '/manager/list', component: BusinessList },

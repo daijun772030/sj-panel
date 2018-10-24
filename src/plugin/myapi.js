@@ -80,6 +80,8 @@ const apis = {
     orderAll: get("/merchant/order/all"),
     //修改订单
     orderType: get("/merchant/order/updateByOrderType"),
+    //修改取衣订单状态
+    updataByOrder: get('/merchant/order/updateByOrderIfhave'),
     //商户后台登录的接口
     login: post('/merchant/login'),
     cancellation: get('/merchant/cancellation'),

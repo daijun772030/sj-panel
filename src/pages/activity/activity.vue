@@ -99,6 +99,7 @@
         <el-button @click="save" type="primary">保存</el-button>
       </span>
     </el-dialog>
+    <audio src="/static/audio/newgoods.1.mp3"  id="music" hidden></audio>
   </div>
 </template>
 <script>

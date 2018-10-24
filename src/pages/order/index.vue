@@ -95,15 +95,21 @@
                 this.orderAll();
             },60000)
         },
-        beforeUpdate () {
-            this.$watch("newTotalCount",function(val) {
-                this.$nextTick(function(){
-                var audio = document.getElementById('music');
-                audio.play();
-                })
-            })
-        },
+        // beforeUpdate () {
+        //     this.$watch("newTotalCount",function(val) {
+        //         this.$nextTick(function(){
+        //         var audio = document.getElementById('music');
+        //         audio.play();
+        //         })
+        //     })
+        // },
         methods: {
+            ceshiDin (scope) {//测试点击过后洗衣状态是不是要改变
+                this.$api('updataByOrder',{params:{orderId:scope.row.id}}).then((res)=>{
+                    console.log(res);
+                })
+                console.log(scope)
+            },
             earchForm() {//搜索函数
                 // console.log('搜索按钮')
                 this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,type:"0"}}).then((res)=>{
@@ -123,8 +129,8 @@
                     console.log(res)
                     var num = scope.$index
                     console.log(num)
-                    this.list[num] = null;
                     this.orderAll();
+                    this.list[num] = null;
                     this.music = "music2"
                 })
             },

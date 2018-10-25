@@ -31,20 +31,20 @@
             <el-table-column prop="phone" align="center" label="客户电话"></el-table-column>
             <el-table-column prop="startTime" align="center" label="取件时间"></el-table-column>
             <el-table-column prop="endTime" align="center" label="送件时间"></el-table-column>
-            <el-table-column prop="ifhave" align="center" label="取衣服状态">
+            <el-table-column prop="ifhave" align="center" width="100px" filter-placement="bottom-end" :filters="[{text:'未取衣服',value:'0'},{text:'已取衣服',value:'1'}]" :filter-method="filterTag" label="取衣服状态">
                 <template slot-scope="scope">
                     <span v-if='scope.row.ifhave==0'>未取衣服</span>
                     <span v-if='scope.row.ifhave==1'>已取衣服</span>
                 </template>
             </el-table-column>
-            <el-table-column prop="status" align="center" label="支付状况">
+            <el-table-column prop="status" align="center" width="100px" label="支付状况">
                 <template slot-scope="scope"> 
                 <span v-if="scope.row.status==0">未支付</span>
                 <span v-if="scope.row.status==1">支付失败</span>
                 <span v-if="scope.row.status==2">支付成功</span>
               </template>
             </el-table-column>
-            <el-table-column prop="payMethod" align="center" label="支付方式">
+            <el-table-column prop="payMethod" align="center" width="100px" label="支付方式">
                 <template slot-scope="scope"> 
                 <span v-if="scope.row.payMethod==0">微信支付</span>
                 <span v-if="scope.row.payMethod==1">支付宝支付</span>
@@ -54,12 +54,20 @@
             <el-table-column prop="remark" align="center" label="客户备注"></el-table-column>
             <el-table-column
              align="center"
-             width="150px"
+             width="220px"
              label="操作">
             <template slot-scope="scope" >
                 <el-button
                 size="mini"
                 @click="handleEdit(scope)">发货</el-button>
+                <el-button
+                size="mini"
+                v-if="scope.row.ifhave==0"
+                @click="ceshiDin(scope)">未取衣</el-button>
+                <el-button
+                size="mini"
+                v-if="scope.row.ifhave==1"
+                >已取衣</el-button>
             </template>
             </el-table-column>
         </el-table>
@@ -133,6 +141,10 @@
 
         },
         methods: {
+            filterTag (value,row) {
+                console.log(row,value);
+                return row.ifhave == value;
+            },
             exportExcel () {//导出数据的函数
                 /* generate workbook object from table */
                 let wb = XLSX.utils.table_to_book(document.querySelector('#rebateSetTable'));
@@ -146,6 +158,13 @@
                         console.log(e, wbout)
                 }
                 return wbout
+            },
+            ceshiDin (scope) {//测试点击过后洗衣状态是不是要改变
+                this.$api('updataByOrder',{params:{orderId:scope.row.id}}).then((res)=>{
+                    if(res.data.retCode ==200) {
+                        this.orderAll();
+                    }
+                })
             },
             //这里做列表的轮询。。查看是不是有新订单
             //点击接单以后前往待发货状态
@@ -167,13 +186,13 @@
                 this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,type:"1"}}).then((res)=>{
                     console.log(res)
                     var list = res.data.data.list;
-                    // this.list = list;
-                    this.list = [];
-                    for (var i = 0;i<list.length;i++) {
-                        if(list[i].ifhave==1) {
-                            this.list.push(list[i]);
-                        }
-                    }
+                    this.list = list;
+                    // this.list = [];
+                    // for (var i = 0;i<list.length;i++) {
+                    //     if(list[i].ifhave==1) {
+                    //         this.list.push(list[i]);
+                    //     }
+                    // }
                     this.searchObj.pageSize = res.data.data.pageSize;
                     this.searchObj.pageNum = res.data.data.pageNum;
                     this.searchObj.totalCount = res.data.data.total
@@ -183,13 +202,13 @@
                 // console.log('搜索按钮')
                 this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,type:"1"}}).then((res)=>{
                     var list = res.data.data.list;
-                    // this.list = list;
+                    this.list = list;
                     this.list = [];
-                    for (var i = 0;i<list.length;i++) {
-                        if(list[i].ifhave==1) {
-                            this.list.push(list[i]);
-                        }
-                    }
+                    // for (var i = 0;i<list.length;i++) {
+                    //     if(list[i].ifhave==1) {
+                    //         this.list.push(list[i]);
+                    //     }
+                    // }
                     this.searchObj.pageSize = res.data.data.pageSize;
                     this.searchObj.pageNum = res.data.data.pageNum;
                     this.searchObj.totalCount = res.data.data.total

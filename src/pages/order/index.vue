@@ -104,12 +104,6 @@
         //     })
         // },
         methods: {
-            ceshiDin (scope) {//测试点击过后洗衣状态是不是要改变
-                this.$api('updataByOrder',{params:{orderId:scope.row.id}}).then((res)=>{
-                    console.log(res);
-                })
-                console.log(scope)
-            },
             earchForm() {//搜索函数
                 // console.log('搜索按钮')
                 this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,type:"0"}}).then((res)=>{

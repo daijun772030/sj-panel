@@ -6,7 +6,7 @@
             <!-- <p style="text-aligin: center">营业状态：</p> -->
         <el-form :inline="true" :model="object" label-width="5px" size="small" class="earchForm">
             <el-form-item class="float_right">
-               <el-select  v-model="changeShop.status" @change="updata" clearable placeholder="请选择营业状态">
+               <el-select  v-model="changeShop.status" @change="updata" placeholder="请选择营业状态">
                     <el-option v-for="item in this.mystatus" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select> 
             </el-form-item>
@@ -139,10 +139,7 @@ import VDistpicker from 'v-distpicker'
             }
         },
         created () {
-            // this.arhives();
-            // this.orderAll();
             this.archivesAll();
-            // this.change();
             this.changeShop.takeoff = 3;
         },
         methods : {
@@ -199,7 +196,6 @@ import VDistpicker from 'v-distpicker'
                 var seconds=date.getSeconds()<10 ? "0"+date.getSeconds() : date.getSeconds();
                 // 拼接
                    time = year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds;
-                //    console.log(time)
                 this.value1 = time
                 console.log(this.changeShop.startTime)
             }, 
@@ -219,8 +215,6 @@ import VDistpicker from 'v-distpicker'
             },
             archivesAll() {//查询商家信息
                 this.$api("merchantChange").then((res)=>{
-                    // debugger;
-                    console.log(res.data)
                     this.changeShop.id = res.data.data.id;
                     this.imgData.id = res.data.data.id;
                     this.changeShop.address = res.data.data.address;

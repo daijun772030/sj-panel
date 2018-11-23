@@ -4,12 +4,24 @@
             <el-form-item class="float_left">
                 <el-input  placeholder="电话号码搜索" v-model="formObj.phone" @keyup.enter.native="search" clearable prefix-icon="el-icon-search" style="width:217px"></el-input>
             </el-form-item>
-            <!-- <el-form-item class="float_left">
-                <el-date-picker type="date" clearable placeholder="选择上传时间"  class="wd"></el-date-picker>
+            <el-form-item class="float_left">
+                <el-date-picker
+                v-model="formObj.startTime"
+                clearable
+                type="datetime"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                placeholder="选择开始时间">
+                </el-date-picker>
             </el-form-item>
             <el-form-item class="float_left">
-                <el-date-picker type="date" clearable placeholder="选择最后编辑"  class="wd"></el-date-picker>
-            </el-form-item> -->
+                <el-date-picker
+                v-model="formObj.endTime"
+                type="datetime"
+                clearable
+                value-format="yyyy-MM-dd HH:mm:ss"
+                placeholder="选择结束时间">
+                </el-date-picker>
+            </el-form-item>
             <el-form-item class="float_left">
                 <el-button type="primary" @click="search">确定</el-button>
             </el-form-item>
@@ -24,7 +36,7 @@
     <!-- table列表展示页 -->
         <el-table class="list-table"  height="calc(100%-160px)" :default-sort = "{prop: 'createTime', order: 'descending'}" border :data="list" id="rebateSetTable">
             <el-table-column prop="orderNum"  width="200px"  label="订单号" align="center"></el-table-column>
-            <el-table-column prop="commodityName"  label="商品名称" align="center"></el-table-column>
+            <el-table-column prop="number"  label="商品名称" align="center"></el-table-column>
             <!-- <el-table-column prop="" label="商品类型" align="center"></el-table-column> -->
             <el-table-column prop="createTime" sortable width="200px"  label="订单生成时间" align="center"></el-table-column>
             <el-table-column prop="payMethod" align="center" label="支付方式">
@@ -74,7 +86,9 @@
                 total:0
             },
             formObj:{
-                phone:null
+                phone:null,
+                startTime:null,
+                endTime:null
             },
             countMoney:null,
             list:[],
@@ -103,13 +117,15 @@
                 }
                 return wbout
             },
-            search () {
-                this.$api('orderAll',{params:{pageNum:this.paginObj.pagnum,phone:this.formObj.phone,pageSize:this.paginObj.pageSize,type:'10'}}).then((res)=> {
+            search () {//搜索数据函数
+                this.$api('orderAll',{params:{pageNum:this.paginObj.pagnum,phone:this.formObj.phone,createtime:this.formObj.startTime,endtime:this.formObj.endTime,pageSize:this.paginObj.pageSize,type:'10'}}).then((res)=> {
                     this.paginObj.pagnum = res.data.data.list.pageNum;
                     this.paginObj.pageSize = res.data.data.list.pageSize;
                     this.paginObj.total = res.data.data.list.total;
                     this.list = res.data.data.list.list;
-                    console.log(res);
+                    this.formObj.phone = null;
+                    this.formObj.startTime = null;
+                    this.formObj.endTime = null;
                 })
             },
             getObj () {//查询所有财务
@@ -137,12 +153,12 @@
             handleSizeChange(val) {
                 this.paginObj.pageSize = val;
                 this.getObj();
-                console.log(val)
+                // console.log(val)
             },
             handleCurrentChange (val) {
                 this.paginObj.pagnum = val;
                 this.getObj();
-                console.log(val)
+                // console.log(val)
             },
             getconfig () {
                 this.dataNum = [1, 2, 3, 4, 5]

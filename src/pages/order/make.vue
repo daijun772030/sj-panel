@@ -7,6 +7,24 @@
                 <el-input placeholder="请输入订单手机号" v-model="formObj.val" @keyup.enter.native="earchForm" clearable></el-input>
             </el-form-item>
             <el-form-item class="float_left">
+                <el-date-picker
+                v-model="formObj.startTime"
+                clearable
+                type="datetime"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                placeholder="选择开始时间">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item class="float_left">
+                <el-date-picker
+                v-model="formObj.endTime"
+                type="datetime"
+                clearable
+                value-format="yyyy-MM-dd HH:mm:ss"
+                placeholder="选择结束时间">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item class="float_left">
                 <el-button @click="earchForm" type="primary">确定</el-button>
             </el-form-item>
             <el-form-item class="float_right">
@@ -25,7 +43,7 @@
             class="home-table"
             id="rebateSetTable">
             <el-table-column prop="orderNum" align="center" label="订单号" width="180px"></el-table-column>
-            <el-table-column prop="commodityName"  align="center" label="商品名称"></el-table-column>
+            <el-table-column prop="number"  align="center" label="商品名称"></el-table-column>
             <el-table-column prop="shName" align="center" label="客户姓名"></el-table-column>
             <el-table-column prop="address" align="center" label="客户地址"></el-table-column>
             <el-table-column prop="phone" align="center" label="客户电话"></el-table-column>
@@ -51,7 +69,13 @@
               </template>
             </el-table-column>
             <el-table-column prop="createTime" sortable align="center" label="创建时间"></el-table-column>
-            <el-table-column prop="remark" align="center" label="客户备注"></el-table-column>
+            <el-table-column prop="remark" align="center" label="客户备注">
+                <template slot-scope="scope">
+                    <el-tooltip class="item" effect="dark" :content="scope.row.remark" placement="top">
+                        <span>{{scope.row.remark}}</span>
+                    </el-tooltip>
+                </template>
+            </el-table-column>
             <el-table-column
              align="center"
              width="220px"
@@ -100,7 +124,9 @@
                 totalCount:0
                 },
                 formObj:{//搜索框值
-                    val:null
+                    val:null,
+                    startTime:null,
+                    endTime:null
                 },
                 seachObject:{
                     input:'',
@@ -170,7 +196,7 @@
             //点击接单以后前往待发货状态
             handleEdit(scope) {
                 console.log(scope)
-                this.$api("orderType",{params:{type:"2", orderId:scope.row.id, outTradeNo:scope.row.orderNum}}).then((res)=>{
+                this.$api("orderType",{params:{type:"2", orderId:scope.row.id, outTradeNo:scope.row.orderNum,status:"2"}}).then((res)=>{
                     // debugger;
                     console.log(res)
                     var num = scope.$index
@@ -200,10 +226,10 @@
             },
             earchForm() {//搜索函数
                 // console.log('搜索按钮')
-                this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,type:"1"}}).then((res)=>{
+                this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,createtime:this.formObj.startTime,endtime:this.formObj.endTime,type:"1"}}).then((res)=>{
                     var list = res.data.data.list;
                     this.list = list;
-                    this.list = [];
+                    // this.list = [];
                     // for (var i = 0;i<list.length;i++) {
                     //     if(list[i].ifhave==1) {
                     //         this.list.push(list[i]);
@@ -211,7 +237,10 @@
                     // }
                     this.searchObj.pageSize = res.data.data.pageSize;
                     this.searchObj.pageNum = res.data.data.pageNum;
-                    this.searchObj.totalCount = res.data.data.total
+                    this.searchObj.totalCount = res.data.data.total;
+                    this.formObj.val = null;
+                    this.formObj.startTime = null;
+                    this.formObj.endTime = null;
                 })
             },
             seach () {

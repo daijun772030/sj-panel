@@ -38,6 +38,7 @@
             <el-select v-model="addform.type" clearable placeholder="请选择商品类型" @change="getShop" :disabled='typeId' value-key="id">
               <el-option v-for="item in this.shopType" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
+            <!-- <i class="el-icon-question" @click="problem"></i> -->
           </el-form-item>
           <el-form-item label="商品名称" prop="name" class="myitem">
             <el-select v-model="addform.id" clearable placeholder="请选择商品名称" :disabled="typeId" value-key="id">
@@ -64,7 +65,7 @@
         </span>
       </el-dialog>
 
-      <el-dialog :modal-append-to-body="false" :title="title" center @close="close(tableData)" :visible.sync="myDisable" :show-close="false" width="900px">
+      <!-- <el-dialog :modal-append-to-body="false" :title="title" center @close="close(tableData)" :visible.sync="myDisable" :show-close="false" width="900px">
         <el-form :inline="true" :model="tableData" ref="imgType" label-width="150px" class="searchFrom demo-form-inline" >
           <el-form-item label="产品类型：" prop="higherup" class="myitem">
             <el-select v-model="tableData.higherup" clearable placeholder="请选择产品的类型" @change="getShop" :disabled='typeId'>
@@ -93,8 +94,19 @@
           <el-button type="primary" @click="ImgClose(tableData)">取消</el-button>
           <el-button type="primary" @click="ImgSave(tableData)">保存</el-button>
         </span>
+      </el-dialog> -->
+      <el-dialog :modal-append-to-body="false" title="意见和建议" @close="problemeClose(nputVal)" center :show-close="true" :visible.sync='opinion' width="400px">
+        <el-input
+          type="textarea"
+          :autosize="{ minRows: 2, maxRows: 4}"
+          placeholder="没有您想要的商品？提出您想要添加的商品。我们尽快为您添加处理"
+          v-model="nputVal">
+        </el-input>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="problemeClose(nputVal)">取消</el-button>
+          <el-button type="primary" @click="save">保存</el-button>
+        </span>
       </el-dialog>
-      
       <!-- 这里是分页功能 -->
       <div class="pageination">
         <el-pagination
@@ -105,7 +117,7 @@
           :page-size="searchObj.pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           :total="searchObj.totalCount">
-        </el-pagination>
+        </el-pagination> 
       </div>
       <audio src="/static/audio/newgoods.1.mp3"  id="music" hidden></audio>
     </div>
@@ -122,6 +134,8 @@
           higherup:null,
           status:"4"
         },
+        opinion:false,//意见控制符
+        nputVal:null,//意见字符串
         typeId:false,
         disable:false,//是否禁用select框
         dialogVisible: false,
@@ -142,7 +156,8 @@
         },
         actionType:null,//操作类型
         higherup:null, //搜索框需要传递的参数(这是商品类型)
-        shopId:null,
+        shopId:null,//商户的id
+        remark:' ',//没用的消息
         addform: {//弹出框对象
           id:null,
           merchantid:null,
@@ -161,16 +176,20 @@
       }
     },
     created () {
-      // this.allshop()
-      // this.addshop();
       this.ces();
       this.status();
-      // this.clasShop();
     },
     methods: {
-      getLogin () {
-        this.$api('merchantChange')
+      problem() {
+        this.opinion = true;
+        this.$api('merchantChange').then((res)=>{
+          this.shopId = res.data.data.id;
+          this.actionType = 3;
+          console.log(res);
+        })
+        console.log('问题提交问题')
       },
+
       handleAvatarSuccess(res, file) {//图片上传函数
         this.imageUrl = URL.createObjectURL(file.raw);
       },
@@ -196,11 +215,6 @@
         }
       },
       ImgSave (tableData) {//
-      },
-      addtype () {//添加商品类型
-        this.myDisable = true;
-        this.actionType = 3;
-        this.title = "添加商品类型"
       },
       input1 () {//输入的金额判断
         var num = this.addform.price;
@@ -241,15 +255,11 @@
               message: '已取消删除'
             });          
           });
-        // this.$api("delshop",{params:{id:scope.id}}).then((res)=>{
-
-        // })
       },
       save () {//保存
-        this.dialogVisible = false
         console.log(this.addform)
         if(this.actionType==1){
-          this.$api("addshop",{typeid:this.addform.id,price:this.addform.price,remark:""}).then((res)=>{
+          this.$api("addshop",{typeid:this.addform.id,price:this.addform.price,remark:"",primaryPrice:this.addform.price}).then((res)=>{
             console.log(res)
             if(res.data.retCode!==200) {
               this.$message('添加失败')
@@ -257,10 +267,11 @@
               this.$message('添加成功')
             }
           })
+          this.dialogVisible = false;
           this.ces()
         }
         if(this.actionType==2) {
-          this.$api('upshop',{id:this.shopNameId,price:this.addform.price}).then((res)=>{
+          this.$api('upshop',{id:this.shopNameId,price:this.addform.price,remark:''}).then((res)=>{
             console.log(res)
             if(res.data.retCode!==200) {
               this.$message('修改失败')
@@ -268,8 +279,27 @@
               this.$message('修改成功')
             }
           })
+          this.dialogVisible = false;
           this.ces()
         }
+        if(this.actionType ==3) {
+          this.$api('proposalAdd',{opinionid:this.shopId,opinion:this.nputVal}).then((res)=>{
+            if(res.data.retCode==200) {
+              this.$message({
+                message:'反馈成功',
+                type:'success'
+              })
+            }else {
+              this.$message.error('反馈失败，请重试');
+            }
+            
+          this.opinion = false;
+          })
+        }
+      },
+      problemeClose(nputVal) {//意见弹框消失
+        nputVal = null;
+        this.opinion = false;
       },
       close (addform) {//取消的时候数据消失
         this.ces()
@@ -341,11 +371,6 @@
         this.searchObj.pageNum = val;
         this.ces();
       },
-      // upshop () { //修改商品
-      //   this.$api('upshop',{id:'2',price:'34'}).then((res)=>{
-      //     console.log(res)
-      //   })
-      // },
       add () {       //添加商品函数
       this.actionType =1;
       this.disable = false
@@ -371,7 +396,13 @@
     } 
   }
 </script>
-<style long="less">
+<style long="less" >
+  .el-icon-question {
+    text-align: center;
+    vertical-align: middle;
+    font-size: 30px;
+    /* background-color: red; */
+  }
   .myitem{
     padding: 30px 0;
   }

@@ -20,7 +20,7 @@
             height: calc(100% -130px)"
             class="home-table">
             <el-table-column prop="orderNum" align="center" label="订单号"></el-table-column>
-            <el-table-column prop="commodityName"  align="center" label="商品名称"></el-table-column>
+            <el-table-column prop="number"  align="center" label="商品名称"></el-table-column>
             <el-table-column prop="address" align="center" label="客户地址"></el-table-column>
             <el-table-column prop="phone" align="center" label="客户电话"></el-table-column>
             <el-table-column prop="shName" align="center" label="客户姓名"></el-table-column>
@@ -40,7 +40,13 @@
               </template>
             </el-table-column>
             <el-table-column prop="createTime" align="center" label="创建时间"></el-table-column>
-            <el-table-column prop="remark" align="center" label="客户备注"></el-table-column>
+            <el-table-column prop="remark" align="center" label="客户备注">
+                <template slot-scope="scope">
+                    <el-tooltip class="item" effect="dark" :content="scope.row.remark" placement="top">
+                        <span>{{scope.row.remark}}</span>
+                    </el-tooltip>
+                </template>
+            </el-table-column>
             <el-table-column
              align="center"
              width="200px"
@@ -93,7 +99,7 @@
             this.orderAll();
             this.timer = setInterval(() =>{
                 this.orderAll();
-            },60000)
+            },59000)
         },
         // beforeUpdate () {
         //     this.$watch("newTotalCount",function(val) {
@@ -118,7 +124,7 @@
             //点击接单以后前往待发货状态
             handleEdit(scope) {
                 console.log(scope)
-                this.$api("orderType",{params:{type:"1",orderId:scope.row.id,outTradeNo:scope.row.orderNum}}).then((res)=>{
+                this.$api("orderType",{params:{type:"1",orderId:scope.row.id,outTradeNo:scope.row.orderNum,status:"2"}}).then((res)=>{
                     // debugger;
                     console.log(res)
                     var num = scope.$index

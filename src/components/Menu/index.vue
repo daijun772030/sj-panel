@@ -10,17 +10,18 @@
                 class="menu-list-el"
                 text-color="#fff"
                 :unique-opened="true"
-            >
-                <el-submenu
-                    class="sub"
-                    v-for="menu in list"
-                    :key="menu.id"
-                    :index="menu.path"
-                    v-if="menu.children.length > 0"
-                >
+            >   
+                
+                <el-submenu class="sub" v-for="menu in list" :key="menu.id" :index="menu.path" v-if="menu.children.length > 0">
                     <template slot="title">
-                        <i :class="'el-icon ' + menu.icon"/>
-                        <span>{{menu.name}}</span>
+                        <el-badge :value='bealen' v-if="menu.id==0" class="item">
+                            <i :class="'el-icon ' + menu.icon"/>
+                            <span>{{menu.name}}</span>
+                        </el-badge>
+                        <el-badge v-else class="item">
+                            <i :class="'el-icon ' + menu.icon"/>
+                            <span>{{menu.name}}</span>
+                        </el-badge>
                     </template>
                     
                     <el-menu-item
@@ -28,8 +29,14 @@
                         :key="submenu.id"
                         :index="submenu.path"
                     >
-                        <i :class="'el-icon ' + submenu.icon"/>
-                        <span>{{submenu.name}}</span>
+                        <el-badge v-if="submenu.id==0" :value="val" class="item">
+                            <i :class="'el-icon ' + submenu.icon"/>
+                            <span>{{submenu.name}}</span>
+                        </el-badge>
+                        <el-badge v-else >
+                            <i :class="'el-icon ' + submenu.icon"/>
+                            <span>{{submenu.name}}</span>
+                        </el-badge>
                     </el-menu-item>
                 </el-submenu>
                 <el-menu-item v-else :index="menu.path">
@@ -48,18 +55,34 @@
             return {
                 list: list,
                 img:img,
-                currentPath: 'index'
+                currentPath: 'index',
+                val:null,
+                bealen:null
             }
         },
         created() {
             this.currentPath = this.$route.path;
             this.getList();
+            this.queryValue();
+            setInterval(() => {
+                this.queryValue();
+            }, 60000)
         },
         methods: {
             // 获取导航列表
             getList() {
                 // this.$api('get_menu');
-            }
+            },
+            queryValue () {
+                this.$api('orderAll',{params:{pageNum:"1",pageSize:"500",type:"0"}}).then((res)=>{
+                    this.val = null;
+                    this.bealen = null;
+                    if(res.data.data.total>0) {
+                        this.val = res.data.data.total;
+                        this.bealen = "NEW";
+                    }
+                })
+            },
         }
     }
 </script>
@@ -76,6 +99,9 @@
         justify-content: space-around;
         align-items: center;
 
+    }
+    .item{
+        margin-top: 5px;
     }
     .log>img{
         width:80%;

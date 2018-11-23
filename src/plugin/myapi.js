@@ -105,7 +105,12 @@ const apis = {
     discountAddDis: post('/discount/addDiscount'), //新增打折优惠
     discountFull: post('/discount/addDiscountByFull'), //新增满减优惠
     deledDiscount: post('/discount/delteDiscount'), //删除优惠
-    updateDiscount: post('/discount/updateDiscount') //修改优惠
+    updateDiscount: post('/discount/updateDiscount'), //修改优惠
+    //意见
+    proposalAll: get('/proposal/all'), //所有意见和建议
+    proposalAdd: post('/proposal/insertProposal'), //添加意见
+    updataProposal: get('/proposal/updateByMerchant') //修改意见信息
+
 }
 const request = function(name, data, config) {
     return apis[name](data)(config);

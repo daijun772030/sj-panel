@@ -7,6 +7,24 @@
                 <el-input placeholder="请输入订单手机号" v-model="formObj.val" @keyup.enter.native="earchForm" clearable></el-input>
             </el-form-item>
             <el-form-item class="float_left">
+                <el-date-picker
+                v-model="formObj.startTime"
+                clearable
+                type="datetime"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                placeholder="选择开始时间">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item class="float_left">
+                <el-date-picker
+                v-model="formObj.endTime"
+                type="datetime"
+                clearable
+                value-format="yyyy-MM-dd HH:mm:ss"
+                placeholder="选择结束时间">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item class="float_left">
                 <el-button @click="earchForm" type="primary">确定</el-button>
             </el-form-item>
             <el-form-item class="float_right">
@@ -44,7 +62,13 @@
               </template>
             </el-table-column>
             <el-table-column prop="createTime" sortable align="center" label="创建时间"></el-table-column>
-            <el-table-column prop="remark" align="center" label="客户备注"></el-table-column>
+            <el-table-column prop="remark" align="center" label="客户备注">
+                <template slot-scope="scope">
+                    <el-tooltip class="item" effect="dark" :content="scope.row.remark" placement="top">
+                        <span>{{scope.row.remark}}</span>
+                    </el-tooltip>
+                </template>
+            </el-table-column>
         </el-table>
         <div class="pageination">
             <el-pagination
@@ -75,7 +99,9 @@
             totalCount:0
             },
             formObj:{//搜索框值
-                val:null
+                val:null,
+                startTime:null,
+                endTime:null
             },
             seachObject:{
                 input:'',
@@ -109,7 +135,6 @@
         }
     },
     created () {
-        // this.getList()
         this.orderAll();
     },
     computed: {
@@ -145,37 +170,38 @@
         },
         //查询所有订单
         orderAll () {
-            this.$api('orderAll',{params:{pageNum:"1",pageSize:"10",type:"5"}}).then((res)=>{
+            this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,type:"3"}}).then((res)=>{
                 var list = res.data.data.list;
-                // this.list = list;
+                this.list = list;
                 // console.log(this.list)
                 this.searchObj.pageSize = res.data.data.pageSize;
                 this.searchObj.pageNum = res.data.data.pageNum;
                 this.searchObj.totalCount = res.data.data.total;
-                for(var i = 0;i<list.length;i++) {
-                    console.log(list[i])
-                    if(list[i].type!==0 && list[i].type!==1) {
-                        this.list.push(list[i])
-                        console.log(this.list)
-                    }
-                }
-                this.searchObj.totalCount = this.list.length
+                // for(var i = 0;i<list.length;i++) {
+                //     console.log(list[i])
+                //     if(list[i].type!==0 && list[i].type!==1) {
+                //         this.list.push(list[i])
+                //         console.log(this.list)
+                //     }
+                // }
+                // this.searchObj.totalCount = this.list.length
             })
         },
         earchForm() {//搜索函数
                 // console.log('搜索按钮')
-            this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,type:"5"}}).then((res)=>{
+            this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,createtime:this.formObj.startTime,endtime:this.formObj.endTime,phone:this.formObj.val,type:"3"}}).then((res)=>{
                 var list = res.data.data.list;
-                console.log(list)
-                for(var i = 0;i<list.length;i++) {
-                    if(list[i].type!== 0&&list[i].type!== 1&&list[i].type!== 2) {
-                        this.list.push(list[i])
-                    }
-                }
+                this.list = list;
+                // console.log(list)
+                // for(var i = 0;i<list.length;i++) {
+                //     if(list[i].type!== 0&&list[i].type!== 1&&list[i].type!== 2) {
+                //         this.list.push(list[i])
+                //     }
+                // }
                 this.searchObj.pageSize = res.data.data.pageSize;
                 this.searchObj.pageNum = res.data.data.pageNum;
                 this.searchObj.totalCount = res.data.data.total;
-                console.log(res);
+                // console.log(res);
             })
         },
         handleSizeChange (val) {//改变每页显示多少条
@@ -196,7 +222,6 @@
         text-align: center;
         color: black;
         color: rgba(0, 0, 0, 0.349)
-        // background-color: aqua;
     }
     .searchForm{
         padding: 10px;

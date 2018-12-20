@@ -57,16 +57,41 @@
                 img:img,
                 currentPath: 'index',
                 val:null,
-                bealen:null
+                bealen:null,
+                total:null
             }
         },
         created() {
             this.currentPath = this.$route.path;
             this.getList();
-            this.queryValue();
-            setInterval(() => {
-                this.queryValue();
-            }, 60000)
+            // this.queryValue();
+            // setInterval(() => {
+            //     this.queryValue();
+            // }, 60000)
+        },
+        // updated () {
+        //     this.total = this.store.state.newTotalCount;
+        //     if(this.total>0) {
+        //         this.val = this.total;
+        //         this.bealen - 'NEW';
+        //     }
+        // },
+        computed: {
+            listenShowPage () {
+                return this.store.state.newTotalCount
+            }
+        },
+        watch: {
+            listenShowPage (old,newd) {
+                console.log(old, newd);
+                if(old>0) {
+                    this.val = old;
+                    this.bealen = 'NEW';
+                }else {
+                    this.val =null;
+                    this.bealen =null;
+                }
+            }
         },
         methods: {
             // 获取导航列表
@@ -74,6 +99,9 @@
                 // this.$api('get_menu');
             },
             queryValue () {
+                console.log(this.store.state.newTotalCount)
+                // var total = this.store.state.newTotalCount;
+                
                 this.$api('orderAll',{params:{pageNum:"1",pageSize:"500",type:"0"}}).then((res)=>{
                     this.val = null;
                     this.bealen = null;

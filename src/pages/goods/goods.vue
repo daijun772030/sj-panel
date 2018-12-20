@@ -38,7 +38,7 @@
             <el-select v-model="addform.type" clearable placeholder="请选择商品类型" @change="getShop" :disabled='typeId' value-key="id">
               <el-option v-for="item in this.shopType" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
-            <!-- <i class="el-icon-question" @click="problem"></i> -->
+            <i class="el-icon-question" @click="problem"></i>
           </el-form-item>
           <el-form-item label="商品名称" prop="name" class="myitem">
             <el-select v-model="addform.id" clearable placeholder="请选择商品名称" :disabled="typeId" value-key="id">
@@ -104,7 +104,7 @@
         </el-input>
         <span slot="footer" class="dialog-footer">
           <el-button type="primary" @click="problemeClose(nputVal)">取消</el-button>
-          <el-button type="primary" @click="save">保存</el-button>
+          <el-button type="primary" @click="Problemesave">保存</el-button>
         </span>
       </el-dialog>
       <!-- 这里是分页功能 -->
@@ -180,16 +180,29 @@
       this.status();
     },
     methods: {
-      problem() {
+      problem() {//问题反馈
         this.opinion = true;
-        this.$api('merchantChange').then((res)=>{
-          this.shopId = res.data.data.id;
-          this.actionType = 3;
+        this.$api('merchantChange',{params:{merchantid:this.store.state.id}}).then((res)=>{
           console.log(res);
+          this.shopId = res.data.data.userId;
+          // this.actionType = 3
         })
         console.log('问题提交问题')
       },
-
+      Problemesave () {
+        this.$api('addFeedback',{userid:this.shopId,content:this.nputVal}).then((res)=>{
+            if(res.data.retCode==200) {
+              this.$message({
+                message:'反馈成功',
+                type:'success'
+              })
+            }else {
+              this.$message.error('反馈失败，请重试');
+            }
+            
+          this.opinion = false;
+          })
+      },
       handleAvatarSuccess(res, file) {//图片上传函数
         this.imageUrl = URL.createObjectURL(file.raw);
       },
@@ -259,7 +272,7 @@
       save () {//保存
         console.log(this.addform)
         if(this.actionType==1){
-          this.$api("addshop",{typeid:this.addform.id,price:this.addform.price,remark:"",primaryPrice:this.addform.price}).then((res)=>{
+          this.$api("addshop",{typeid:this.addform.id,price:this.addform.price,remark:"",primaryPrice:this.addform.price,limitNum:0,ifMail:0}).then((res)=>{
             console.log(res)
             if(res.data.retCode!==200) {
               this.$message('添加失败')
@@ -271,7 +284,7 @@
           this.ces()
         }
         if(this.actionType==2) {
-          this.$api('upshop',{id:this.shopNameId,price:this.addform.price,remark:''}).then((res)=>{
+          this.$api('upshop',{id:this.shopNameId,price:this.addform.price,remark:'',primaryPrice:0}).then((res)=>{
             console.log(res)
             if(res.data.retCode!==200) {
               this.$message('修改失败')
@@ -282,20 +295,9 @@
           this.dialogVisible = false;
           this.ces()
         }
-        if(this.actionType ==3) {
-          this.$api('proposalAdd',{opinionid:this.shopId,opinion:this.nputVal}).then((res)=>{
-            if(res.data.retCode==200) {
-              this.$message({
-                message:'反馈成功',
-                type:'success'
-              })
-            }else {
-              this.$message.error('反馈失败，请重试');
-            }
-            
-          this.opinion = false;
-          })
-        }
+        // if(this.actionType ==3) {
+          
+        // }
       },
       problemeClose(nputVal) {//意见弹框消失
         nputVal = null;

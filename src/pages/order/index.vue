@@ -91,15 +91,13 @@
                 pageNum:1,
                 totalCount:0
                 },
-                newTotalCount:null
+                newTotalCount:null,
+                vuexTotal:null,
             }
         },
         created () {
             // this.getList()
             this.orderAll();
-            this.timer = setInterval(() =>{
-                this.orderAll();
-            },59000)
         },
         // beforeUpdate () {
         //     this.$watch("newTotalCount",function(val) {
@@ -109,6 +107,22 @@
         //         })
         //     })
         // },
+        computed: {
+            listenShowPage () {
+                return this.store.state.newTotalCount
+            }
+        },
+        watch: {
+            listenShowPage (val,newval) {
+                if(val!=0) {
+                    this.orderAll();
+                }else {
+                    this.orderAll();
+                }
+                console.log('老的val' + val);
+                console.log('新的val' + newval);
+            }
+        },
         methods: {
             earchForm() {//搜索函数
                 // console.log('搜索按钮')
@@ -136,6 +150,8 @@
             },
             //查询所有订单
             orderAll () {
+                console.log(this.store.state.newTotalCount);
+                this.vuexTotal = this.store.state.newTotalCount;
                 this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,type:"0"}}).then((res)=>{
                     console.log(res)
                     var list = res.data.data.list;
@@ -144,6 +160,7 @@
                     this.searchObj.pageNum = res.data.data.pageNum;
                     this.searchObj.totalCount = res.data.data.total;
                     this.newTotalCount = res.data.data.total;
+                    this.store.state.newTotalCount = res.data.data.total;
 
                 })
             },

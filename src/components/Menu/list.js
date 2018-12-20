@@ -10,22 +10,29 @@ export default [{
                 icon: "resource",
                 children: []
             },
-            // {
-            //     id: 1,
-            //     name: "未取衣订单",
-            //     path: "/manager/NoTake",
-            //     icon: "resource",
-            //     children: []
-            // },
             {
                 id: 1,
+                name: "待取衣",
+                path: "/manager/awaitClose",
+                icon: "resource",
+                children: []
+            },
+            {
+                id: 2,
                 name: "待发货",
                 path: "/manager/make",
                 icon: "resource",
                 children: []
             },
             {
-                id: 2,
+                id: 3,
+                name: "待收货",
+                path: "/manager/awaitTake",
+                icon: "resource",
+                children: []
+            },
+            {
+                id: 4,
                 name: "完成订单",
                 path: "/manager/accomplish",
                 icon: "resource",
@@ -69,6 +76,11 @@ export default [{
         icon: "resource",
         children: []
     },
-
-
+    {
+        id: "4",
+        name: "地图",
+        path: "/manager/Map",
+        icon: "resource",
+        children: []
+    }
 ];

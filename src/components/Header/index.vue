@@ -21,10 +21,10 @@
             </el-dropdown-menu>
         </el-dropdown>
         <!-- <audio v-if="true" src=""></audio> -->
-         <el-dialog :modal-append-to-body="false" @close="close(changeShop)" :title="title" center :visible.sync="dialogVisible" :show-close="false" width="900px">
+        <el-dialog :modal-append-to-body="false" @close="close(changeShop)" :title="title" center :visible.sync="dialogVisible" :show-close="false" width="900px">
             <el-form :inline="false" :model='changeShop' ref="changeShop" label-width="150px" class="demo-form-inline"  size="small" >
                  <el-form-item label="地区：">
-                        <v-distpicker clearable :province="select.province" :city="select.city" :area="select.area" @selected="onSeleted" ></v-distpicker>
+                        <v-distpicker clearable :province="select.province" :city="select.city" :area="select.area" class="myInput1" @selected="onSeleted" ></v-distpicker>
                 </el-form-item>
                 <el-form-item label="详细地址：">
                     <el-input clearable autosize type="textarea" placeholder= "店铺详细地址" v-model="detAdress" size="medium" class="myInput"></el-input>
@@ -81,11 +81,11 @@
                     <el-input clearable autosize type="textarea" placeholder= "输入公告信息" v-model="changeShop.notice" size="large" class="myInput"></el-input>
                 </el-form-item>
             </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel" type="primary">取消</el-button>
-        <el-button @click="save" type="primary">保存</el-button>
-      </span>
-    </el-dialog>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="cancel" type="primary">取消</el-button>
+                <el-button @click="save" type="primary">保存</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script>
@@ -214,7 +214,7 @@ import VDistpicker from 'v-distpicker'
                 console.log(changeShop)
             },
             archivesAll() {//查询商家信息
-                this.$api("merchantChange").then((res)=>{
+                this.$api("merchantChange",{params:{merchantid:this.store.state.id}}).then((res)=>{
                     this.changeShop.id = res.data.data.id;
                     this.imgData.id = res.data.data.id;
                     this.changeShop.address = res.data.data.address;

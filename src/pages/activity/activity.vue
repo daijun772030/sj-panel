@@ -164,13 +164,15 @@
     methods: {
       MerchantsQuery () {
         this.$api("merchantChange").then((res)=>{
-          this.MerchantId = res.data.data.id;
-          console.log(this.MerchantId);
+          console.log(res);
+          // this.MerchantId = res.data.data.id;
+          // console.log(this.MerchantId);
 
         })
       },
       getShop(){//这里是点击商品类型获取相应商品
         this.clasShop()
+        console.log(this.store.state.id);
       },
       status () {//查询我们的所有商品的类型
         this.$api('typeStatus',{params:{status:"1"}}).then((res)=>{
@@ -180,7 +182,7 @@
       },
       clasShop () {//这里根据商品类型查询相应的商品集
       // debugger;
-        this.$api('commitFindMerId',{params:{merchantid:this.MerchantId,typeid:this.addForm.UpNameId}}).then((res)=>{
+        this.$api('commitFindMerId',{params:{merchantid:this.store.state.id,typeid:this.addForm.UpNameId}}).then((res)=>{
           console.log(res);
           this.classShop = res.data.data;
           for(var i=0;i<this.classShop.length;i++) {
@@ -219,7 +221,7 @@
             var reduce = Number(this.addForm.reduce);
             var full = Number(this.addForm.full);
             // var re = full*0.2;
-            if(reduce>=full || reduce<=0 || reduce>full*0.2) {
+            if(reduce>=full || reduce<=0 ) {
               this.$message('输入金额有误');
               this.addForm.reduce=null;
               return false;

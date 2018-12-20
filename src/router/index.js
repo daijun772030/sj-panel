@@ -10,6 +10,8 @@ const Login = () =>
     import ('@/pages/login' /* webpackChunkName: "pages/login" */ ).then(m => m.default || m)
     // const Order = () =>
     //     import ('@/pages/order' /* webpackChunkName: "pages/order" */ ).then(m => m.default || m)
+    // const Business = () =>
+    //     import ('@/pages/business' /* webpackChunkName: "pages/business" */ ).then(m => m.default || m)
 const BusinessList = () =>
     import ('@/pages/business/list' /* webpackChunkName: "pages/business/list" */ ).then(m => m.default || m)
 const BusinessOrder = () =>
@@ -30,6 +32,12 @@ const Accomplish = () =>
     //     import ('@/pages/order/evaluate' /* webpackChunkName: "/pages/order/evaluate" */ ).then(m => m.default || m)
 const Make = () =>
     import ('@/pages/order/make' /* webpackChunkName: "/pages/order/make" */ ).then(m => m.default || m)
+const AwaitTake = () =>
+    import ('@/pages/order/awaitTake' /* webpackChunkName: "/pages/order/awaitTake" */ ).then(m => m.default || m)
+const AwaitClose = () =>
+    import ('@/pages/order/awaitClose' /* webpackChunkName: "/pages/order/awaitClose" */ ).then(m => m.default || m)
+const Map = () =>
+    import ('@/pages/Map' /* webpackChunkName: "/pages/Map" */ ).then(m => m.default || m)
 const NoTake = () =>
     import ('@/pages/order/NoTake' /* webpackChunkName: "/pages/order/NoTake" */ ).then(m => m.default || m)
 const page404 = () =>
@@ -61,7 +69,7 @@ const scrollBehavior = (to, from, savedPosition) => {
     // 注册路由
 const router = new Router({
     mode: 'history',
-    base: '/sangjie/panel/', //项目的根名称 如：localhost:3000/sangjie/panel/index
+    base: '/shangjie/panel/', //项目的根名称 如：localhost:3000/sangjie/panel/index
     linkActiveClass: 'b-link-active',
     linkExactActiveClass: 'b-c-link-active',
     scrollBehavior,
@@ -77,17 +85,20 @@ const router = new Router({
             component: Manager,
             children: [
                 { name: "manager", path: '/manager', component: Index },
-                // { name: "order", path: '/manager/order', component: Index },
+                { name: "order", path: '/manager/order', component: Index },
                 { name: "order-index", path: '/manager/index', component: Index },
                 { name: "order-accomplish", path: '/manager/accomplish', component: Accomplish },
                 // { name: "order-evaluate", path: 'evaluate', component: Evaluate },
                 { name: "order-make", path: '/manager/make', component: Make },
                 { name: "order-NoTake", path: '/manager/NoTake', component: NoTake },
+                { name: "order-awaitTake", path: '/manager/awaitTake', component: AwaitTake },
+                { name: "order-awaitClose", path: '/manager/awaitClose', component: AwaitClose },
                 // { name: "order-send", path: 'send', component: Send },
                 { name: 'business', path: '/manager/business', component: BusinessList },
                 { name: 'business-list', path: '/manager/list', component: BusinessList },
                 { name: 'business-order', path: '/manager/business-order', component: BusinessOrder },
                 { name: 'goods-goods', path: '/manager/goods', component: Goods },
+                { name: 'Map', path: '/manager/Map', component: Map },
                 { name: 'activity-activity', path: '/manager/activity', component: Activity },
                 { name: 'finance-finance', path: '/manager/finance', component: Finance },
                 { name: 'generalize-generalize', path: '/manager/generalize', component: Generalize }

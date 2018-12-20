@@ -43,7 +43,7 @@
             class="home-table"
             id="rebateSetTable">
             <el-table-column prop="orderNum" align="center" label="订单号"></el-table-column>
-            <el-table-column prop="commodityName"  align="center" label="商品名称"></el-table-column>
+            <el-table-column prop="number"  align="center" label="商品名称"></el-table-column>
             <el-table-column prop="address" align="center" label="客户地址"></el-table-column>
             <el-table-column prop="phone" align="center" label="客户电话"></el-table-column>
             <el-table-column prop="startTime" align="center" label="取件时间"></el-table-column>

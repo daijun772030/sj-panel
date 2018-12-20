@@ -16,10 +16,12 @@ export default {
         async showPage(){
             // debugger;
             const that = this;
-            this.$api("typeStatus",{params:{status:"1"}}).then(res => {
+            this.$api("findBy",{params:{commodityid:'55'}}).then(res => {
                 // 已登录
                 const { path } = that.$route;
+                console.log(that.$route)
                 if(res.data.retCode == 200) {
+                    console.log(path)
                     if(path === '/') {
                         that.$router.replace({ path: "/manager" });
                     }else {

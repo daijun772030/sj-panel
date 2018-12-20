@@ -1,4 +1,5 @@
 import create from '../plugin/myapi';
+import store from './store.js'
 
 function orderAll() {
     // var music = 'music';
@@ -12,6 +13,8 @@ function orderAll() {
         console.log(res)
         var newTotalCount = null;
         newTotalCount = res.data.data.total;
+        store.commit('increment', newTotalCount);
+        console.log(store.state.newTotalCount);
         if (newTotalCount > 0) {
             var audio = document.getElementById('music');
             console.log(audio);

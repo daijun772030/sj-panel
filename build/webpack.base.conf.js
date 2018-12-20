@@ -96,5 +96,10 @@ module.exports = {
             jQuery: "jquery",
             $: "jquery"
         })
-    ]
+    ],
+    externals: {
+        'AMap': 'AMap',
+        'Loca': 'Loca',
+        'AMapUI': 'AMapUI'
+    }
 }

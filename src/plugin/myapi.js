@@ -89,8 +89,12 @@ const apis = {
     archivesAll: get("/archives/all"),
     //查询商家个人基本信息
     merchantChange: get("/merchant/order/findByMerchantidDetail"),
+    //查询商品下活动
+    findBy: get('/activity/findByActivityAll'),
     //修改商家个人信息
     updataByMer: post("/archives/updateByMerchant"),
+    //查询达达订单详情
+    dadaQuery: get('/archives/dadaQuery'),
     //商品接口
     myshop: get('/commodity/all'), //查询所有商品
     addshop: post('/commodity/addCommodity'), //添加商品
@@ -109,7 +113,9 @@ const apis = {
     //意见
     proposalAll: get('/proposal/all'), //所有意见和建议
     proposalAdd: post('/proposal/insertProposal'), //添加意见
-    updataProposal: get('/proposal/updateByMerchant') //修改意见信息
+    updataProposal: get('/proposal/updateByMerchant'), //修改意见信息
+    //添加反馈
+    addFeedback: post('/feedback/addFeedback')
 
 }
 const request = function(name, data, config) {

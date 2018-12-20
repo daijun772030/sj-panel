@@ -76,11 +76,15 @@ import Hashes from 'jshashes'
             // console.log(res)
             var message = res.data.message
 
-          if(res.data.retCode==200&&res.data.data.type==0) {
+          if(res.data.retCode==200&&res.data.data.type!==2) {
+              var id = null;
+                id = res.data.data.id;
+                this.store.commit("increment", id)
+                console.log(this.store.state.id);
               this.$router.replace({ path : this.manager });
               this.isBtnLoading = false;
           }else if(message){
-            this.$message.error(message);
+            this.$message.error('输入有误，请重新输入');
             this.isBtnLoading = false;
           }else{
             this.$message.error("网络出错请重试...");

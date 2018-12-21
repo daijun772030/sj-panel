@@ -84,14 +84,14 @@
                 <el-button
                 size="mini"
                 @click="handleEdit(scope)">发货</el-button>
-                <el-button
+                <!-- <el-button
                 size="mini"
                 v-if="scope.row.ifhave==0"
                 @click="ceshiDin(scope)">未取衣</el-button>
                 <el-button
                 size="mini"
                 v-if="scope.row.ifhave==1"
-                >已取衣</el-button>
+                >已取衣</el-button> -->
             </template>
             </el-table-column>
         </el-table>

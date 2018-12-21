@@ -73,23 +73,24 @@ import Hashes from 'jshashes'
         this.isBtnLoading = true;
         // let loginParams = {name:vm.username,password:vm.password};
         this.$api("login",{phone:this.login1.phone,password: MD5.hex(this.login1.password)}).then((res)=>{
-            // console.log(res)
-            var message = res.data.message
-
-          if(res.data.retCode==200&&res.data.data.type!==2) {
-              var id = null;
+            console.log(res)
+            // var message = res.data.message
+            if(res.data.retCode==200&&res.data.data == null || res.data.retCode==200&&res.data.data.type==2){
+                this.$message.error('输入有误，请重新输入');
+                this.isBtnLoading = false  
+            }
+            if(res.data.retCode==200&&res.data.data.type!==2) {
+                var id = null;
                 id = res.data.data.id;
                 this.store.commit("increment", id)
                 console.log(this.store.state.id);
-              this.$router.replace({ path : this.manager });
-              this.isBtnLoading = false;
-          }else if(message){
-            this.$message.error('输入有误，请重新输入');
-            this.isBtnLoading = false;
-          }else{
-            this.$message.error("网络出错请重试...");
-            this.isBtnLoading = false;
-          }
+                this.$router.replace({ path : this.manager });
+                this.isBtnLoading = false;
+            }
+            if(res.data.retCode!=200) {
+                this.$message.error('输入有误，请重新输入');
+                this.isBtnLoading = false  
+            }
         })
       }
     }

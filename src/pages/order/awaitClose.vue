@@ -171,55 +171,17 @@
             // this.getList()
             this.orderAll();
         },
-        // watch: {
-        //   dialogVisible(curVal,oldVal) {
-        //     if(curVal == true) {
-        //       this.init();
-        //     }
-        //   }
-        // },
-        // mounted () {
-        //   this.init();
-        // },
         methods: {
-          //这里做地图的展示
-          init () {//地图的初始化
-            var map = new AMap.Map('container', {
-              resizeEnable: true,
-              rotateEnable:true,
-              pitchEnable:true,
-              zoom: 17,
-              pitch:80,
-              rotation:-15,
-              // viewMode:'3D',//开启3D视图,默认为关闭
-              // buildingAnimation:true,//楼块出现是否带动画
-              expandZoomRange:true,
-              zooms:[3,20],
-              center:[104.066143,30.573095]
-            }); 
-            AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function () {
-                map.addControl(new AMap.ToolBar({
-                  showZoomBar:false,
-                  showControlButton:true,
-                  position:{
-                    right:'10px',
-                    top:'10px'
-                  }
-                }))
-                map.addControl(new AMap.Scale())
-              })
-          },
-          //地图展示方法结束
           queryMap(scope) {//这里是查询订单号替换到data中
             console.log(scope);
+            this.shopOrder = scope.row.orderNum;
             this.$api('dadaQuery',{params:{ordernum:scope.row.orderNum}}).then((res)=>{
               console.log(res);
-              if(res.data.data.dadaResponse.code==0) {
-                this.shopOrder = scope.row.orderNum;
+              if(res.data.data.dadaResponse.code==0&&res.data.data.dadaResponse.result.transporterLat !== "") {
                 this.dialogVisible = true;
                 this.horseman = res.data.data.dadaResponse.result;
               }else {
-                this.$message.error('没有物流信息');
+                this.$message.error('骑手未接单，暂时没有物流信息');
               }
             // var supplierLat = res.data.data.dadaResponse.result.supplierLat;
             // var supplierLog = res.data.data.dadaResponse.result.supplierLng;

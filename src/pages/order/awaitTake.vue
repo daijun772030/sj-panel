@@ -172,16 +172,6 @@
             // this.getList()
             this.orderAll();
         },
-        // watch: {
-        //   dialogVisible(curVal,oldVal) {
-        //     if(curVal == true) {
-        //       this.init();
-        //     }
-        //   }
-        // },
-        // mounted () {
-        //   this.init();
-        // },
         methods: {
           //这里做地图的展示
           init () {//地图的初始化
@@ -212,23 +202,17 @@
           },
           //地图展示方法结束
           queryMap(scope) {//这里是查询订单号替换到data中
+            console.log(typeof(scope.row.id))
+            this.shopOrder = scope.row.id
             console.log(scope);
-            this.$api('dadaQuery',{params:{ordernum:scope.row.orderNum}}).then((res)=>{
+            this.$api('dadaQuery',{params:{ordernum:scope.row.id}}).then((res)=>{
               console.log(res);
-              if(res.data.data.dadaResponse.code==0) {
-                this.shopOrder = scope.row.orderNum;
+              if(res.data.data.dadaResponse.code==0&&res.data.data.dadaResponse.result.transporterLat !== "") {
                 this.dialogVisible = true;
                 this.horseman = res.data.data.dadaResponse.result;
               }else {
-                this.$message.error('没有物流信息');
-              }
-            // var supplierLat = res.data.data.dadaResponse.result.supplierLat;
-            // var supplierLog = res.data.data.dadaResponse.result.supplierLng;
-            // var transporterLat = res.data.data.dadaResponse.result.transporterLat;
-            // var transporterLog = res.data.data.dadaResponse.result.transporterLng;
-            // var merchantLat = res.data.data.orderModel.merchantLat;
-            // var merchantLog = res.data.data.orderModel.merchantLog; 
-            // this.init(supplierLat,supplierLog) 
+                this.$message.error('骑手未接单，，暂时没有物流信息');
+              } 
           })  
             
           },

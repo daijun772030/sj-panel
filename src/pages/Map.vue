@@ -31,7 +31,7 @@ export default {
   },
   props:{
     shopOrder:{
-      type:String,
+      type:Number,
       required:true
     }
   },
@@ -41,14 +41,11 @@ export default {
   },
   mounted () {
     this.dituCshi();
-    this.queryQiXi();
-    this.huaqishou();
   },
   methods:{
     dadaQuery() {//查询数据，，然后去渲染地图
         this.$api('dadaQuery',{params:{ordernum:this.shopOrder}}).then((res)=>{
             console.log(res);
-            return res
             this.dadaRS.supplierLat = res.data.data.dadaResponse.result.supplierLat;
             this.dadaRS.supplierLog = res.data.data.dadaResponse.result.supplierLng;
             this.dadaRS.transporterLat = res.data.data.dadaResponse.result.transporterLat;
@@ -58,70 +55,77 @@ export default {
         })
     },
     queryQiXi () {//骑行路线的开始和结束点
-        console.log(this.shopOrder);
+        // console.log(this.shopOrder);
         this.$api('dadaQuery',{params:{ordernum:this.shopOrder}}).then((res)=>{
-           var supplierLat = res.data.data.dadaResponse.result.supplierLat;
-           var supplierLog = res.data.data.dadaResponse.result.supplierLng;
-           var transporterLat = res.data.data.dadaResponse.result.transporterLat;
-           var transporterLog = res.data.data.dadaResponse.result.transporterLng;
-           var merchantLat = res.data.data.orderModel.merchantLat;
-           var merchantLog = res.data.data.orderModel.merchantLog; 
-            this.qixin(supplierLat,supplierLog,transporterLat,transporterLog,merchantLat,merchantLog) 
+          console.log(res);
+           var supplierLat = res.data.data.dadaResponse.result.supplierLat;//用户的经纬度
+           var supplierLog = res.data.data.dadaResponse.result.supplierLng;//用户的经纬度
+          //  var transporterLat = res.data.data.dadaResponse.result.transporterLat;//骑手的经纬度
+          //  var transporterLog = res.data.data.dadaResponse.result.transporterLng;//骑手的经纬度
+           var merchantLat = res.data.data.orderModel.merchantLat;//商家的经纬度
+           var merchantLog = res.data.data.orderModel.merchantLog; //商家的经纬度
+            this.qixin(supplierLat,supplierLog,merchantLat,merchantLog) 
         })
     },
 
     huaqishou () {//给骑手标记点
-    console.log(this.shopOrder)
+    // console.log(this.shopOrder)
       this.$api('dadaQuery',{params:{ordernum:this.shopOrder}}).then((res)=>{
-        var supplierLat = res.data.data.dadaResponse.result.supplierLat;
-        var supplierLog = res.data.data.dadaResponse.result.supplierLng;
-        var transporterLat = res.data.data.dadaResponse.result.transporterLat;
-        var transporterLog = res.data.data.dadaResponse.result.transporterLng;
-        var merchantLat = res.data.data.orderModel.merchantLat;
-        var merchantLog = res.data.data.orderModel.merchantLog; 
-        this.biaodianDT(supplierLat,supplierLog,transporterLat,transporterLog,merchantLat,merchantLog) 
+        var supplierLat = res.data.data.dadaResponse.result.supplierLat;//用户的经纬度
+           var supplierLog = res.data.data.dadaResponse.result.supplierLng;//用户的经纬度
+           var transporterLat = res.data.data.dadaResponse.result.transporterLat;//骑手的经纬度
+           var transporterLog = res.data.data.dadaResponse.result.transporterLng;//骑手的经纬度
+           var merchantLat = res.data.data.orderModel.merchantLat;//商家的经纬度
+           var merchantLog = res.data.data.orderModel.merchantLog; //商家的经纬度
+        if(transporterLat!=="" && transporterLog!==""){
+          this.biaodianDT(supplierLat,supplierLog,transporterLat,transporterLog,merchantLat,merchantLog) 
+        }
       })
     },
-    biaodianDT (a,b,c,d,e,f) {//标注开始和结束点的函数
+    biaodianDT (a,b,c,d,e,f) {//标注骑手的位置
         console.log(a,b,c,d,e,f)
       var viaMarker = new AMap.Marker({
             position: new AMap.LngLat(d,c),
             // 将一张图片的地址设置为 icon
-            icon: 'http://www.pigcome.com:81/img?path=/usr/img//type/0c95390c9e6d4ba790f48335ce05d82f.png',
+            icon: 'http://www.pigcome.com:3381/images/qishou@3x.png',
             // 设置了 icon 以后，设置 icon 的偏移量，以 icon 的 [center bottom] 为原点
             offset: new AMap.Pixel(-13, -30)
         });
         map.add(viaMarker)
     },
     //创建开始和结束得坐标点
-     qixin (a,b,c,d,e,f) {//骑行路线的规划
-     console.log(a,b,c,d,e,f)
+     qixin (a,b,c,d) {//创建开始和结束坐标
+     console.log(a,b,c,d)
        //这里开始画起始点
-        var startIcon = new AMap.Icon({
-          size:new AMap.Size(25,34),//图标的大小
-          image:'//a.amap.com/jsapi_demos/static/demo-center/icons/dir-marker.png',//图标的位置
-          imageSize:new AMap.Size(135,40),//图标的大小
-          imageOffset:new AMap.Pixel(-9,-3)//图标的偏移量
+        var startIcon = new AMap.Icon({//商家的位置
+          size:new AMap.Size(60,60),//图标的大小
+          image:'http://www.pigcome.com:3381/images/qi@3x.png',//图标的位置
+          imageSize:new AMap.Size(60,60),//图标的大小
+          imageOffset:new AMap.Pixel(-2,-1)//图标的偏移量
       });
       //将图标传入markers
       var startMarker = new AMap.Marker({
-        position:new AMap.LngLat(f,e),//坐标位置
+        position:new AMap.LngLat(d,c),//坐标位置
         icon:startIcon,
         offset:new AMap.Pixel(-13,-30)
       });
       //创建结束坐标的icon
        var endIcon = new AMap.Icon({
-          size:new AMap.Size(25,34),//图标的大小
-          image:'//a.amap.com/jsapi_demos/static/demo-center/icons/dir-marker.png',//图标的位置
-          imageSize:new AMap.Size(135,40),//图标的大小
-          imageOffset:new AMap.Pixel(-95,-3)//图标的偏移量
+          size:new AMap.Size(60,60),//图标的大小
+          image:'http://www.pigcome.com:3381/images/zhong@3x.png',//图标的位置
+          imageSize:new AMap.Size(60,60),//图标的大小
+          imageOffset:new AMap.Pixel(-2,-1)//图标的偏移量
       });
       //将图标传入markers
-      var endMarker = new AMap.Marker({
+      var endMarker = new AMap.Marker({//用户的位置
         position:new AMap.LngLat(b,a),//坐标位置
         icon:endIcon,
         offset:new AMap.Pixel(-13,-30)
       });
+      // endMarker.setLable({
+      //   offset: new AMap.Pixel(20, 20),
+      //   content: "<div class='info'>我是 marker 的 label 标签</div>"
+      // })
       //将这两个传入到marker
       map.add([startMarker,endMarker])
     //将地图的位置调整到居中的最佳位置
@@ -140,7 +144,7 @@ export default {
             // 调整视野达到最佳显示区域
             map.setFitView([ startMarker, endMarker, routeLine ])
     },
-    dituCshi () {//给骑手标记点
+    dituCshi () {//地图初始化
       this.$api('dadaQuery',{params:{ordernum:this.shopOrder}}).then((res)=>{
         var supplierLat = res.data.data.dadaResponse.result.supplierLat;
         var supplierLog = res.data.data.dadaResponse.result.supplierLng;
@@ -167,16 +171,18 @@ export default {
         center:[b,a]
       }); 
       AMap.plugin(['AMap.ToolBar', 'AMap.Scale'], function () {
-          map.addControl(new AMap.ToolBar({
-            showZoomBar:false,
-            showControlButton:true,
-            position:{
-              right:'10px',
-              top:'10px'
-            }
-          }))
-          map.addControl(new AMap.Scale())
-        })
+        map.addControl(new AMap.ToolBar({
+          showZoomBar:false,
+          showControlButton:true,
+          position:{
+            right:'10px',
+            top:'10px'
+          }
+        }))
+        map.addControl(new AMap.Scale())
+      })
+      this.queryQiXi();
+      this.huaqishou();
     }
   }
 }
@@ -208,8 +214,8 @@ export default {
   /* 标注 */
   .amap-icon img,
         .amap-marker-content img{
-            width: 25px;
-            height: 34px;
+            width: 100px;
+            /* height: 60px; */
         }
 
         .marker {

@@ -52,12 +52,12 @@
                 </el-form-item>
                 <el-form-item prop="startTime" label="配送开始时间：" class="uniq">
                     <template>
-                        <el-time-picker clearable v-model="changeShop.startTime" value-format="HH:mm" format = "HH:mm"  placeholder="开始配送时间"></el-time-picker>    
+                        <el-time-picker clearable v-model="changeShop.startTime" value-format="HH:00" format = "HH:00"  placeholder="开始配送时间"></el-time-picker>    
                     </template>
                 </el-form-item>
                 <el-form-item prop="endTime" label="配送结束时间：" class="uniq">
                     <template>
-                        <el-time-picker clearable v-model="changeShop.endTime" value-format="HH:mm" format = "HH:mm" placeholder="结束配送时间"></el-time-picker>
+                        <el-time-picker clearable v-model="changeShop.endTime" value-format="HH:00" format = "HH:00" placeholder="结束配送时间"></el-time-picker>
                     </template>
                 </el-form-item>
                 <el-form-item prop="takeoff" label="取送费：" class="uniq">
@@ -214,6 +214,7 @@ import VDistpicker from 'v-distpicker'
                 console.log(changeShop)
             },
             archivesAll() {//查询商家信息
+                console.log(this.store.state.id);
                 this.$api("merchantChange",{params:{merchantid:this.store.state.id}}).then((res)=>{
                     this.changeShop.id = res.data.data.id;
                     this.imgData.id = res.data.data.id;
@@ -239,7 +240,7 @@ import VDistpicker from 'v-distpicker'
             change () {//这里是修改数据的函数
                 // debugger;
                 console.log(this.changeShop.address)
-                var NewAddress = this.select.province + " " + this.select.city + " " + this.select.area + " , " + this.detAdress;
+                var NewAddress = this.select.province + " " + this.select.city + " " + this.select.area + " " + this.detAdress;
                 console.log(NewAddress)
                 this.changeShop.address = NewAddress; 
                 console.log(this.changeShop.startTime)

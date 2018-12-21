@@ -230,10 +230,14 @@ import VDistpicker from 'v-distpicker'
                     var Myaddress = res.data.data.address;
                     var a = Myaddress.split(' ')
                     console.log(a)
+                    if(a.length==4) {
+                        this.detAdress = a[3]
+                    }else if(a.length==5) {
+                        this.detAdress = a[4]
+                    }
                     this.select.province = a[0];
                     this.select.city = a[1];
                     this.select.area =a[2];
-                    this.detAdress = a[4];
                     console.log(this.changeShop)
                 })
             },

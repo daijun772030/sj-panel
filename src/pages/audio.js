@@ -14,7 +14,7 @@ function orderAll() {
         var newTotalCount = null;
         newTotalCount = res.data.data.total;
         store.commit('increment', newTotalCount);
-        console.log(store.state.newTotalCount);
+        console.log("订单数量" + store.state.newTotalCount);
         if (newTotalCount > 0) {
             var audio = document.getElementById('music');
             console.log(audio);

@@ -57,25 +57,15 @@
                 img:img,
                 currentPath: 'index',
                 val:null,
-                bealen:null,
+                bealen
+                :null,
                 total:null
             }
         },
         created() {
             this.currentPath = this.$route.path;
             this.getList();
-            // this.queryValue();
-            // setInterval(() => {
-            //     this.queryValue();
-            // }, 60000)
         },
-        // updated () {
-        //     this.total = this.store.state.newTotalCount;
-        //     if(this.total>0) {
-        //         this.val = this.total;
-        //         this.bealen - 'NEW';
-        //     }
-        // },
         computed: {
             listenShowPage () {
                 return this.store.state.newTotalCount
@@ -83,10 +73,11 @@
         },
         watch: {
             listenShowPage (old,newd) {
-                console.log(old, newd);
+                console.log("查看数据" + old, newd);
                 if(old>0) {
                     this.val = old;
-                    this.bealen = 'NEW';
+                    this.bealen
+                     = 'NEW';
                 }else {
                     this.val =null;
                     this.bealen =null;
@@ -96,7 +87,7 @@
         methods: {
             // 获取导航列表
             getList() {
-                // this.$api('get_menu');
+                this.queryValue ();
             },
             queryValue () {
                 console.log(this.store.state.newTotalCount)
@@ -106,6 +97,7 @@
                     this.val = null;
                     this.bealen = null;
                     if(res.data.data.total>0) {
+                        console.log('数据的查看' + res.data.data.total)
                         this.val = res.data.data.total;
                         this.bealen = "NEW";
                     }

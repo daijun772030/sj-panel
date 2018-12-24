@@ -33,6 +33,10 @@ export default {
     shopOrder:{
       type:Number,
       required:true
+    },
+    shopType:{
+      type:Number,
+      required:true
     }
   },
   created () {
@@ -56,6 +60,7 @@ export default {
     },
     queryQiXi () {//骑行路线的开始和结束点
         // console.log(this.shopOrder);
+        console.log(this.shopType);//查看订单的类型
         this.$api('dadaQuery',{params:{ordernum:this.shopOrder}}).then((res)=>{
           console.log(res);
            var supplierLat = res.data.data.dadaResponse.result.supplierLat;//用户的经纬度
@@ -100,7 +105,7 @@ export default {
         var startIcon = new AMap.Icon({//商家的位置
           size:new AMap.Size(60,60),//图标的大小
           image:'http://www.pigcome.com:3381/images/qi@3x.png',//图标的位置
-          imageSize:new AMap.Size(60,60),//图标的大小
+          imageSize:new AMap.Size(50,50),//图标的大小
           imageOffset:new AMap.Pixel(-2,-1)//图标的偏移量
       });
       //将图标传入markers
@@ -111,9 +116,9 @@ export default {
       });
       //创建结束坐标的icon
        var endIcon = new AMap.Icon({
-          size:new AMap.Size(60,60),//图标的大小
+          size:new AMap.Size(5,3),//图标的大小
           image:'http://www.pigcome.com:3381/images/zhong@3x.png',//图标的位置
-          imageSize:new AMap.Size(60,60),//图标的大小
+          imageSize:new AMap.Size(40,35),//图标的大小
           imageOffset:new AMap.Pixel(-2,-1)//图标的偏移量
       });
       //将图标传入markers
@@ -214,7 +219,7 @@ export default {
   /* 标注 */
   .amap-icon img,
         .amap-marker-content img{
-            width: 100px;
+            width: 60px;
             /* height: 60px; */
         }
 

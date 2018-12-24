@@ -10,6 +10,7 @@ import router from './router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import create from '../src/plugin/myapi';
+import Axios from 'axios'
 import store from './pages/store'
 import timer from './pages/audio';
 import VueCookies from 'vue-cookies';
@@ -20,6 +21,7 @@ Vue.use(VueAreaLinkage);
 Vue.use(timer);
 Vue.config.productionTip = false
 Vue.prototype.$api = create
+Vue.prototype.$axios = Axios
 Vue.prototype.$jq = jq
 Vue.prototype.$cookies = VueCookies
 new Vue({

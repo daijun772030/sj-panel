@@ -93,7 +93,7 @@
               <span>骑手电话：{{horseman.transporterPhone}}</span>
             </div>
             <div class="map">
-              <Map :shopOrder = 'shopOrder' v-if="dialogVisible">
+              <Map :shopOrder = 'shopOrder' :shopType = 'shopType' v-if="dialogVisible">
               </Map>
             </div>
         </el-dialog>
@@ -112,8 +112,8 @@
         <audio src="/static/audio/newgoods.1.mp3"  id="music" hidden></audio>
     </div>
 </template>
-// <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
-// <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
+ <script src="https://a.amap.com/jsapi_demos/static/demo-center/js/demoutils.js"></script>
+ <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
 <script>
     // import AMap from 'AMap';//导入地图api
     import Map from '../Map'
@@ -164,6 +164,7 @@
                     region: ''
                 },
                 shopOrder:null,//商品的订单号
+                shopType:0,//这一单的类型（默认是起点是用户，终点是商家）
                 horseman:null//骑手信息
             }
         },
@@ -182,14 +183,7 @@
                 this.horseman = res.data.data.dadaResponse.result;
               }else {
                 this.$message.error('骑手未接单，暂时没有物流信息');
-              }
-            // var supplierLat = res.data.data.dadaResponse.result.supplierLat;
-            // var supplierLog = res.data.data.dadaResponse.result.supplierLng;
-            // var transporterLat = res.data.data.dadaResponse.result.transporterLat;
-            // var transporterLog = res.data.data.dadaResponse.result.transporterLng;
-            // var merchantLat = res.data.data.orderModel.merchantLat;
-            // var merchantLog = res.data.data.orderModel.merchantLog; 
-            // this.init(supplierLat,supplierLog) 
+              } 
           })  
             
           },

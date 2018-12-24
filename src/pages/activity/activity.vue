@@ -84,7 +84,8 @@
           </el-select>
           </el-form-item>
         <el-form-item prop="reduce" label="(满减优惠)减：" class="myitem">
-          <el-input type="text" placeholder="请输入金额" @blur="regular" v-model="addForm.reduce" :disabled="addtypeT" width="50%" >
+          <el-input type="text" placeholder="请输入金额"  v-model="addForm.reduce" :disabled="addtypeT" width="50%" >
+            <!-- @blur="regular" -->
             <template slot="append">元</template>
           </el-input>
         </el-form-item>

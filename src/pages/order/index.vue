@@ -55,6 +55,9 @@
                 <el-button
                 size="mini"
                 @click="handleEdit(scope)">接单</el-button>
+                <el-button
+                size="mini"
+                @click="ceshiQiTa(scope)">测试退款</el-button>
             </template>
             </el-table-column>
         </el-table>
@@ -73,8 +76,11 @@
     </div>
 </template>
 <script>
-    // import DjObject from './object.js';
+    import qs from 'qs';
     export default {
+        components:{
+            qs
+        },
         data(){
             return {
                 music:'music',
@@ -124,6 +130,25 @@
             }
         },
         methods: {
+            //测试调
+            ceshiQiTa(scope) {
+                console.log(scope);
+                let data = qs.stringify({
+                    'out_trade_no':scope.row.orderNum
+                });
+                let api = '/test/alipayRefund/refund?' + data
+                console.log(api);
+                this.$axios.post(api).then((res)=>{
+                    console.log(res);
+                    if(res.data.retCode == 200) {
+                        this.$message('退款成功')
+                        this.orderAll();
+                    }else {
+                        this.$message.error('退款失败');
+                    }
+                })
+            },
+
             earchForm() {//搜索函数
                 // console.log('搜索按钮')
                 this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,type:"0"}}).then((res)=>{

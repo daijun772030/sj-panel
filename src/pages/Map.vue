@@ -31,7 +31,7 @@ export default {
   },
   props:{
     shopOrder:{
-      type:Number,
+      type:String,
       required:true
     },
     shopType:{
@@ -59,17 +59,24 @@ export default {
         })
     },
     queryQiXi () {//骑行路线的开始和结束点
-        // console.log(this.shopOrder);
-        console.log(this.shopType);//查看订单的类型
+        console.log(this.shopOrder);
         this.$api('dadaQuery',{params:{ordernum:this.shopOrder}}).then((res)=>{
           console.log(res);
+          console.log(this.shopType)
            var supplierLat = res.data.data.dadaResponse.result.supplierLat;//用户的经纬度
            var supplierLog = res.data.data.dadaResponse.result.supplierLng;//用户的经纬度
           //  var transporterLat = res.data.data.dadaResponse.result.transporterLat;//骑手的经纬度
           //  var transporterLog = res.data.data.dadaResponse.result.transporterLng;//骑手的经纬度
            var merchantLat = res.data.data.orderModel.merchantLat;//商家的经纬度
            var merchantLog = res.data.data.orderModel.merchantLog; //商家的经纬度
+           if(this.shopType == 1) {
+             console.log('商家为起点' + this.shopType)
+            this.qixin(merchantLat,merchantLog,supplierLat,supplierLog) 
+           }else if(this.shopType == 0) {
+             console.log('商家为终点' + this.shopType)
             this.qixin(supplierLat,supplierLog,merchantLat,merchantLog) 
+           }
+            
         })
     },
 
@@ -89,41 +96,47 @@ export default {
     },
     biaodianDT (a,b,c,d,e,f) {//标注骑手的位置
         console.log(a,b,c,d,e,f)
+      var qishouIcon = new AMap.Icon({//骑手的icon
+          size:new AMap.Size(50,50),//图标的大小
+          image:'http://www.pigcome.com:3381/images/qishou@3x.png',//图标的位置
+          imageSize:new AMap.Size(35,40),//图标的大小
+          imageOffset:new AMap.Pixel(-2,-1)//图标的偏移量
+      });
       var viaMarker = new AMap.Marker({
-            position: new AMap.LngLat(d,c),
-            // 将一张图片的地址设置为 icon
-            icon: 'http://www.pigcome.com:3381/images/qishou@3x.png',
-            // 设置了 icon 以后，设置 icon 的偏移量，以 icon 的 [center bottom] 为原点
-            offset: new AMap.Pixel(-13, -30)
-        });
-        map.add(viaMarker)
+        position: new AMap.LngLat(d,c),
+        // 将一张图片的地址设置为 icon
+        icon:qishouIcon,
+        // 设置了 icon 以后，设置 icon 的偏移量，以 icon 的 [center bottom] 为原点
+        offset: new AMap.Pixel(-13, -30)
+      });
+      map.add(viaMarker)
     },
     //创建开始和结束得坐标点
      qixin (a,b,c,d) {//创建开始和结束坐标
      console.log(a,b,c,d)
        //这里开始画起始点
         var startIcon = new AMap.Icon({//商家的位置
-          size:new AMap.Size(60,60),//图标的大小
+          size:new AMap.Size(50,50),//图标的大小
           image:'http://www.pigcome.com:3381/images/qi@3x.png',//图标的位置
-          imageSize:new AMap.Size(50,50),//图标的大小
+          imageSize:new AMap.Size(35,40),//图标的大小
           imageOffset:new AMap.Pixel(-2,-1)//图标的偏移量
       });
       //将图标传入markers
       var startMarker = new AMap.Marker({
-        position:new AMap.LngLat(d,c),//坐标位置
+        position:new AMap.LngLat(b,a),//坐标位置
         icon:startIcon,
         offset:new AMap.Pixel(-13,-30)
       });
       //创建结束坐标的icon
        var endIcon = new AMap.Icon({
-          size:new AMap.Size(5,3),//图标的大小
+          size:new AMap.Size(50,50),//图标的大小
           image:'http://www.pigcome.com:3381/images/zhong@3x.png',//图标的位置
-          imageSize:new AMap.Size(40,35),//图标的大小
+          imageSize:new AMap.Size(35,40),//图标的大小
           imageOffset:new AMap.Pixel(-2,-1)//图标的偏移量
       });
       //将图标传入markers
       var endMarker = new AMap.Marker({//用户的位置
-        position:new AMap.LngLat(b,a),//坐标位置
+        position:new AMap.LngLat(d,c),//坐标位置
         icon:endIcon,
         offset:new AMap.Pixel(-13,-30)
       });
@@ -150,14 +163,20 @@ export default {
             map.setFitView([ startMarker, endMarker, routeLine ])
     },
     dituCshi () {//地图初始化
+    console.log(this.shopOrder)
+    console.log(this.shopType)
       this.$api('dadaQuery',{params:{ordernum:this.shopOrder}}).then((res)=>{
         var supplierLat = res.data.data.dadaResponse.result.supplierLat;
         var supplierLog = res.data.data.dadaResponse.result.supplierLng;
         var transporterLat = res.data.data.dadaResponse.result.transporterLat;
         var transporterLog = res.data.data.dadaResponse.result.transporterLng;
         var merchantLat = res.data.data.orderModel.merchantLat;
-        var merchantLog = res.data.data.orderModel.merchantLog; 
-        this.init(supplierLat,supplierLog) 
+        var merchantLog = res.data.data.orderModel.merchantLog;
+        if(this.shopType == 0) {
+          this.init(supplierLat,supplierLog)
+        }else if (this.shopType == 1) {
+          this.init(merchantLat,merchantLog)
+        }
       })
     },
     init (a,b) {//地图的初始化

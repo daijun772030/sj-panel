@@ -11,16 +11,19 @@ function orderAll() {
         }
     }).then((res) => {
         console.log(res)
-        var newTotalCount = null;
-        newTotalCount = res.data.data.total;
+        var newTotalCount = {
+            newTotalCount: res.data.data.total,
+            id: store.state.id
+        };
         store.commit('increment', newTotalCount);
         console.log("订单数量" + store.state.newTotalCount);
-        if (newTotalCount > 0) {
+        console.log(store.state.id)
+        if (newTotalCount.newTotalCount > 0) {
             var audio = document.getElementById('music');
             console.log(audio);
             audio.play();
         } else {
-            console.log("没有改变")
+            console.log("没有订单")
         }
     })
 }

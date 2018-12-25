@@ -49,6 +49,12 @@
             <el-table-column prop="phone" align="center" label="客户电话"></el-table-column>
             <el-table-column prop="startTime" align="center" label="取件时间"></el-table-column>
             <el-table-column prop="endTime" align="center" label="送件时间"></el-table-column>
+            <el-table-column prop="iftake" align="center" label="取送方式">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.iftake==0">达达配送</span>
+                    <span v-if="scope.row.iftake==1">用户自取自送</span>
+                </template>
+            </el-table-column>
             <el-table-column prop="ifhave" align="center" width="100px" filter-placement="bottom-end" :filters="[{text:'未取衣服',value:'0'},{text:'已取衣服',value:'1'}]" :filter-method="filterTag" label="取衣服状态">
                 <template slot-scope="scope">
                     <span v-if='scope.row.ifhave==0'>未取衣服</span>

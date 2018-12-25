@@ -125,6 +125,7 @@ import VDistpicker from 'v-distpicker'
                     status:null,
                     notice:null
                 },
+                vuxID:null,
                 formObj:[
                     {id:'1',
                     name:"dadadada"}
@@ -141,6 +142,43 @@ import VDistpicker from 'v-distpicker'
         created () {
             this.archivesAll();
             this.changeShop.takeoff = 3;
+        },
+        computed: {
+            listenShowPage () {
+                return this.store.state.id
+            }
+        },
+        watch: {
+            listenShowPage (val,newval) {
+                console.log('新的val' + val);
+                console.log('老的val' + newval);
+                this.vuxID = val; 
+                this.$api("merchantChange",{params:{merchantid:this.vuxID}}).then((res)=>{
+                    this.changeShop.id = res.data.data.id;
+                    this.imgData.id = res.data.data.id;
+                    this.changeShop.address = res.data.data.address;
+                    this.changeShop.phone  = res.data.data.phone;
+                    this.changeShop.shopName = res.data.data.shopName;
+                    this.changeShop.startTime = res.data.data.startTime;
+                    this.changeShop.endTime = res.data.data.endTime;
+                    this.changeShop.takeoff = '3';
+                    this.changeShop.riseoff = res.data.data.riseoff;
+                    this.changeShop.status = res.data.data.status;
+                    this.changeShop.notice = res.data.data.notice;
+                    var Myaddress = res.data.data.address;
+                    var a = Myaddress.split(' ')
+                    console.log(a)
+                    if(a.length==4) {
+                        this.detAdress = a[3]
+                    }else if(a.length==5) {
+                        this.detAdress = a[4]
+                    }
+                    this.select.province = a[0];
+                    this.select.city = a[1];
+                    this.select.area =a[2];
+                    console.log(this.changeShop)
+                })
+            }
         },
         methods : {
             changeInput() {
@@ -214,8 +252,8 @@ import VDistpicker from 'v-distpicker'
                 console.log(changeShop)
             },
             archivesAll() {//查询商家信息
-                console.log(this.store.state.id);
                 this.$api("merchantChange",{params:{merchantid:this.store.state.id}}).then((res)=>{
+                    console.log(this.store.state.id)
                     this.changeShop.id = res.data.data.id;
                     this.imgData.id = res.data.data.id;
                     this.changeShop.address = res.data.data.address;

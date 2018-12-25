@@ -49,6 +49,12 @@
             <el-table-column prop="phone" align="center" label="客户电话"></el-table-column>
             <el-table-column prop="startTime" align="center" label="取件时间"></el-table-column>
             <el-table-column prop="endTime" align="center" label="送件时间"></el-table-column>
+            <el-table-column prop="iftake" align="center" label="取送方式">
+                <template slot-scope="scope">
+                    <span v-if="scope.row.iftake==0">达达配送</span>
+                    <span v-if="scope.row.iftake==1">用户自取自送</span>
+                </template>
+            </el-table-column>
             <el-table-column prop="ifhave" align="center" width="100px" filter-placement="bottom-end" :filters="[{text:'未取衣服',value:'0'},{text:'已取衣服',value:'1'}]" :filter-method="filterTag" label="取衣服状态">
                 <template slot-scope="scope">
                     <span v-if='scope.row.ifhave==0'>未取衣服</span>
@@ -90,10 +96,11 @@
         <el-dialog :modal-append-to-body="false" :title="title" center :visible.sync="dialogVisible" :show-close="false" width="900px">
           <div v-if="dialogVisible" class="messageQS">
             <span>骑手姓名：{{horseman.transporterName}}</span>
+            <span>骑手状态：{{horseman.statusMsg}}</span>
             <span>骑手电话：{{horseman.transporterPhone}}</span>
           </div>
           <div class="map">
-            <Map :shopOrder = 'shopOrder' v-if="dialogVisible">
+            <Map v-bind:shopOrder = 'shopOrder' v-bind:shopType = 'shopType' v-if="dialogVisible">
 
             </Map>
           </div>
@@ -165,6 +172,7 @@
                     region: ''
                 },
                 shopOrder:null,//商品的订单号
+                shopType:1,//起点是商家位置
                 horseman:null//骑手信息
             }
         },
@@ -203,15 +211,15 @@
           //地图展示方法结束
           queryMap(scope) {//这里是查询订单号替换到data中
             console.log(typeof(scope.row.id))
-            this.shopOrder = scope.row.id
+            this.shopOrder = String(scope.row.id)
             console.log(scope);
             this.$api('dadaQuery',{params:{ordernum:scope.row.id}}).then((res)=>{
               console.log(res);
-              if(res.data.data.dadaResponse.code==0&&res.data.data.dadaResponse.result.transporterLat !== "") {
+              if(res.data.data.dadaResponse.code==0) {
                 this.dialogVisible = true;
                 this.horseman = res.data.data.dadaResponse.result;
               }else {
-                this.$message.error('骑手未接单，，暂时没有物流信息');
+                this.$message.error('暂时没有物流信息');
               } 
           })  
             

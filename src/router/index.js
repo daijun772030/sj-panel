@@ -28,8 +28,8 @@ const Generalize = () =>
     import ('@/pages/generalize/generalize' /* webpackChunkName: "pages/generalize/generalize" */ ).then(m => m.default || m)
 const Accomplish = () =>
     import ('@/pages/order/accomplish' /* webpackChunkName: "/pages/order/accomplish" */ ).then(m => m.default || m)
-    // const Evaluate = () =>
-    //     import ('@/pages/order/evaluate' /* webpackChunkName: "/pages/order/evaluate" */ ).then(m => m.default || m)
+const Refund = () =>
+    import ('@/pages/order/refund' /* webpackChunkName: "/pages/order/refund" */ ).then(m => m.default || m)
 const Make = () =>
     import ('@/pages/order/make' /* webpackChunkName: "/pages/order/make" */ ).then(m => m.default || m)
 const AwaitTake = () =>
@@ -93,7 +93,7 @@ const router = new Router({
                 { name: "order-NoTake", path: '/manager/NoTake', component: NoTake },
                 { name: "order-awaitTake", path: '/manager/awaitTake', component: AwaitTake },
                 { name: "order-awaitClose", path: '/manager/awaitClose', component: AwaitClose },
-                // { name: "order-send", path: 'send', component: Send },
+                { name: "order-refund", path: '/manager/refund', component: Refund },
                 { name: 'business', path: '/manager/business', component: BusinessList },
                 { name: 'business-list', path: '/manager/list', component: BusinessList },
                 { name: 'business-order', path: '/manager/business-order', component: BusinessOrder },

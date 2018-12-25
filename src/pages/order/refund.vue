@@ -53,7 +53,7 @@
                     </el-tooltip>
                 </template>
             </el-table-column>
-            <el-table-column
+            <!-- <el-table-column
              align="center"
              width="200px"
              label="操作">
@@ -61,11 +61,11 @@
                 <el-button
                 size="mini"
                 @click="handleEdit(scope)">接单</el-button>
-                <!-- <el-button
+                <el-button
                 size="mini"
-                @click="cexunTuikuan">测试查询接口</el-button> -->
+                @click="cexunTuikuan">测试查询接口</el-button>
             </template>
-            </el-table-column>
+            </el-table-column> -->
         </el-table>
         <div class="pageination">
             <el-pagination
@@ -111,30 +111,6 @@
             // this.getList()
             this.orderAll();
         },
-        // beforeUpdate () {
-        //     this.$watch("newTotalCount",function(val) {
-        //         this.$nextTick(function(){
-        //         var audio = document.getElementById('music');
-        //         audio.play();
-        //         })
-        //     })
-        // },
-        computed: {
-            listenShowPage () {
-                return this.store.state.newTotalCount
-            }
-        },
-        watch: {
-            listenShowPage (val,newval) {
-                if(val!=0) {
-                    this.orderAll();
-                }else {
-                    this.orderAll();
-                }
-                console.log('老的val' + val);
-                console.log('新的val' + newval);
-            }
-        },
         methods: {
             //测试调
             ceshiQiTa(scope) {//退款调试
@@ -155,49 +131,33 @@
                     }
                 })
             },
-            cexunTuikuan () {
-                this.$api('findChiltid',{params:{
-                    pageNum:'1',pageSize:'10',merchantid:this.store.state.id
-                }}).then((res)=>{
-                    console.log(res);
-                })
-            },
+            // cexunTuikuan () {//测试查询退款
+            //     this.$api('findChiltid',{params:{
+            //         pageNum:'1',pageSize:'10',merchantid:this.store.state.id
+            //     }}).then((res)=>{
+            //         console.log(res);
+            //     })
+            // },
             earchForm() {//搜索函数
                 // console.log('搜索按钮')
-                this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,type:"0"}}).then((res)=>{
+                this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,merchantid:this.store.state.id,phone:this.formObj.val}}).then((res)=>{
                     var list = res.data.data.list;
                     this.list = list;
                     this.searchObj.pageSize = res.data.data.pageSize;
                     this.searchObj.pageNum = res.data.data.pageNum;
                     this.searchObj.totalCount = res.data.data.total;
                     console.log(res);
-                })
-            },
-            //点击接单以后前往待发货状态
-            handleEdit(scope) {
-                console.log(scope)
-                this.$api("orderType",{params:{type:"1",orderId:scope.row.id,outTradeNo:scope.row.orderNum,status:"2"}}).then((res)=>{
-                    // debugger;
-                    console.log(res)
-                    var num = scope.$index
-                    console.log(num)
-                    this.orderAll();
-                    this.list[num] = null;
-                    this.music = "music2"
                 })
             },
             //查询所有订单
             orderAll () {
-                this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,type:"0"}}).then((res)=>{
+                this.$api('findChiltid',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,merchantid:this.store.state.id}}).then((res)=>{
                     console.log(res)
                     var list = res.data.data.list;
                     this.list = list;
                     this.searchObj.pageSize = res.data.data.pageSize;
                     this.searchObj.pageNum = res.data.data.pageNum;
                     this.searchObj.totalCount = res.data.data.total;
-                    this.newTotalCount = res.data.data.total;
-                    this.store.state.newTotalCount = res.data.data.total;
-
                 })
             },
             handleSizeChange (val) {//改变每页显示多少条

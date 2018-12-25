@@ -91,6 +91,8 @@ const apis = {
     merchantChange: get("/merchant/order/findByMerchantidDetail"),
     //查询商品下活动
     findBy: get('/activity/findByActivityAll'),
+    //查询用户退款信息
+    findChiltid: get('/merchant/order/findByMerchantidRefund'),
     //修改商家个人信息
     updataByMer: post("/archives/updateByMerchant"),
     //查询达达订单详情

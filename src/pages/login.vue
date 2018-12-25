@@ -80,8 +80,9 @@ import Hashes from 'jshashes'
                 this.isBtnLoading = false  
             }
             if(res.data.retCode==200&&res.data.data.type!==2) {
-                var id = null;
-                id = res.data.data.id;
+                var id = {
+                    id:res.data.data.id
+                };
                 this.store.commit("increment", id)
                 console.log(this.store.state.id);
                 this.$router.replace({ path : this.manager });

@@ -37,6 +37,13 @@ export default [{
                 path: "/manager/accomplish",
                 icon: "resource",
                 children: []
+            },
+            {
+                id: 5,
+                name: "退款订单",
+                path: "/manager/refund",
+                icon: "resource",
+                children: []
             }
         ]
     },
@@ -75,12 +82,12 @@ export default [{
         path: "/manager/activity",
         icon: "resource",
         children: []
-    },
-    {
-        id: "4",
-        name: "地图",
-        path: "/manager/Map",
-        icon: "resource",
-        children: []
     }
+    // {
+    //     id: "4",
+    //     name: "地图",
+    //     path: "/manager/Map",
+    //     icon: "resource",
+    //     children: []
+    // }
 ];

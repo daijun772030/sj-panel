@@ -87,16 +87,15 @@
         methods: {
             // 获取导航列表
             getList() {
-                this.queryValue ();
+                // this.queryValue ();
             },
             queryValue () {
                 console.log(this.store.state.newTotalCount)
                 // var total = this.store.state.newTotalCount;
                 
                 this.$api('orderAll',{params:{pageNum:"1",pageSize:"500",type:"0"}}).then((res)=>{
-                    this.val = null;
-                    this.bealen = null;
                     if(res.data.data.total>0) {
+                        console.log(res)
                         console.log('数据的查看' + res.data.data.total)
                         this.val = res.data.data.total;
                         this.bealen = "NEW";

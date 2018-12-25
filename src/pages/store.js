@@ -8,8 +8,8 @@ const store = new Vuex.Store({
     },
     mutations: {
         increment(state, value) {
-            state.newTotalCount = value;
-            state.id = value;
+            state.newTotalCount = value.newTotalCount;
+            state.id = value.id
         }
     }
 })

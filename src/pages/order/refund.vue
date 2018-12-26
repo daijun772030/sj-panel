@@ -14,7 +14,7 @@
             :data="list"
             empty-text="没有新东西"
             v-loading="loading" 
-            :default-sort = "{prop: 'condition', order: 'descending'}"
+            :default-sort = "{prop: 'refundStatus', order: 'descending'}"
             element-loading-text="加载中..."
             style="
             height: calc(100% -130px)"
@@ -45,6 +45,13 @@
                 <span v-if="scope.row.payMethod==1">支付宝支付</span>
               </template>
             </el-table-column>
+            <el-table-column prop="refundStatus" sortable align="center" label="支付方式">
+                <template slot-scope="scope"> 
+                <span v-if="scope.row.refundStatus==0">待审核</span>
+                <span v-if="scope.row.refundStatus==1">退款成功</span>
+                <span v-if="scope.row.refundStatus==2">退款失败</span>
+              </template>
+            </el-table-column>
             <el-table-column prop="createTime" align="center" label="创建时间"></el-table-column>
             <el-table-column prop="remark" align="center" label="客户备注">
                 <template slot-scope="scope">
@@ -53,19 +60,23 @@
                     </el-tooltip>
                 </template>
             </el-table-column>
-            <!-- <el-table-column
+            <el-table-column
              align="center"
-             width="200px"
+             width="200px"     
              label="操作">
             <template slot-scope="scope" width="80%">
                 <el-button
+                v-if="scope.row.refundStatus==0"
                 size="mini"
-                @click="handleEdit(scope)">接单</el-button>
+                @click="Refund(scope,1)">同意</el-button>
                 <el-button
+                v-if="scope.row.refundStatus==0"
                 size="mini"
-                @click="cexunTuikuan">测试查询接口</el-button>
+                @click="Refund(scope,2)">不同意</el-button>
+                <span v-if="scope.row.refundStatus==1">退款成功</span>
+                <span v-if="scope.row.refundStatus==2">退款失败</span>
             </template>
-            </el-table-column> -->
+            </el-table-column>
         </el-table>
         <div class="pageination">
             <el-pagination
@@ -113,34 +124,26 @@
         },
         methods: {
             //测试调
-            ceshiQiTa(scope) {//退款调试
-                console.log(scope);
+            Refund(scope,a) {//退款函数
                 let data = qs.stringify({
                     'out_trade_no':scope.row.orderNum,
-                    'type':1
+                    'type':a
                 });
                 let api = '/test/alipayRefund/refund?' + data
                 console.log(api);
                 this.$axios.post(api).then((res)=>{
                     console.log(res);
                     if(res.data.retCode == 200) {
-                        this.$message('退款成功')
+                        this.$message('退款操作成功')
                         this.orderAll();
                     }else {
-                        this.$message.error('退款失败');
+                        this.$message.error('退款操作失败');
                     }
                 })
             },
-            // cexunTuikuan () {//测试查询退款
-            //     this.$api('findChiltid',{params:{
-            //         pageNum:'1',pageSize:'10',merchantid:this.store.state.id
-            //     }}).then((res)=>{
-            //         console.log(res);
-            //     })
-            // },
             earchForm() {//搜索函数
                 // console.log('搜索按钮')
-                this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,merchantid:this.store.state.id,phone:this.formObj.val}}).then((res)=>{
+                this.$api('findChiltid',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,merchantid:this.store.state.id,phone:this.formObj.val}}).then((res)=>{
                     var list = res.data.data.list;
                     this.list = list;
                     this.searchObj.pageSize = res.data.data.pageSize;

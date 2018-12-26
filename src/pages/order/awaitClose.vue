@@ -191,7 +191,7 @@
               }else {
                 this.$message.error('暂时没有物流信息');
               } 
-          })  
+          })
             
           },
           filterTag (value,row) {//是否是已经取衣服

@@ -50,6 +50,15 @@
               <template slot="append">元</template>
             </el-input> 
           </el-form-item>
+          <el-form-item label="限购数量：" prop="limitNum" class="myitem">
+            <el-input type="text" placeholder="填写限购数量" :disabled='typeId'  v-model="addform.limitNum" >
+            </el-input> 
+          </el-form-item>
+          <el-form-item label="是否包邮" prop="ifMail" class="myitem" value-key="id">
+            <el-select v-model="addform.ifMail" clearable placeholder="选择是否包邮" :disabled='typeId' value-key="id">
+              <el-option v-for="item in this.MailShop" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="编辑时间" class="myitem">
             <el-date-picker
           :disabled="true"
@@ -158,6 +167,10 @@
         higherup:null, //搜索框需要传递的参数(这是商品类型)
         shopId:null,//商户的id
         remark:' ',//没用的消息
+        MailShop:[//是否包邮
+          {id:0,name:'不包邮'},
+          {id:1,name:'包邮'}
+        ],//是否包邮
         addform: {//弹出框对象
           id:null,
           merchantid:null,
@@ -166,6 +179,8 @@
           type:null,
           upName:null,
           price:null,
+           limitNum:0,//限购数量
+          ifMail:null,//是否包邮
         },
         type3:null,
         shopType:[],//商品类型
@@ -272,16 +287,16 @@
       save () {//保存
         console.log(this.addform)
         if(this.actionType==1){
-          this.$api("addshop",{typeid:this.addform.id,price:this.addform.price,remark:"",primaryPrice:this.addform.price,limitNum:0,ifMail:0}).then((res)=>{
+          this.$api("addshop",{typeid:this.addform.id,price:this.addform.price,remark:"",primaryPrice:this.addform.price,limitNum:this.addform.limitNum,ifMail:this.addform.ifMail}).then((res)=>{
             console.log(res)
             if(res.data.retCode!==200) {
               this.$message('添加失败')
             }else{
               this.$message('添加成功')
+              this.ces()
             }
           })
           this.dialogVisible = false;
-          this.ces()
         }
         if(this.actionType==2) {
           this.$api('upshop',{id:this.shopNameId,price:this.addform.price,remark:'',primaryPrice:0}).then((res)=>{

@@ -69,12 +69,14 @@ export default {
           //  var transporterLog = res.data.data.dadaResponse.result.transporterLng;//骑手的经纬度
            var merchantLat = res.data.data.orderModel.merchantLat;//商家的经纬度
            var merchantLog = res.data.data.orderModel.merchantLog; //商家的经纬度
-           if(this.shopType == 1) {
+           var lattitude = res.data.data.orderModel.latitude;//用户经纬度
+           var lonitude = res.data.data.orderModel.longitude;//用户的经纬度
+           if(this.shopType == 0) {
+             console.log('用户为起点' + this.shopType)
+            this.qixin(lattitude,lonitude,supplierLat,supplierLog) 
+           }else if(this.shopType == 1) {
              console.log('商家为起点' + this.shopType)
-            this.qixin(merchantLat,merchantLog,supplierLat,supplierLog) 
-           }else if(this.shopType == 0) {
-             console.log('商家为终点' + this.shopType)
-            this.qixin(supplierLat,supplierLog,merchantLat,merchantLog) 
+            this.qixin(supplierLat,supplierLog,lattitude,lonitude) 
            }
             
         })
@@ -89,8 +91,10 @@ export default {
            var transporterLog = res.data.data.dadaResponse.result.transporterLng;//骑手的经纬度
            var merchantLat = res.data.data.orderModel.merchantLat;//商家的经纬度
            var merchantLog = res.data.data.orderModel.merchantLog; //商家的经纬度
+           var lattitude = res.data.data.orderModel.latitude;//用户经纬度
+           var lonitude = res.data.data.orderModel.longitude;//用户的经纬度
         if(transporterLat!=="" && transporterLog!==""){
-          this.biaodianDT(supplierLat,supplierLog,transporterLat,transporterLog,merchantLat,merchantLog) 
+          this.biaodianDT(supplierLat,supplierLog,transporterLat,transporterLog,lattitude,lonitude) 
         }
       })
     },
@@ -172,10 +176,12 @@ export default {
         var transporterLog = res.data.data.dadaResponse.result.transporterLng;
         var merchantLat = res.data.data.orderModel.merchantLat;
         var merchantLog = res.data.data.orderModel.merchantLog;
+        var lattitude = res.data.data.orderModel.latitude;//用户经纬度
+        var lonitude = res.data.data.orderModel.longitude;//用户的经纬度
         if(this.shopType == 0) {
           this.init(supplierLat,supplierLog)
         }else if (this.shopType == 1) {
-          this.init(merchantLat,merchantLog)
+          this.init(lattitude,lonitude)
         }
       })
     },

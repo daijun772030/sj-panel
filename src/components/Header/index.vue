@@ -6,9 +6,18 @@
             <!-- <p style="text-aligin: center">营业状态：</p> -->
         <el-form :inline="true" :model="object" label-width="5px" size="small" class="earchForm">
             <el-form-item class="float_right">
-               <el-select  v-model="changeShop.status" @change="updata" placeholder="请选择营业状态">
+               <el-select v-model="changeShop.status" @change="updata" placeholder="请选择营业状态">
                     <el-option v-for="item in this.mystatus" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select> 
+            </el-form-item>
+            <el-form-item>
+                <el-switch
+                    v-if="changeShop.status == 0"
+                    v-model="autoOrder"
+                    @change="AutoOrder"
+                    active-text="自动接单"
+                    inactive-text="手动接单">
+                </el-switch>
             </el-form-item>
         </el-form>
         <el-dropdown class="head-option" @command="handler">
@@ -103,6 +112,7 @@ import VDistpicker from 'v-distpicker'
                 imageUrl:"",
                 value1:null,
                 value2:null,
+                autoOrder:false,
                 mystatus:[
                     {
                         id:0,
@@ -154,6 +164,12 @@ import VDistpicker from 'v-distpicker'
                 console.log('老的val' + newval);
                 this.vuxID = val; 
                 this.$api("merchantChange",{params:{merchantid:this.vuxID}}).then((res)=>{
+                    if(res.data.data.ifAuto == 0) {
+                        this.autoOrder = true;
+                    }else {
+                        this.autoOrder = false;
+                    }
+                    console.log(res)
                     this.changeShop.id = res.data.data.id;
                     this.imgData.id = res.data.data.id;
                     this.changeShop.address = res.data.data.address;
@@ -181,6 +197,48 @@ import VDistpicker from 'v-distpicker'
             }
         },
         methods : {
+            AutoOrder() {//自动接单或则手动接单
+                // alert('开启或者关闭');
+                let open = '';
+                let openMessage = '';
+                let ifAuto = null;
+                if(this.autoOrder == false) {
+                    open = '是否关闭自动接单';
+                    openMessage = '已取消关闭自动接单';
+                    ifAuto = 1;
+                }else {
+                    open = '是否开启自动接单';
+                    openMessage ='已取消开启自动接单';
+                    ifAuto = 0;
+                }
+                this.$confirm(open,'提示',{
+                    confirmButtonText:'确定',
+                    cancelButtonText:'取消',
+                    type:'warning'
+                }).then(()=>{
+                    this.$api('AutoOrder',{ifAuto:ifAuto,id:this.changeShop.id}).then((res)=>{
+                        console.log(res);
+                        if(res.data.retCode == 200) {
+                            this.$message({
+                                type:'success',
+                                message:'操作成功'
+                            })
+                        }else{
+                            this.$message({
+                                type:'error',
+                                message:'操作失败,请重试'
+                            })
+                        }
+                    })
+
+                }).catch(()=>{
+                    this.$message({
+                        type:'info',
+                        message:openMessage
+                    })
+                })
+
+            },
             changeInput() {
                 var takeoff = this.changeShop.takeoff;
                 if(takeoff !== 3) {
@@ -252,8 +310,10 @@ import VDistpicker from 'v-distpicker'
                 console.log(changeShop)
             },
             archivesAll() {//查询商家信息
+                // debugger;
                 this.$api("merchantChange",{params:{merchantid:this.store.state.id}}).then((res)=>{
                     console.log(this.store.state.id)
+                    console.log(res);
                     this.changeShop.id = res.data.data.id;
                     this.imgData.id = res.data.data.id;
                     this.changeShop.address = res.data.data.address;

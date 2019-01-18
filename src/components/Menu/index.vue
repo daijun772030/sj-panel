@@ -14,11 +14,11 @@
                 
                 <el-submenu class="sub" v-for="menu in list" :key="menu.id" :index="menu.path" v-if="menu.children.length > 0">
                     <template slot="title">
-                        <el-badge :value='bealen' v-if="menu.id==0" class="item">
+                        <el-badge :value='bealen' v-if="menu.id==0" class="item1">
                             <i :class="'el-icon ' + menu.icon"/>
                             <span>{{menu.name}}</span>
                         </el-badge>
-                        <el-badge v-else class="item">
+                        <el-badge v-else class="item1">
                             <i :class="'el-icon ' + menu.icon"/>
                             <span>{{menu.name}}</span>
                         </el-badge>
@@ -29,7 +29,7 @@
                         :key="submenu.id"
                         :index="submenu.path"
                     >
-                        <el-badge v-if="submenu.id==0" :value="val" class="item">
+                        <el-badge v-if="submenu.id==0" :value="val" class="item1">
                             <i :class="'el-icon ' + submenu.icon"/>
                             <span>{{submenu.name}}</span>
                         </el-badge>
@@ -53,18 +53,18 @@
     export default {
         data() {
             return {
+                dpList:[],//真实数据的问题
                 list: list,
                 img:img,
                 currentPath: 'index',
                 val:null,
-                bealen
-                :null,
+                bealen:null,
                 total:null
             }
         },
         created() {
             this.currentPath = this.$route.path;
-            this.getList();
+            this.queryValue ();
         },
         computed: {
             listenShowPage () {
@@ -76,30 +76,40 @@
                 console.log("查看数据" + old, newd);
                 if(old>0) {
                     this.val = old;
-                    this.bealen
-                     = 'NEW';
-                }else {
-                    this.val =null;
-                    this.bealen =null;
+                    this.bealen = 'NEW';
+                }else if(old==0) {
+                    this.val = null;
+                    this.bealen = '';
                 }
             }
         },
         methods: {
             // 获取导航列表
-            getList() {
-                // this.queryValue ();
-            },
             queryValue () {
                 console.log(this.store.state.newTotalCount)
                 // var total = this.store.state.newTotalCount;
-                
-                this.$api('orderAll',{params:{pageNum:"1",pageSize:"500",type:"0"}}).then((res)=>{
-                    if(res.data.data.total>0) {
-                        console.log(res)
-                        console.log('数据的查看' + res.data.data.total)
-                        this.val = res.data.data.total;
-                        this.bealen = "NEW";
+
+                this.$api('orderAll',{params:{pageNum:1,pageSize:500,type:"0"}}).then((res)=>{
+                    this.dpList = [];
+                    console.log(res)
+                    var list = res.data.data.list;
+                    for (var i = 0;i<list.length;i++) {
+                        // console.log(list[i].refundStatus);
+                        if(list[i].refundStatus==10) {
+                            this.dpList.push(list[i]);
+                        }
                     }
+                    if(this.dpList.length>0) {
+                        console.log(this.store.state.newTotalCount)
+                        console.log('数据的查看' + res.data.data.total)
+                        this.val = this.store.state.newTotalCount;
+                        this.bealen = "NEW";
+                    }else {
+                        this.val = null;
+                        this.bealen = '';
+                    }
+                    // this.store.state.newTotalCount = this.dpList.length;
+
                 })
             },
         }
@@ -119,7 +129,7 @@
         align-items: center;
 
     }
-    .item{
+    .item1{
         margin-top: 5px;
     }
     .log>img{

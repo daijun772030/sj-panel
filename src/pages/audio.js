@@ -2,17 +2,28 @@ import create from '../plugin/myapi';
 import store from './store.js'
 
 function orderAll() {
+    // debugger;
     // var music = 'music';
     create('orderAll', {
         params: {
             pageNum: "1",
-            pageSize: "10",
+            pageSize: "1000",
             type: "0"
         }
     }).then((res) => {
         console.log(res)
+        let list = [];
+        var resList = res.data.data.list;
+        for (let i = 0; i < resList.length; i++) {
+            if (resList[i].refundStatus == 10 && resList[i].type == 0) {
+                list.push(resList[i])
+                console.log(list)
+            }
+        }
+        var num = list.length;
+        console.log(num)
         var newTotalCount = {
-            newTotalCount: res.data.data.total,
+            newTotalCount: num,
             id: store.state.id
         };
         store.commit('increment', newTotalCount);
@@ -27,7 +38,11 @@ function orderAll() {
         }
     })
 }
-const timer = setInterval(() => {
+const timer = function() {
+    // debugger;
     orderAll();
-}, 60000)
+    setInterval(() => {
+        orderAll();
+    }, 60000);
+}
 export default timer;

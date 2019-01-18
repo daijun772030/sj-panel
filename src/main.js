@@ -12,13 +12,13 @@ import 'element-ui/lib/theme-chalk/index.css';
 import create from '../src/plugin/myapi';
 import Axios from 'axios'
 import store from './pages/store'
-import timer from './pages/audio';
+// import './pages/audio';
 import VueCookies from 'vue-cookies';
 import jq from 'jquery'
 Vue.use(ElementUI, { size: 'mini', zIndex: 3000 });
 Vue.prototype.store = store;
 Vue.use(VueAreaLinkage);
-Vue.use(timer);
+// Vue.use(timer);
 Vue.config.productionTip = false
 Vue.prototype.$api = create
 Vue.prototype.$axios = Axios

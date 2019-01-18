@@ -7,6 +7,9 @@
                 <el-input placeholder="请输入订单手机号" v-model="formObj.val" @keyup.enter.native="earchForm" clearable></el-input>
             </el-form-item>
             <el-form-item class="float_left">
+                <el-input placeholder="请输入订单号" v-model="formObj.merId" @keyup.enter.native="earchForm" clearable></el-input>
+            </el-form-item>
+            <el-form-item class="float_left">
                 <el-date-picker
                 v-model="formObj.startTime"
                 clearable
@@ -107,7 +110,8 @@
             formObj:{//搜索框值
                 val:null,
                 startTime:null,
-                endTime:null
+                endTime:null,
+                merId:null
             },
             seachObject:{
                 input:'',
@@ -176,7 +180,7 @@
         },
         //查询所有订单
         orderAll () {
-            this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,type:"3"}}).then((res)=>{
+            this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,type:"4"}}).then((res)=>{
                 var list = res.data.data.list;
                 this.list = list;
                 // console.log(this.list)
@@ -195,7 +199,7 @@
         },
         earchForm() {//搜索函数
                 // console.log('搜索按钮')
-            this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,createtime:this.formObj.startTime,endtime:this.formObj.endTime,phone:this.formObj.val,type:"3"}}).then((res)=>{
+            this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,createtime:this.formObj.startTime,endtime:this.formObj.endTime,phone:this.formObj.val,ordernum:this.formObj.merId,type:"4"}}).then((res)=>{
                 var list = res.data.data.list;
                 this.list = list;
                 // console.log(list)

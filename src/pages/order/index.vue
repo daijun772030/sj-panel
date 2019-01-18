@@ -3,7 +3,28 @@
     <!-- 搜索框的展示  -->
         <el-form :inline="true" :model="formObj" label-width="5px" size="mini"  class="searchForm">
             <el-form-item class="float_left">
-                <el-input placeholder="请输入订单手机号" v-model="formObj.val" clearable></el-input>
+                <el-input placeholder="请输入订单手机号" v-model="formObj.val" @keyup.enter.native="earchForm" clearable></el-input>
+            </el-form-item>
+            <el-form-item class="float_left">
+                <el-input placeholder="请输入订单号" v-model="formObj.merId" @keyup.enter.native="earchForm" clearable></el-input>
+            </el-form-item>
+            <el-form-item class="float_left">
+                <el-date-picker
+                v-model="formObj.startTime"
+                clearable
+                type="datetime"
+                value-format="yyyy-MM-dd HH:mm:ss"
+                placeholder="选择开始时间">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item class="float_left">
+                <el-date-picker
+                v-model="formObj.endTime"
+                type="datetime"
+                clearable
+                value-format="yyyy-MM-dd HH:mm:ss"
+                placeholder="选择结束时间">
+                </el-date-picker>
             </el-form-item>
             <el-form-item class="float_left">
                 <el-button @click="earchForm" type="primary">确定</el-button>
@@ -72,7 +93,7 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="searchObj.pageNum"
-                :page-sizes="[10, 15, 20, 35, 100]"
+                :page-sizes="[60, 80, 100, 120, 200]"
                 :page-size="searchObj.pageSize"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="searchObj.totalCount">
@@ -91,15 +112,18 @@
             return {
                 music:'music',
                 formObj:{//搜索框值
-                    val:null
+                    val:null,
+                    startTime:null,
+                    endTime:null,
+                    merId:null
                 },
                 playFlay:false,
                 autoplay:' ',
                 loading:false,
-                list:null,
+                list:[],
                 arrObj:[],
                 searchObj:{
-                pageSize:10,
+                pageSize:100,
                 pageNum:1,
                 totalCount:0
                 },
@@ -111,14 +135,6 @@
             // this.getList()
             this.orderAll();
         },
-        // beforeUpdate () {
-        //     this.$watch("newTotalCount",function(val) {
-        //         this.$nextTick(function(){
-        //         var audio = document.getElementById('music');
-        //         audio.play();
-        //         })
-        //     })
-        // },
         computed: {
             listenShowPage () {
                 return this.store.state.newTotalCount
@@ -137,13 +153,22 @@
         },
         methods: {
             //测试调
-            ceshiQiTa(scope) {//退款调试
+            ceshiQiTa(scope) {//支付宝退款调试
                 console.log(scope);
                 let data = qs.stringify({
                     'out_trade_no':scope.row.orderNum,
                     'type':1
                 });
-                let api = '/test/alipayRefund/refund?' + data
+                let allApi;
+                let api = '/test/alipayRefund/refund?' + data;
+                let wechatApi = '/test/weixin/wxRefund?' + data;
+                if(scope.row.payMethod==0) {
+                    allApi = wechatApi;
+                    console.log(allApi);
+                }else if(scope.row.payMethod==1){
+                    allApi = api;
+                    console.log(allApi)
+                }
                 console.log(api);
                 this.$axios.post(api).then((res)=>{
                     console.log(res);
@@ -164,7 +189,7 @@
             },
             earchForm() {//搜索函数
                 // console.log('搜索按钮')
-                this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,type:"0"}}).then((res)=>{
+                this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,createtime:this.formObj.startTime,endtime:this.formObj.endTime,ordernum:this.formObj.merId,type:"0"}}).then((res)=>{
                     var list = res.data.data.list;
                     this.list = list;
                     this.searchObj.pageSize = res.data.data.pageSize;
@@ -176,27 +201,63 @@
             //点击接单以后前往待发货状态
             handleEdit(scope) {
                 console.log(scope)
-                this.$api("orderType",{params:{type:"1",orderId:scope.row.id,outTradeNo:scope.row.orderNum,status:"2"}}).then((res)=>{
-                    // debugger;
-                    console.log(res)
-                    var num = scope.$index
-                    console.log(num)
-                    this.orderAll();
-                    this.list[num] = null;
-                    this.music = "music2"
+
+                this.$confirm('确定接下这单订单？','提示',{
+                    confirmButtonText:'确定',
+                    cancelButtonText:'取消',
+                    type:'warning'
+                }).then(()=>{
+                    console.log(scope.row);
+                     this.$api("orderType",{params:{type:"1",orderId:scope.row.id,outTradeNo:scope.row.orderNum,status:"2"}}).then((res)=>{
+                        console.log(res);
+                        if(res.data.retCode == 200) {
+                            this.$message({
+                                type:'success',
+                                message:'接单成功'
+                            })
+                            this.orderAll();
+                        }else{
+                            this.$message({
+                                type:'error',
+                                message:'接单失败,请重试'
+                            })
+                        }
+                    })
+                }).catch(()=>{
+                    this.$message({
+                        type:'info',
+                        message:'取消操作'
+                    })
                 })
+                // this.$api("orderType",{params:{type:"1",orderId:scope.row.id,outTradeNo:scope.row.orderNum,status:"2"}}).then((res)=>{
+                //     // debugger;
+                //     console.log(res)
+                //     var num = scope.$index
+                //     console.log(num)
+                //     this.orderAll();
+                //     this.list[num] = null;
+                //     this.music = "music2"
+                // })
             },
             //查询所有订单
             orderAll () {
                 this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,type:"0"}}).then((res)=>{
+                    this.list = [];
                     console.log(res)
                     var list = res.data.data.list;
-                    this.list = list;
+                    for (var i = 0;i<list.length;i++) {
+                        // console.log(list[i].refundStatus);
+                        if(list[i].refundStatus==10) {
+                            this.list.push(list[i]);
+                        }
+                    }
+                    console.log(this.list)
+                    this.store.state.newTotalCount = this.list.length;
                     this.searchObj.pageSize = res.data.data.pageSize;
                     this.searchObj.pageNum = res.data.data.pageNum;
-                    this.searchObj.totalCount = res.data.data.total;
-                    this.newTotalCount = res.data.data.total;
-                    this.store.state.newTotalCount = res.data.data.total;
+                    this.searchObj.totalCount = this.list.length;
+                    // this.newTotalCount = res.data.data.total;
+                    // this.store.state.newTotalCount = res.data.data.total;
 
                 })
             },

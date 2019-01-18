@@ -117,7 +117,9 @@ const apis = {
     proposalAdd: post('/proposal/insertProposal'), //添加意见
     updataProposal: get('/proposal/updateByMerchant'), //修改意见信息
     //添加反馈
-    addFeedback: post('/feedback/addFeedback')
+    addFeedback: post('/feedback/addFeedback'),
+    //自动或者手动接单
+    AutoOrder: post('/archives/updateMerchantByifAuto')
 
 }
 const request = function(name, data, config) {

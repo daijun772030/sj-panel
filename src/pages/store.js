@@ -4,12 +4,14 @@ Vue.use(Vuex);
 const store = new Vuex.Store({
     state: {
         newTotalCount: null,
-        id: null
+        id: null,
+        ifAuto: null
     },
     mutations: {
         increment(state, value) {
             state.newTotalCount = value.newTotalCount;
-            state.id = value.id
+            state.id = value.id;
+            state.ifAuto = value.ifAuto;
         }
     }
 })

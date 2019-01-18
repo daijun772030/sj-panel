@@ -5,6 +5,9 @@
                 <el-input  placeholder="电话号码搜索" v-model="formObj.phone" @keyup.enter.native="search" clearable prefix-icon="el-icon-search" style="width:217px"></el-input>
             </el-form-item>
             <el-form-item class="float_left">
+                <el-input placeholder="请输入订单号" v-model="formObj.merId" @keyup.enter.native="earchForm" clearable></el-input>
+            </el-form-item>
+            <el-form-item class="float_left">
                 <el-date-picker
                 v-model="formObj.startTime"
                 clearable
@@ -88,7 +91,8 @@
             formObj:{
                 phone:null,
                 startTime:null,
-                endTime:null
+                endTime:null,
+                merId:null
             },
             countMoney:null,
             list:[],
@@ -118,7 +122,7 @@
                 return wbout
             },
             search () {//搜索数据函数
-                this.$api('orderAll',{params:{pageNum:this.paginObj.pagnum,phone:this.formObj.phone,createtime:this.formObj.startTime,endtime:this.formObj.endTime,pageSize:this.paginObj.pageSize,type:'10'}}).then((res)=> {
+                this.$api('orderAll',{params:{pageNum:this.paginObj.pagnum,phone:this.formObj.phone,createtime:this.formObj.startTime,endtime:this.formObj.endTime,ordernum:this.formObj.merId,pageSize:this.paginObj.pageSize,type:'10'}}).then((res)=> {
                     this.paginObj.pagnum = res.data.data.list.pageNum;
                     this.paginObj.pageSize = res.data.data.list.pageSize;
                     this.paginObj.total = res.data.data.list.total;

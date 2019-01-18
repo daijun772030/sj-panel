@@ -59,13 +59,10 @@
               <el-option v-for="item in this.MailShop" :key="item.id" :label="item.name" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="编辑时间" class="myitem">
-            <el-date-picker
-          :disabled="true"
-            v-model="addform.id"
-            type="date"
-            placeholder="创建时间">
-          </el-date-picker>
+          <el-form-item label="商品分区" class="myitem">
+            <el-select v-model="addform.ifLow" clearable placeholder="是否是起送价商品" :disabled="typeId" value-key="id">
+              <el-option v-for="item in this.lowShop" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            </el-select>
           </el-form-item>
         </el-form>
         <span slot="footer" class="dialog-footer">
@@ -170,7 +167,11 @@
         MailShop:[//是否包邮
           {id:0,name:'不包邮'},
           {id:1,name:'包邮'}
-        ],//是否包邮
+        ],
+        lowShop:[//是不是特价商品
+          {id:1,name:'普通商品'},
+          {id:0,name:'起送价商品'}
+        ],
         addform: {//弹出框对象
           id:null,
           merchantid:null,
@@ -181,6 +182,7 @@
           price:null,
            limitNum:0,//限购数量
           ifMail:null,//是否包邮
+          ifLow:null//是否是特价区
         },
         type3:null,
         shopType:[],//商品类型
@@ -287,7 +289,7 @@
       save () {//保存
         console.log(this.addform)
         if(this.actionType==1){
-          this.$api("addshop",{typeid:this.addform.id,price:this.addform.price,remark:"",primaryPrice:this.addform.price,limitNum:this.addform.limitNum,ifMail:this.addform.ifMail}).then((res)=>{
+          this.$api("addshop",{typeid:this.addform.id,price:this.addform.price,remark:"",primaryPrice:this.addform.price,limitNum:this.addform.limitNum,ifMail:this.addform.ifMail,ifLow:this.addform.ifLow}).then((res)=>{
             console.log(res)
             if(res.data.retCode!==200) {
               this.$message('添加失败')

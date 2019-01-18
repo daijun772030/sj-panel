@@ -7,6 +7,9 @@
                 <el-input placeholder="请输入订单手机号" v-model="formObj.val" @keyup.enter.native="earchForm" clearable></el-input>
             </el-form-item>
             <el-form-item class="float_left">
+                <el-input placeholder="请输入订单号" v-model="formObj.merId" @keyup.enter.native="earchForm" clearable></el-input>
+            </el-form-item>
+            <el-form-item class="float_left">
                 <el-date-picker
                 v-model="formObj.startTime"
                 clearable
@@ -36,7 +39,7 @@
             :data="list"
             empty-text="没有新东西"
             v-loading="loading" 
-            :default-sort = "{prop: 'createTime', order: 'descending'}"
+            :default-sort = "{prop: 'endTime', order: 'descending'}"
             element-loading-text="加载中..."
             style="
             height: calc(100% -60px)"
@@ -48,7 +51,7 @@
             <el-table-column prop="address" align="center" label="客户地址"></el-table-column>
             <el-table-column prop="phone" align="center" label="客户电话"></el-table-column>
             <el-table-column prop="startTime" align="center" label="取件时间"></el-table-column>
-            <el-table-column prop="endTime" align="center" label="送件时间"></el-table-column>
+            <el-table-column prop="endTime" sortable align="center" label="送件时间"></el-table-column>
             <el-table-column prop="iftake" align="center" label="取送方式">
                 <template slot-scope="scope">
                     <span v-if="scope.row.iftake==0">达达配送</span>
@@ -59,6 +62,7 @@
                 <template slot-scope="scope">
                     <span v-if='scope.row.ifhave==0'>未取衣服</span>
                     <span v-if='scope.row.ifhave==1'>已取衣服</span>
+                    <span v-if='scope.row.ifhave==2'>衣服已洗完</span>
                 </template>
             </el-table-column>
             <el-table-column prop="status" align="center" width="100px" label="支付状况">
@@ -74,7 +78,7 @@
                 <span v-if="scope.row.payMethod==1">支付宝支付</span>
               </template>
             </el-table-column>
-            <el-table-column prop="createTime" sortable align="center" label="创建时间"></el-table-column>
+            <el-table-column prop="createTime" align="center" label="创建时间"></el-table-column>
             <el-table-column prop="remark" align="center" label="客户备注">
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" :content="scope.row.remark" placement="top">
@@ -90,14 +94,7 @@
                 <el-button
                 size="mini"
                 @click="handleEdit(scope)">发货</el-button>
-                <!-- <el-button
-                size="mini"
-                v-if="scope.row.ifhave==0"
-                @click="ceshiDin(scope)">未取衣</el-button>
-                <el-button
-                size="mini"
-                v-if="scope.row.ifhave==1"
-                >已取衣</el-button> -->
+                <!-- <span v-if="scope.row.ifhave == 2">等待用户确认收货</span> -->
             </template>
             </el-table-column>
         </el-table>
@@ -132,7 +129,8 @@
                 formObj:{//搜索框值
                     val:null,
                     startTime:null,
-                    endTime:null
+                    endTime:null,
+                    merId:null
                 },
                 seachObject:{
                     input:'',
@@ -191,26 +189,43 @@
                 }
                 return wbout
             },
-            ceshiDin (scope) {//测试点击过后洗衣状态是不是要改变
-                this.$api('updataByOrder',{params:{orderId:scope.row.id}}).then((res)=>{
-                    if(res.data.retCode ==200) {
-                        this.orderAll();
-                    }
-                })
-            },
+            // ceshiDin (scope) {//测试点击过后洗衣状态是不是要改变
+            //     this.$api('updataByOrder',{params:{orderId:scope.row.id}}).then((res)=>{
+            //         if(res.data.retCode ==200) {
+            //             this.orderAll();
+            //         }
+            //     })
+            // },
             //这里做列表的轮询。。查看是不是有新订单
             //点击接单以后前往待发货状态
-            handleEdit(scope) {
-                console.log(scope)
-                this.$api("orderType",{params:{type:"2", orderId:scope.row.id, outTradeNo:scope.row.orderNum,status:"2"}}).then((res)=>{
-                    // debugger;
-                    console.log(res)
-                    var num = scope.$index
-                    console.log(num)
-                    this.list[num] = null;
-                    if(res.data.retCode==200) {
-                        this.orderAll();
-                    }
+            handleEdit (scope) {//测试点击过后洗衣状态是不是要改
+            this.$confirm('确定发货给客户吗？','提示',{
+                    confirmButtonText:'确定',
+                    cancelButtonText:'取消',
+                    type:'warning'
+                }).then(()=>{
+                    console.log(scope.row);
+                      this.$api("orderType",{params:{type:"2",orderId:scope.row.id,outTradeNo:scope.row.orderNum,status:"2"}}).then((res)=>{
+                        console.log(res);
+                        if(res.data.retCode == 200) {
+                            this.$message({
+                                type:'success',
+                                message:'发货成功'
+                            })
+                            this.orderAll();
+                        }else{
+                            this.$message({
+                                type:'error',
+                                message:'发货失败,请重试'
+                            })
+                        }
+                    })
+
+                }).catch(()=>{
+                    this.$message({
+                        type:'info',
+                        message:'取消操作'
+                    })
                 })
             },
             //查询所有订单
@@ -232,7 +247,7 @@
             },
             earchForm() {//搜索函数
                 // console.log('搜索按钮')
-                this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,createtime:this.formObj.startTime,endtime:this.formObj.endTime,type:"1"}}).then((res)=>{
+                this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,createtime:this.formObj.startTime,endtime:this.formObj.endTime,ordernum:this.formObj.merId,type:"1"}}).then((res)=>{
                     var list = res.data.data.list;
                     this.list = list;
                     // this.list = [];

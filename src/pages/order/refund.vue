@@ -66,15 +66,15 @@
              label="操作">
             <template slot-scope="scope" width="80%">
                 <el-button
-                v-if="scope.row.refundStatus==0"
+                v-if="scope.row.refundStatus==0&&scope.row.type!=7"
                 size="mini"
                 @click="Refund(scope,1)">同意</el-button>
                 <el-button
-                v-if="scope.row.refundStatus==0"
+                v-if="scope.row.refundStatus==0&&scope.row.type!=7"
                 size="mini"
                 @click="Refund(scope,2)">不同意</el-button>
-                <span v-if="scope.row.refundStatus==1">退款成功</span>
-                <span v-if="scope.row.refundStatus==2">退款失败</span>
+                <span v-if="scope.row.type==7 || scope.row.refundStatus == 1">退款成功</span>
+                <span v-if="scope.row.refundStatus==2&&scope.row.type!==7">退款失败</span>
             </template>
             </el-table-column>
         </el-table>
@@ -125,21 +125,76 @@
         methods: {
             //测试调
             Refund(scope,a) {//退款函数
-                let data = qs.stringify({
-                    'out_trade_no':scope.row.orderNum,
-                    'type':a
-                });
-                let api = '/test/alipayRefund/refund?' + data
-                console.log(api);
-                this.$axios.post(api).then((res)=>{
-                    console.log(res);
-                    if(res.data.retCode == 200) {
-                        this.$message('退款操作成功')
-                        this.orderAll();
-                    }else {
-                        this.$message.error('退款操作失败');
+
+                this.$confirm('确定取消订单并退款给用户吗？','提示',{
+                    confirmButtonText:'确定',
+                    cancelButtonText:'取消',
+                    type:'warning'
+                }).then(()=>{
+                    console.log(scope.row);
+                    let allApi;
+                    let data = qs.stringify({
+                        'out_trade_no':scope.row.orderNum,
+                        'type':a
+                    });
+                    let api = '/test/alipayRefund/refund?' + data
+                    let wechatApi = '/test/weixin/wxRefund?' + data
+                    if(scope.row.payMethod == 0) {
+                        allApi = wechatApi;
+                        console.log(allApi)
+                    }else if( scope.row.payMethod == 1) {
+                        allApi = api;
+                        console.log(allApi);
                     }
+                     this.$axios.post(allApi).then((res)=>{
+                        console.log(res);
+                        if(res.data.retCode == 200) {
+                            this.$message({
+                                type:'success',
+                                message:'退款成功'
+                            })
+                            this.orderAll();
+                        }else{
+                            this.$message({
+                                type:'error',
+                                message:'退款失败,请重试'
+                            })
+                        }
+                    })
+                }).catch(()=>{
+                    this.$message({
+                        type:'info',
+                        message:'取消操作'
+                    })
                 })
+
+                // console.log(scope.row.payMethod)
+                // let allApi;
+                // let data = qs.stringify({
+                //     'out_trade_no':scope.row.orderNum,
+                //     'type':a
+                // });
+                // let api = '/test/alipayRefund/refund?' + data
+                // let wechatApi = '/test/weixin/wxRefund?' + data
+                // if(scope.row.payMethod == 0) {
+                //     allApi = wechatApi;
+                //     console.log(allApi)
+                // }else if( scope.row.payMethod == 1) {
+                //     allApi = api;
+                //     console.log(allApi);
+                // }
+                // // console.log(api);
+                // this.$axios.post(allApi).then((res)=>{
+                //     console.log(res);
+                //     if(res.data.retCode == 200) {
+                //         this.$message('退款操作成功')
+                //         this.orderAll();
+                //     }else {
+                //         this.$message.error('退款操作失败');
+                //     }
+                //     alert('请刷新当前页面')
+                // })
+                // this.orderAll();
             },
             earchForm() {//搜索函数
                 // console.log('搜索按钮')
@@ -154,6 +209,7 @@
             },
             //查询所有订单
             orderAll () {
+                console.log(this.store.state.id);
                 this.$api('findChiltid',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,merchantid:this.store.state.id}}).then((res)=>{
                     console.log(res)
                     var list = res.data.data.list;

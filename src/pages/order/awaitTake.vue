@@ -7,6 +7,9 @@
                 <el-input placeholder="请输入订单手机号" v-model="formObj.val" @keyup.enter.native="earchForm" clearable></el-input>
             </el-form-item>
             <el-form-item class="float_left">
+                <el-input placeholder="请输入订单号" v-model="formObj.merId" @keyup.enter.native="earchForm" clearable></el-input>
+            </el-form-item>
+            <el-form-item class="float_left">
                 <el-date-picker
                 v-model="formObj.startTime"
                 clearable
@@ -88,8 +91,10 @@
              label="操作">
             <template slot-scope="scope" >
                 <el-button
+                v-if="scope.row.iftake==0"
                 size="mini"
                 @click="queryMap(scope)">查看物流</el-button>
+                <span v-if="scope.row.iftake==1">自取自送</span>
             </template>
             </el-table-column>
         </el-table>
@@ -151,7 +156,8 @@
                 formObj:{//搜索框值
                     val:null,
                     startTime:null,
-                    endTime:null
+                    endTime:null,
+                    merId:null
                 },
                 seachObject:{
                     input:'',
@@ -275,7 +281,7 @@
           },
           earchForm() {//搜索函数
               // console.log('搜索按钮')
-              this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,createtime:this.formObj.startTime,endtime:this.formObj.endTime,type:"2"}}).then((res)=>{
+              this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,createtime:this.formObj.startTime,endtime:this.formObj.endTime,ordernum:this.formObj.merId,type:"2"}}).then((res)=>{
                   var list = res.data.data.list;
                   this.list = list;
                   // this.list = [];

@@ -7,6 +7,9 @@
                 <el-input placeholder="请输入订单手机号" v-model="formObj.val" @keyup.enter.native="earchForm" clearable></el-input>
             </el-form-item>
             <el-form-item class="float_left">
+                <el-input placeholder="请输入订单号" v-model="formObj.merId" @keyup.enter.native="earchForm" clearable></el-input>
+            </el-form-item>
+            <el-form-item class="float_left">
                 <el-date-picker
                 v-model="formObj.startTime"
                 clearable
@@ -36,7 +39,7 @@
             :data="list"
             empty-text="没有新东西"
             v-loading="loading" 
-            :default-sort = "{prop: 'createTime', order: 'descending'}"
+            :default-sort = "{prop: 'startTime', order: 'descending'}"
             element-loading-text="加载中..."
             style="
             height: calc(100% -60px)"
@@ -47,7 +50,7 @@
             <el-table-column prop="shName" align="center" label="客户姓名"></el-table-column>
             <el-table-column prop="address" align="center" label="客户地址"></el-table-column>
             <el-table-column prop="phone" align="center" label="客户电话"></el-table-column>
-            <el-table-column prop="startTime" align="center" label="取件时间"></el-table-column>
+            <el-table-column prop="startTime" sortable align="center" label="取件时间"></el-table-column>
             <el-table-column prop="endTime" align="center" label="送件时间"></el-table-column>
             <el-table-column prop="iftake" align="center" label="取送方式">
                 <template slot-scope="scope">
@@ -74,7 +77,7 @@
                 <span v-if="scope.row.payMethod==1">支付宝支付</span>
               </template>
             </el-table-column>
-            <el-table-column prop="createTime" sortable align="center" label="创建时间"></el-table-column>
+            <el-table-column prop="createTime" align="center" label="创建时间"></el-table-column>
             <el-table-column prop="remark" align="center" label="客户备注">
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" :content="scope.row.remark" placement="top">
@@ -88,8 +91,13 @@
              label="操作">
             <template slot-scope="scope" >
                 <el-button
+                v-if="scope.row.iftake==0"
                 size="mini"
                 @click="queryMap(scope)">查看物流</el-button>
+                <el-button
+                v-if="scope.row.iftake==1"
+                size="mini"
+                @click="ceshiDin(scope)">取衣服</el-button>
             </template>
             </el-table-column>
         </el-table>
@@ -110,7 +118,7 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="searchObj.pageNum"
-                :page-sizes="[10, 15, 20, 35, 100]"
+                :page-sizes="[60, 80, 100, 120, 200]"
                 :page-size="searchObj.pageSize"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="searchObj.totalCount">
@@ -143,14 +151,15 @@
                 list:[],
                 right:null,//订单是否接单
                 searchObj:{
-                pageSize:10,
+                pageSize:100,
                 pageNum:1,
                 totalCount:0
                 },
                 formObj:{//搜索框值
                     val:null,
                     startTime:null,
-                    endTime:null
+                    endTime:null,
+                    merId:null
                 },
                 seachObject:{
                     input:'',
@@ -194,6 +203,36 @@
           })
             
           },
+          ceshiDin (scope) {//测试点击过后洗衣状态是不是要改
+            this.$confirm('确定取衣服吗','提示',{
+                    confirmButtonText:'确定',
+                    cancelButtonText:'取消',
+                    type:'warning'
+                }).then(()=>{
+                    console.log(scope.row);
+                     this.$api('updataByOrder',{params:{orderId:scope.row.id,ifhave:1}}).then((res)=>{
+                        console.log(res);
+                        if(res.data.retCode == 200) {
+                            this.$message({
+                                type:'success',
+                                message:'操作成功'
+                            })
+                            this.orderAll();
+                        }else{
+                            this.$message({
+                                type:'error',
+                                message:'操作失败,请重试'
+                            })
+                        }
+                    })
+
+                }).catch(()=>{
+                    this.$message({
+                        type:'info',
+                        message:'取消操作'
+                    })
+                })
+            },
           filterTag (value,row) {//是否是已经取衣服
               console.log(row,value);
               return row.ifhave == value;
@@ -228,24 +267,23 @@
           },
           //查询所有订单
           orderAll () {
-              this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,type:"13"}}).then((res)=>{
-                  console.log(res)
-                  var list = res.data.data.list;
-                  this.list = list;
-                  // this.list = [];
-                  // for (var i = 0;i<list.length;i++) {
-                  //     if(list[i].ifhave==1) {
-                  //         this.list.push(list[i]);
-                  //     }
-                  // }
+            this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,type:"13"}}).then((res)=>{
+                console.log(res)
+                  this.list = [];
+                    var list = res.data.data.list;
+                    for (var i = 0;i<list.length;i++) {
+                        if(list[i].refundStatus==10) {
+                            this.list.push(list[i]);
+                        }
+                    }
                   this.searchObj.pageSize = res.data.data.pageSize;
                   this.searchObj.pageNum = res.data.data.pageNum;
                   this.searchObj.totalCount = res.data.data.total
-              })
+            })
           },
           earchForm() {//搜索函数
               // console.log('搜索按钮')
-              this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,createtime:this.formObj.startTime,endtime:this.formObj.endTime,type:"13"}}).then((res)=>{
+              this.$api('orderAll',{params:{pageNum:this.searchObj.pageNum,pageSize:this.searchObj.pageSize,phone:this.formObj.val,createtime:this.formObj.startTime,endtime:this.formObj.endTime,ordernum:this.formObj.merId,type:"13"}}).then((res)=>{
                   var list = res.data.data.list;
                   this.list = list;
                   // this.list = [];

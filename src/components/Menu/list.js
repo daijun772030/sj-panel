@@ -19,27 +19,34 @@ export default [{
             },
             {
                 id: 2,
+                name: "已取衣",
+                path: "/manager/takeColse",
+                icon: "resource",
+                children: []
+            },
+            {
+                id: 3,
                 name: "待发货",
                 path: "/manager/make",
                 icon: "resource",
                 children: []
             },
             {
-                id: 3,
+                id: 4,
                 name: "待收货",
                 path: "/manager/awaitTake",
                 icon: "resource",
                 children: []
             },
             {
-                id: 4,
+                id: 5,
                 name: "完成订单",
                 path: "/manager/accomplish",
                 icon: "resource",
                 children: []
             },
             {
-                id: 5,
+                id: 6,
                 name: "退款订单",
                 path: "/manager/refund",
                 icon: "resource",

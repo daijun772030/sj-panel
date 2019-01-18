@@ -40,6 +40,8 @@ const Map = () =>
     import ('@/pages/Map' /* webpackChunkName: "/pages/Map" */ ).then(m => m.default || m)
 const NoTake = () =>
     import ('@/pages/order/NoTake' /* webpackChunkName: "/pages/order/NoTake" */ ).then(m => m.default || m)
+const TakeColse = () =>
+    import ('@/pages/order/takeColse' /* webpackChunkName: "/pages/order/takeColse" */ ).then(m => m.default || m)
 const page404 = () =>
     import ('@/pages/error/404' /* webpackChunkName: "/pages/error/404" */ ).then(m => m.default || m)
 Vue.use(Router);
@@ -94,6 +96,7 @@ const router = new Router({
                 { name: "order-awaitTake", path: '/manager/awaitTake', component: AwaitTake },
                 { name: "order-awaitClose", path: '/manager/awaitClose', component: AwaitClose },
                 { name: "order-refund", path: '/manager/refund', component: Refund },
+                { name: "order-takeColse", path: '/manager/takeColse', component: TakeColse },
                 { name: 'business', path: '/manager/business', component: BusinessList },
                 { name: 'business-list', path: '/manager/list', component: BusinessList },
                 { name: 'business-order', path: '/manager/business-order', component: BusinessOrder },
@@ -125,6 +128,7 @@ router.beforeEach((to, from, next) => {
     //         next({ path: 'login' })
     //     }
     // }
+    // console.log(from)
     clearInterval(this.timer)
     next()
 });
